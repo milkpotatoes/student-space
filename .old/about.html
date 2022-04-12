@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css" integrity="sha384-2PJ2u4NYg6jCNNpv3i1hK9AoAqODy6CdiC+gYiL2DVx+ku5wzJMFNdE3RoWfBIRP"
+		 crossorigin="anonymous" />
+		<link rel="stylesheet" href="css/style.css?v=1.0.0" />
+		<link rel="manifest" href="json/manifest.json" />
+		<link rel="shortcut icon" href="src/ic_launcher.png" type="image/x-icon">
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"> </script>
+		<script src="js/base64.js"></script>
+		<script src="js/NativeShare.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/function.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/script.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/theme.js" type="text/javascript" charset="utf-8"></script>
+		<title>关于</title>
+	</head>
+	<body class="mdui-appbar-with-toolbar mdui-theme-layout-auto">
+
+		<header class="mdui-appbar mdui-appbar-fixed">
+			<div class="mdui-toolbar mdui-color-theme">
+				<a href="javascript:;" onclick="window.history.back()" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a>
+				<span class=" mdui-typo-title">关于</span>
+			</div>
+		</header>
+		<div class="mdui-container">
+			<!-- 关于 页面logo -->
+			<div class="mdui-card mdui-m-t-2 mdui-hoverable">
+				<img class="mdui-img-circle mdui-center mdui-m-t-3 back" src="src/ic_launcher.png" style="width: 154px;">
+				<div class="mdui-m-y-3 mdui-typo-title" style="width: 100%;text-align: center;">
+					<span class="mdui-typo-title appName">学习空间</span><br />
+					<span class="mdui-subheader description">七天网络成绩查询</span>
+					<!-- style="font-weight: 500;font-size: 20px;" -->
+				</div>
+			</div>
+			<!-- 关于页面项目 -->
+			<ul class="mdui-list">
+				<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item jump-link" data="coolmarket://www.coolapk.com/u/653223">
+					<i class="mdui-list-item-icon mdui-icon material-icons" mdui-dialog="{target: '#openAuthor'}">face</i>
+					<div class="mdui-list-item-content" mdui-dialog="{target: '#openAuthor'}">
+						<div class="mdui-list-item-title" mdui-dialog="{target: '#openAuthor'}">作者</div>
+						<div class="mdui-list-item-text mdui-list-item-one-line" mdui-dialog="{target: '#openAuthor'}">酷安@牛奶土豆</div>
+					</div>
+					<button class="mdui-btn mdui-btn-icon jump-link" data="mailto:feedback@milkpotatoes.cn"><i class="mdui-list-item-icon mdui-icon material-icons">email</i></button>
+				</li>
+
+				<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link" data="https://qm.qq.com/cgi-bin/qm/qr?k=9ZPw36rGZEK4-beWpijEhRzeG3BNdcOW&jump_from=webapi">
+					<i class="mdui-list-item-icon mdui-icon material-icons">group</i>
+					<div class="mdui-list-item-content">
+						<div class="mdui-list-item-title">加入群聊</div>
+						<div class="mdui-list-item-text mdui-list-item-one-line">加入群聊，一起来聊聊学习？</div>
+					</div>
+				</li>
+
+				<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item">
+					<i class="mdui-list-item-icon mdui-icon material-icons">send</i>
+					<div class="mdui-list-item-content">
+						<div class="mdui-list-item-title">版本</div>
+						<div class="mdui-list-item-text mdui-list-item-one-line appVersion"></div>
+					</div>
+				</li>
+
+				<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item" mdui-dialog="{target: '#share'}">
+				 <!-- onclick="byNativeShare()"> -->
+					<i class="mdui-list-item-icon mdui-icon material-icons">share</i>
+					<div class="mdui-list-item-content">
+						<div class="mdui-list-item-title">分享</div>
+						<div class="mdui-list-item-text mdui-list-item-one-line">好用的话，就分享给小伙伴吧</div>
+					</div>
+				</li>
+
+				<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item" mdui-dialog="{target: '#donation'}">
+					<i class="mdui-list-item-icon mdui-icon material-icons">confirmation_number</i>
+					<div class="mdui-list-item-content">
+						<div class="mdui-list-item-title">捐赠</div>
+						<div class="mdui-list-item-text mdui-list-item-one-line">卑微土豆，在线乞讨</div>
+					</div>
+				</li>
+
+				<!-- 以下项目将列举出引用库 -->
+				<li class="mdui-subheader mdui-text-color-theme-accent importList">引用库</li>
+
+				<!-- 友情链接 -->
+				<li class="mdui-subheader mdui-text-color-theme-accent friendLink">友情链接</li>
+
+				<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link" data="https://www.milkpotatoes.cn/">
+					<i class="mdui-list-item-icon mdui-icon material-icons">link</i>
+					<div class="mdui-list-item-content">
+						<div class="mdui-list-item-title">牛奶土豆</div>
+						<div class="mdui-list-item-text mdui-list-item-one-line">土豆的个人博客</div>
+					</div>
+				</li>
+
+				<!-- <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item friend-link">
+					<i class="mdui-list-item-icon mdui-icon material-icons">link</i>
+					<div class="mdui-list-item-content">
+						<div class="mdui-list-item-title">jQuery&nbsp;&nbsp;<small class="mdui-typo-body-1-opacity">v2.1.4</small></div>
+						<div class="mdui-list-item-text mdui-list-item-one-line">快速，小型且功能丰富的JavaScript库。</div>
+					</div>
+				</li> -->
+			</ul>
+		</div>
+		<!-- 分享网页对话框 -->
+		<div class="mdui-dialog" id="share">
+			<div class="mdui-dialog-title">分享</div>
+			<div class="mdui-dialog-content">
+				<img class="mdui-center mdui-m-b-2" style="width:196px" src="data:image/png;base64,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">
+				<span class="mdui-typo">
+					长按二维码或右键点击将图片保存到本地
+				</span>
+			</div>
+			<div class="mdui-dialog-actions">
+				<button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+				<button class="mdui-btn mdui-ripple copyShareLink" mdui-dialog-confirm>复制分享链接</button>
+			</div>
+		</div>
+		<!-- 打开酷安 -->
+		<div class="mdui-dialog" id="openAuthor">
+			<div class="mdui-dialog-title">在网页打开</div>
+			<div class="mdui-dialog-content">
+				<span class="mdui-typo">
+					手机未安装酷安或没有自动打开？
+				</span>
+			</div>
+			<div class="mdui-dialog-actions">
+				<button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+				<button class="mdui-btn mdui-ripple open-link" data="http://www.coolapk.com/u/653223" mdui-dialog-confirm>打开</button>
+			</div>
+		</div>
+		<!-- 捐赠对话框 -->
+		<div class="mdui-dialog" id="donation">
+			<div class="mdui-dialog-title">捐赠</div>
+			<div class="mdui-dialog-content">
+				<span class="mdui-typo">
+					炎炎酷暑，请作者吃根冰棍？
+				</span>
+				<div class="mdui-panel" mdui-panel="{accordion: true}">
+					<!-- 支付宝二维码 -->
+					<div class="mdui-panel-item mdui-panel-item-open">
+						<div class="mdui-panel-item-header">
+							<div class="mdui-panel-item-title">支付宝</div>
+							<!-- <div class="mdui-panel-item-summary">Carribean cruise</div> -->
+							<i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+						</div>
+						<div class="mdui-panel-item-body">
+							<img class="mdui-img-rounded mdui-img-fluid" src="src/1598247557.jpg">
+							<div class="mdui-panel-item-actions">
+								<button class="mdui-btn mdui-ripple open-link" data="https://qr.alipay.com/fkx03789wzomihfk9oashc9"
+								 mdui-panel-item-confirm>打开支付宝</button>
+							</div>
+						</div>
+					</div>
+					<!-- 工银商户之家二维码 -->
+					<div class="mdui-panel-item">
+						<div class="mdui-panel-item-header">
+							<div class="mdui-panel-item-title">工银商户之家</div>
+							<div class="mdui-panel-item-summary">支持微信/云闪付</div>
+							<i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+						</div>
+						<div class="mdui-panel-item-body">
+							<img class="mdui-img-rounded mdui-img-fluid" src="src/bizelife_1594987651062.jpg">
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="mdui-dialog-actions">
+				<button class="mdui-btn mdui-ripple" mdui-dialog-close>不了</button>
+				<!-- <button class="mdui-btn mdui-ripple copyShareLink" mdui-dialog-confirm>复制分享链接</button> -->
+			</div>
+		</div>
+
+		<button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed back-top"><i class="mdui-icon material-icons">keyboard_arrow_up</i></button>
+
+		<!-- 分享链接文本 -->
+		<input type="" id="shareUrl" style="background-color: rgba(0,0,0,0); color:rgba(0,0,0,0); border: none; position:absolute; top:-150px; left:-1000px; "
+		 value="我正在使用网页版学习空间,无需下载即可使用,你也来试试吧~&#10;链接:https://stusp.milkpotatoes.cn/?sourse=copy" />
+
+		<script type="text/javascript">
+			$(".copyShareLink").click(function() {
+				$('#shareUrl').select();
+				document.execCommand('copy');
+				mdui.snackbar({
+					message: "复制成功"
+				});
+			})
+
+			$.get("json/version.json", function(data, status) {
+				$(".appVersion").text("v" + data.version);
+				$(".appVersion").parents(".mdui-list-item").click(function() {
+					mdui.dialog({
+						title: "更新日志",
+						content: data.details,
+						buttons: [{
+							text: "确定"
+						}]
+					})
+				})
+			})
+
+			$.get("json/import.json", function(data, status) {
+				for (let i = 0; i < data.length; i++) {
+					let name = data[i].name;
+					let version = data[i].version;
+					let description = data[i].description;
+					let url = data[i].url;
+					let icon = data[i].icon;
+					let model;
+					if (data[i].iconType === "img") {
+						model =
+							`<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link" data="${url}"><div class="mdui-list-item-avatar"><img src="${icon}"></div><div class="mdui-list-item-content"><div class="mdui-list-item-title">${name}&nbsp;&nbsp;<small class="mdui-typo-body-1-opacity">v${version}</small></div><div class="mdui-list-item-text mdui-list-item-one-line">${description}</div></div></li>`
+					} else {
+						model =
+							`<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link" data="${url}"><div class="mdui-list-item-avatar">${icon} ;</div><div class="mdui-list-item-content"><div class="mdui-list-item-title">${name}&nbsp;&nbsp;<small class="mdui-typo-body-1-opacity">v${version}</small></div><div class="mdui-list-item-text mdui-list-item-one-line">${description}</div></div></li>`
+					};
+					$(".friendLink").before($(model));
+				}
+			})
+
+			$(".open-link").click(function(e) {
+				window.open($(e.target).closest(".open-link").attr("data"));
+			});
+
+			$(".jump-link").click(function(e) {
+				window.location.assign($(e.target).closest(".jump-link").attr("data"));
+			})
+
+			var nativeShare = new NativeShare()
+			var shareData = {
+				title: '学习空间',
+				desc: '学习空间是一个完全免费的第三方七天学堂成绩查询工具。',
+				link: 'https://stusp.milkpotatos.cn/?sourse=share',
+				icon: 'https://stusp.milkpotatoes.cn/ic_launcher.png',
+				// 不要过于依赖以下两个回调，很多浏览器是不支持的
+				success: function() {
+
+				},
+				fail: function() {
+
+				}
+			}
+			nativeShare.setShareData(shareData)
+
+			function byNativeShare(command) {
+				try {
+					nativeShare.call(command)
+				} catch (err) {
+					// 如果不支持，你可以在这里做降级处理
+					// alert(err.message)
+				}
+			}
+		</script>
+		<script src="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js" integrity="sha384-aB8rnkAu/GBsQ1q6dwTySnlrrbhqDwrDnpVHR2Wgm8pWLbwUnzDcIROX3VvCbaK+"
+		 crossorigin="anonymous"></script>
+	</body>
+</html>

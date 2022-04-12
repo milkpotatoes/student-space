@@ -1,0 +1,467 @@
+#!/usr/bin/python3
+
+from ast import While
+import asyncio
+from asyncore import loop
+from concurrent.futures import ThreadPoolExecutor, thread
+from email import header, message
+from email.header import Header
+from http import client
+from pydoc import cli
+import random
+from select import select
+from socket import socket
+from telnetlib import STATUS
+import time
+from flask import Flask, request, session, g, redirect, url_for, abort, jsonify, Response
+import json
+from werkzeug.datastructures import ImmutableMultiDict
+from flask_sockets import Sockets
+import httpx
+import re
+import pymysql
+import redis
+# from flask_tortoise import Tortoise
+
+app = Flask(__name__)
+sockets = Sockets(app)
+
+RETURN_CODE = {"NOT_FOUNT": 404,
+               "SUCCESS": 200,
+               "NOT_ALLOWED": 500,
+               "FAILD": 501
+               }
+
+
+url_pool = {
+    "user": {
+        "user_info": "https://szone-my.7net.cc/userInfo/GetUserInfo"
+    },
+    "exam": {
+        "exam_list": "https://szone-score.7net.cc/exam/getClaimExams?studentName=<studentName>&schoolGuid=<schoolGuid>&startIndex=0&grade=<grade>&rows=3",
+        "unclaim_exam": "https://szone-score.7net.cc/exam/getUnClaimExams?studentName=<studentName>&schoolGuid=<schoolGuid>",
+        "unclaim_exam_count": "https://szone-score.7net.cc/exam/getExamCount?studentName=<studentName>&schoolGuid=<schoolGuid>"
+    }
+}
+
+
+sql = {
+    "register_full": """INSERT INTO examinfo(StudentName, Token, Mail, UserGuid, SchoolGuid, Grade, LatestExamGuid, ReadLatestExam, LatestUnclaimExam, ReadLatestUnclaimExam, IPAddress, Status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+    "register_simple": """INSERT INTO examinfo(StudentName, Token, Mail, UserGuid, Grade, IPAddress, Status)
+    VALUES (?, ?, ?, ?, ?, ?, ?)""",
+    "user_info": """SELECT StudentName, Token, UserGuid, SchoolGuid, Grade, IPAddress from examinfo WHERE UserGuid = ? """,
+    "user_token": """SELECT StudentName, Token, UserGuid, SchoolGuid, Grade, IPAddress, Status from examinfo WHERE Token = ? """,
+    'available_user_info': """SELECT StudentName, Token, UserGuid, SchoolGuid, Grade, IPAddress, LatestExamGuid, LatestUnclaimExam from examinfo WHERE Status = ? """,
+    'mark_unavailable': """UPDATE examinfo SET Status=1 WHERE UserGuid = ?""",
+    'update_read_unclaim': """UPDATE examinfo SET ReadLatestUnclaimExam = ? WHERE UserGuid = ?""",
+    'update_unclaim': """UPDATE examinfo SET LatestUnclaimExam = ? WHERE UserGuid = ?""",
+    'update_read_exam': """UPDATE examinfo SET ReadLatestExam = ? WHERE UserGuid = ?""",
+    'update_exam': """UPDATE examinfo SET LatestExamGuid = ? WHERE UserGuid = ?"""
+}
+
+MESSAGE_STATUS = {
+    'READ': 0,
+    'UNREAD': 1
+}
+
+ACCOUNTSTATUS = {
+    'AVAILABLE': 0,
+    'UNAVAILABLE': 1,
+}
+
+szone_headers = {
+    "Version": "3.1.0"
+}
+
+TOKEN = {
+    "UNSET": '0',
+    'REGISTERED': '1'
+}
+
+
+def prepare_sql():
+    for k in sql.keys():
+        cur = g.mysql_db.cursor()
+        # print("PREPARE %s FROM '%s';" % (k, sql[k]))
+        cur.execute("PREPARE %s FROM '%s';" % (k, sql[k]))
+
+
+def check_query_args(url, args):
+    reg = re.compile(r'(?<=\<)(\w+)(?=\>)')
+    request_params = reg.findall(url)
+    miss = []
+    for k in request_params:
+        if not k in args:
+            miss.append(k)
+    return miss
+
+
+def check_request_args(require, args):
+    miss = []
+    if args:
+        for k in require:
+            if not k in args:
+                miss.append(k)
+    else:
+        miss = require
+    return miss
+
+
+def lower_first(str):
+    return str[:1].lower()+str[1:]
+
+
+def upper_first(str):
+    return str[:1].upper()+str[1:]
+
+
+def replace_query(url, args):
+    reg = re.compile(r'(?<=\<)(\w+)(?=\>)')
+    request_params = reg.findall(url)
+    for k in request_params:
+        if type(args) == dict:
+            if upper_first(k) in args:
+                # print('\\<%s\\>' % k, args[upper_first(k)], url)
+                url = re.sub('\\<%s\\>' % k, args[upper_first(k)], url)
+        else:
+            if upper_first(k) in args[1]:
+                url = re.sub('\\<%s\\>' % k, args[0][upper_first(k)], url)
+
+    return url
+
+
+def connect_db():
+    return pymysql.connect(host='localhost',
+                           port=3307,
+                           user='push',
+                           password='0000',
+                           database='push')
+
+
+def get_db():
+    if not hasattr(g, 'mysql_db'):
+        g.mysql_db = connect_db()
+        prepare_sql()
+    return g.mysql_db
+
+
+def get_redis():
+    if not hasattr(g, 'redis'):
+        g.redis = redis.Redis(host='localhost', port=6379,
+                              decode_responses=True)
+    return g.redis
+
+
+def method_not_allowed():
+    return jsonify(code=RETURN_CODE['NOT_ALLOWED'], message="method not allowed"), 200, {"Access-Control-Allow-Origin": "*"}
+
+
+def get_user_info(user_guid):
+    cursor = get_db().cursor()
+    try:
+        cursor.execute("SET @UserGuid = '%s';" % user_guid)
+        cursor.execute("EXECUTE %s USING %s;" % ('user_info', '@UserGuid'))
+        r = cursor.fetchall()
+        return r
+    except:
+        get_db().rollback()
+
+
+def check_token(token):
+    cursor = get_db().cursor()
+    try:
+        cursor.execute("SET @Token = '%s';" % token)
+        cursor.execute("EXECUTE %s USING %s;" % ('user_token', '@Token'))
+        r = cursor.fetchall()
+        return r
+    except:
+        get_db().rollback()
+
+
+def get_available_user():
+    cur = get_db().cursor()
+    cur.execute("SET @Status=%s" % 0)
+    cur.execute("EXECUTE available_user_info USING @Status;")
+    return cur.fetchall()
+
+
+def mark_unavailable(user_guid):
+    cur = get_db().cursor()
+    try:
+       # 执行SQL语句
+        cur.execute('SET @UserGuid = %s' % user_guid)
+        cur.execute('EXECUTE mark_unavailable USING %s' % '@UserGuid')
+        # 提交到数据库执行
+        get_db().commit()
+    except:
+       # 发生错误时回滚
+        get_db().rollback()
+    return
+
+
+def update_read_unclaim_exam(user_guid, read, latest):
+    cur = get_db().cursor()
+    try:
+       # 执行SQL语句
+        cur.execute('SET @UserGuid = %s, @LatestUnclaimExam = %s, @ReadLatestUnclaimExam' %
+                    user_guid, latest, read)
+        cur.execute('EXECUTE update_read_unclaim USING %s' %
+                    '@UserGuid, @ReadLatestUnclaimExam')
+        cur.execute('EXECUTE update_unclaim USING %s' %
+                    '@UserGuid, @LatestUnclaimExam')
+        # 提交到数据库执行
+        get_db().commit()
+    except:
+       # 发生错误时回滚
+        get_db().rollback()
+    return
+
+
+def update_read_exam(user_guid, read, latest):
+    cur = get_db().cursor()
+    try:
+       # 执行SQL语句
+        cur.execute('SET @UserGuid = %s, @LatestExamGuid = %s, @ReadLatestExam' %
+                    user_guid, latest, read)
+        cur.execute('EXECUTE update_read_exam USING %s' %
+                    '@UserGuid, @ReadULatestExam')
+        cur.execute('EXECUTE update_exam USING %s' %
+                    '@UserGuid, @LatestExamGuid')
+        # 提交到数据库执行
+        get_db().commit()
+    except:
+       # 发生错误时回滚
+        get_db().rollback()
+    return
+
+
+async def get_unclaim_exam(client, user_info, headers):
+    url = replace_query(
+        url_pool['exam']['unclaim_exam'], user_info)
+    r = await client.get(url, headers=headers)
+    return r.json()
+
+
+async def get_exam_list(client, user_info, headers):
+    url = replace_query(
+        url_pool['exam']['exam_list'], user_info)
+    r = await client.get(url, headers=headers)
+    return r.json()
+
+
+async def query_unclaim_info():
+    title = [['StudentName', 'Token', 'UserGuid', 'SchoolGuid', 'Grade',
+              'IPAddress', 'LatestExamGuid', 'LatestUnclaimExam']]
+    """0:StudentName; 1:Token; 2:UserGuid; 3:SchoolGuid; 4:Grede; 5:IPAddress; 6:LExam; 7:LUExam"""
+    async with httpx.AsyncClient(headers=szone_headers) as client:
+        while(True):
+            result = get_available_user()
+            for row in result:
+                url = replace_query(
+                    url_pool['exam']['unclaim_exam_count'], title + [row])
+                headers = {
+                    'Token': row[1],
+                    'X-Forward-For': row[5]
+                }
+                r = await client.get(url, headers=headers)
+                data = r.json()
+                if data['status'] != 200:
+                    mark_unavailable(row[3])
+                    return
+                if data['data']['count'] > 0:
+                    data = get_unclaim_exam(client, title+[row], headers)
+                    if data['status'] == 200:
+                        data = data['data']
+                        if data[0]['list'][0]['examGuid'] != row[7]:
+                            update_read_unclaim_exam(
+                                row[2], MESSAGE_STATUS['UNREAD'], data[0]['list'][0]['examGuid'])
+                await asyncio.sleep(0.2)
+            await asyncio.sleep(300)
+
+
+async def query_exam_info():
+    title = [['StudentName', 'Token', 'UserGuid', 'SchoolGuid', 'Grade',
+              'IPAddress', 'LatestExamGuid', 'LatestUnclaimExam']]
+    time.sleep(1)
+    async with httpx.AsyncClient(headers=szone_headers) as client:
+        while(True):
+            result = get_available_user
+            for row in result:
+                headers = {
+                    'Token': row[1],
+                    'X-Forward-For': row[5]
+                }
+                data = get_exam_list(client, title+[row], headers)
+                if data['status'] != 200:
+                    mark_unavailable(row[3])
+                    return
+                if data['status'] == 200:
+                    data = data['data']
+                    update_read_exam(
+                        client, MESSAGE_STATUS['UNREAD'], data['data'][0]['examGuid'])
+                await asyncio.sleep(0.2)
+            await asyncio.sleep(300)
+    return
+
+
+async def get_detail_info(user_info, headers):
+    async with httpx.AsyncClient(headers=szone_headers) as client:
+        data = await get_exam_list(client, user_info, headers)
+        if data['status'] == 200:
+            data = data['data']['list']
+            user_info.update({
+                'ReadLatestExam': MESSAGE_STATUS['UNREAD'],
+                'LatestExamGuid': data[0]['examGuid']
+            })
+
+        url = replace_query(
+            url_pool['exam']['unclaim_exam_count'], user_info)
+        r = await client.get(url, headers=headers)
+        data = r.json()
+        if data['data']['unClaimCount'] > 0:
+            data = await get_unclaim_exam(client, user_info, headers)
+
+            if data['status'] == 200:
+                data = data['data']
+                user_info.update({
+                    "LatestUnclaimExam": data[0]['list'][0]['examGuid'],
+                    "ReadLatestUnclaimExam": MESSAGE_STATUS['UNREAD']
+                })
+        cur = get_db().cursor()
+        cur.execute(
+            # print(
+            """SET @StudentName='%s', @Token='%s', @Mail='%s', @UserGuid='%s', @SchoolGuid='%s', @Grade='%s',
+            @LatestExamGuid='%s', @ReadLatestExam=%s, @LatestUnclaimExam='%s', @ReadLatestUnclaimExam=%s, @IPAddress='%s', @Status=%s;"""
+            % (user_info['StudentName'], user_info['Token'], user_info['Mail'], user_info['UserGuid'], user_info['SchoolGuid'], user_info['Grade'], user_info['LatestExamGuid'],
+               str(user_info['ReadLatestExam']), user_info['LatestUnclaimExam'], str(user_info['ReadLatestUnclaimExam']), user_info['IPAddress'], str(user_info['Status'])))
+        # """SET @StudentName='%s', @Token='%s', @Mail='%s', @UserGuid='%s', @SchoolGuid='%s', @Grade='%s',
+        # @LatestExamGuid='%s', @ReadLatestExam=%s, @LatestUnclaimExam='%s', @ReadLatestUnclaimExam=%s, @IPAddress='%s', @Status=%s;"""
+        # % (user_info['StudentName'], user_info['Token'],user_info['Mail'], user_info['UserGuid'], user_info['SchoolGuid'], user_info['Mail'], user_info['Grade'], user_info['LatestExamGuid'],
+        #    user_info['ReadLatestExam'], user_info['LatestUnclaimExam'], user_info['ReadLatestUnclaimExam'], user_info['IPAddress'], user_info['Status']))
+        cur.execute("EXECUTE register_full USING @StudentNAme, @Token, @Mail, @UserGuid, @SchoolGuid, @Grade, @LatestExamGuid, @ReadLatestExam, @LatestUnclaimExam, @ReadLatestUnclaimExam, @IPAddress, @Status")
+        get_db().commit()
+        # else:
+        #     msg = jsonify(
+        #         code=RETURN_CODE['FAILD'], message=data['message'])
+        #     return msg, 200, {"Access-Control-Allow-Origin": "*"}
+
+
+@app.teardown_appcontext
+def close_db(self):
+    # """Closes the database again at the end of the request."""
+    if hasattr(g, 'mysql_db'):
+        g.mysql_db.close()
+
+
+def register_to_server(args):
+    data = check_token(args['token'])
+    print(data)
+    if len(data) == 0:
+        with httpx.Client(headers=szone_headers) as client:
+            user_info = {
+                'Token': args['token']
+            }
+            if 'mail' in args:
+                user_info.update(Mail=args['mail'])
+            else:
+                user_info.update(Mail="")
+            headers = {'Token': args['token'],
+                       "X-Forward-For": request.remote_addr}
+            # 获取用户信息，验证Token
+            r = client.get(url_pool["user"]["user_info"], headers=headers)
+            data = r.json()
+            if data['status'] == 200:
+                data = data['data']
+                user_info.update({
+                    'UserGuid': data['userGuid'],
+                    'Grade': data['grade'],
+                    'StudentName': data['studentName'],
+                    'SchoolGuid': data['schoolGuid'],
+                    'IPAddress': request.remote_addr,
+                    'Status': 0
+                })
+                asyncio.run(get_detail_info(user_info, headers))
+                return [True, user_info]
+            else:
+                msg = jsonify(
+                    code=RETURN_CODE['FAILD'], message='Token error: %s' % data['message'])
+                return [False, msg]
+    else:
+        data = data[0]
+        if data[6] == ACCOUNTSTATUS['AVAILABLE']:
+            return [True, {
+                'StudentName': data[0],
+                'Token': data[1],
+                'UserGuid': data[2],
+                'SchoolGuid': data[3],
+                'Grade': data[4],
+                'IPAddress': data[5],
+                'Status': data[6]
+            }]
+        else:
+            return [False, jsonify(
+                code=RETURN_CODE['FAILD'], message='Token error: %s' % 'Token has expired.')
+            ]
+    # return True
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return jsonify(code=RETURN_CODE['NOT_FOUNT'], message="page not found"), 404, {"Access-Control-Allow-Origin":	"*"}
+
+
+def create_random_authcode():
+    num = ""
+    i = 0
+    while i < 4:
+        num += str(random.randrange(0, 9))
+        i += 1
+    return num
+
+
+def create_authcode():
+    num = create_random_authcode()
+    while get_redis().get(num):
+        num = create_random_authcode()
+    get_redis().set(num, TOKEN['UNSET'], ex=60)
+    return num
+
+
+@sockets.route('/api/authcode')
+def get_auth_code(ws):
+    authcode = create_authcode()
+    ws.send(authcode)
+    # if request.environ.get('wsgi.websocket'):
+    #     ws = request.environ['wsgi.websocket']
+    #     while True:
+    #         msg = ws.wait()
+    #         ws.send(msg)
+    r = get_redis()
+    while not ws.closed and r.get(authcode):
+        print(r.get(authcode))
+        print("---wait for auth---")
+        if r.get(authcode) != TOKEN['UNSET']:
+            res = register_to_server(r.get(authcode))
+            user_guid = res[1]
+            ws.send(json.dumps({
+                'status': RETURN_CODE['SUCCESS'],
+                'message': 'success',
+                'data': {
+                    'userGuid': user_guid
+                }
+            }))
+            r.set(authcode, TOKEN['REGISTERED'], ex=0)
+            ws.close()
+        time.sleep(1)
+
+
+if __name__ == '__main__':
+    # app.run()
+    # debug=True
+    app.run(threaded=True)
+    # from gevent import pywsgi
+    # from geventwebsocket.handler import WebSocketHandler
+    # server = pywsgi.WSGIServer(('', 5000), app, handler_class=WebSocketHandler)
+    print('server start')
+    # server.serve_forever()

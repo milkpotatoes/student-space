@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="/css/mdui.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/viewer.min.css" />
+    <link rel="stylesheet" href="/css/style.min.css" />
+    <link rel="manifest" href="/json/manifest.json" />
+    <link rel="shortcut icon" href="/src/ic_launcher.png" type="image/x-icon">
+    <script src="/js/viewer.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/js/base64.min.js"></script>
+    <script src="/js/showdown.min.js" type="text/javascript" charset="utf-8"></script>
+    <title>学习空间 - 牛奶土豆</title>
+    <link rel="preload" href="/src/Ultimate Material Lollipop Collection - 456.jpg" as="image">
+</head>
+
+<body class="mdui-appbar-with-toolbar mdui-theme-layout-auto mdui-drawer-body-left">
+    <header class="mdui-appbar mdui-appbar-fixed simple-appbar mdui-hidden">
+        <div class="mdui-toolbar mdui-color-theme"> <a href="javascript:;" onclick="window.history.back()"
+                class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a> <span
+                class=" mdui-typo-title"></span> </div>
+    </header>
+    <div class="page-loading mdui-theme-layout-auto">
+        <div class="mdui-spinner page-loading-pgs"></div>
+        <div class="page-loading-appname">学习空间</div>
+        <div class="page-loading-version"></div>
+    </div> <!-- 登录界面 -->
+    <div class="main-container login" appbar="simple-appbar" page-title="学习空间 - 登录" scroll-hide="false" back-up-btn="false"
+        back-btn="false">
+        <div class="mdui-card-content mdui-center mdui-container">
+            <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12"> <i
+                    class="mdui-icon material-icons">phone</i> <label class="mdui-textfield-label">手机号</label> <input
+                    class="mdui-textfield-input" id="userCode" name="userCode" pattern="^1+[0-9]{10,10}$"
+                    autocomplete="off" type="tel" />
+                <div class="mdui-textfield-error">手机号格式错误</div>
+            </div>
+            <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12 password-widget"> <i
+                    class="mdui-icon material-icons">lock</i> <label class="mdui-textfield-label">密码</label> <input
+                    class="mdui-textfield-input" id="password" type="password" name="password" /> </div>
+            <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-8 sms-widget" style="display: none;">
+                <i class="mdui-icon material-icons">message</i> <label class="mdui-textfield-label">短信验证码</label> <input
+                    class="mdui-textfield-input" id="smsCode" pattern="^[0-9]{1,6}$" type="tel" name="smscode" />
+                <div class="mdui-textfield-error">验证码格式错误</div>
+            </div> <button class="mdui-btn mdui-btn-raised mdui-color-theme-accent mdui-m-t-3 mdui-col-xs-4 sms-widget"
+                id="sendsms" type="button" style="display: none;">获取验证码</button>
+            <p class="mdui-typo mdui-col-xs-12" style="font-size: 16px;"><a id="login-type" class="login-sms"
+                    href="javascript:void(0);">验证码登录/注册</a></p> <label class="mdui-checkbox"><input type="checkbox"
+                    id="agree-rules-login" /><i class="mdui-checkbox-icon"></i>我已阅读并同意<a
+                    class="show-page mdui-text-color-theme-accent" data="agreement">《学习空间用户条款》</a>、<a
+                    class="show-page mdui-text-color-theme-accent" data="privacystatement">《学习空间隐私条款》</a></label>
+            <div class="mdui-col-xs-12"> <input type="submit" id="login-btn"
+                    class="mdui-btn mdui-btn-raised mdui-color-theme-accent mdui-float-right" value="登录" /> </div>
+        </div>
+    </div>
+    <div class="main-container index" appbar="nonw" page-title="学习空间" back-up-btn="true">
+        <header class="mdui-appbar mdui-appbar-fixed">
+            <div class="mdui-toolbar mdui-color-theme"> <a href="javascript:;" class="mdui-btn mdui-btn-icon"
+                    mdui-drawer="{target: '#drawer'}"><i class="mdui-icon material-icons">menu</i></a> <span
+                    class="mdui-typo-title mdui-toolbar-spacer">学习空间</span> <a href="javascript:void(0);"
+                    class="mdui-btn mdui-btn-icon show-page" data="unclaim" mdui-tooltip="{content: '未认领'}"> <i
+                        class="mdui-icon material-icons notifications-icon">notifications_none</i> </a> </div>
+        </header>
+        <div class="mdui-drawer" id="drawer">
+            <div class="mdui-card-media">
+                <div class="background-card"
+                    style="width: 100%; height: 196px; background-image: url('src/Ultimate%20Material%20Lollipop%20Collection%20-%20456.jpg');  background-repeat: no-repeat;  background-size: 100% auto;">
+                </div>
+                <div class="mdui-card-primary mdui-list-item mdui-card-media-covered show-page userBasicInfo"
+                    data="user">
+                    <div class="mdui-list-item-avatar"><img class="userAvatar" /></div>
+                    <div class="mdui-list-item-content ">
+                        <div class="mdui-list-item-title nick-name"> </div>
+                        <div class="mdui-list-item-summary userCode"></div>
+                    </div>
+                </div>
+            </div>
+            <ul class="mdui-list">
+                <li class="mdui-list-item mdui-ripple mdui-slider-disabled widgets mdui-hidden"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">widgets</i>
+                    <div class="mdui-list-item-content">桌面小部件</div>
+                </li>
+                <li class="mdui-list-item mdui-ripple show-page mdui-hidden" data="settings"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">settings</i>
+                    <div class="mdui-list-item-content">设置</div>
+                </li>
+                <li class="mdui-list-item mdui-ripple connect-watch" data="connect-watch"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">watch</i>
+                    <div class="mdui-list-item-content">连接到手表</div>
+                </li>
+                <li class="mdui-list-item mdui-ripple show-page" data="help"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">book</i>
+                    <div class="mdui-list-item-content">帮助</div>
+                </li>
+                <li class="mdui-list-item mdui-ripple" mdui-dialog="{target: '#donation', history: false}"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">confirmation_number</i>
+                    <div class="mdui-list-item-content">捐赠</div>
+                </li>
+                <li class="mdui-list-item mdui-ripple show-page" data="about"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">send</i>
+                    <div class="mdui-list-item-content">关于</div>
+                </li>
+                <li class="mdui-list-item mdui-ripple" onclick="logout()"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">exit_to_app</i>
+                    <div class="mdui-list-item-content">退出登录</div>
+                </li>
+            </ul>
+        </div>
+        <div class="main">
+            <ul class="mdui-list mdui-container mdui-center" id="examList"> </ul>
+            <div class="mdui-progress mdui-m-t-1 exam-item-pgs">
+                <div class="mdui-progress-indeterminate"></div>
+            </div>
+        </div>
+    </div>
+    <div class="main-container unclaim" appbar="simple-appbar" page-title="未认领考试" scroll-hide="false" back-up-btn="true"
+        back-btn="true">
+        <div class="main">
+            <ul class="mdui-list mdui-container mdui-center" id="unClaimExamList"> </ul>
+            <div class="mdui-typo mdui-hidden noUnclaimExam" style="text-align: center;"
+                mdui-dialog="{target: '#claimExam', history: false}"> 当前无未认领考试 </div>
+            <div class="mdui-progress mdui-m-t-1 exam-item-pgs">
+                <div class="mdui-progress-indeterminate"></div>
+            </div>
+        </div>
+        <div class="mdui-dialog" id="claimExam">
+            <div class="mdui-dialog-title">捐赠</div>
+            <div class="mdui-dialog-content"> <span class="mdui-typo"> 请选择属于本人的考试认领 </span>
+                <div class="mdui-panel examInfo" mdui-panel="{accordion: true}"> </div>
+            </div>
+            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> </div>
+        </div>
+    </div>
+    <div class="main-container exam" appbar="none" page-title="成绩详情" back-up-btn="true" back-btn="true">
+        <header class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-toolbar-hide">
+            <div class="mdui-toolbar mdui-color-theme"> <a href="javascript:;" onclick="window.history.back()"
+                    class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a> <span
+                    class=" mdui-typo-title">成绩详情</span> </div>
+            <div class="mdui-tab mdui-tab-scrollable mdui-tab-full-width mdui-color-white mdui-hidden mdui-p-l-1"
+                mdui-tab="{trigger:'click'}"></div>
+        </header>
+        <div class="main mdui-p-t-2">
+            <div class="mdui-progress mdui-m-t-1 exam-detail-pgs">
+                <div class="mdui-progress-indeterminate"></div>
+            </div>
+        </div>
+    </div>
+    <div class="main-container about" appbar="simple-appbar" page-title="关于" scroll-hide="false" back-up-btn="true"
+        back-btn="true">
+        <div class="mdui-container">
+            <div class="mdui-card mdui-m-t-2 mdui-hoverable"> <img class="mdui-img-circle mdui-center mdui-m-t-3 back"
+                    src="src/ic_launcher.png" style="width: 154px;">
+                <div class="mdui-m-y-3 mdui-typo-title" style="width: 100%;text-align: center;"> <span
+                        class="mdui-typo-title app-name">学习空间</span><br /> <span
+                        class="mdui-subheader description">七天网络成绩查询</span> </div>
+            </div>
+            <ul class="mdui-list">
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item jump-link"
+                    data="coolmarket://www.coolapk.com/u/653223"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons"
+                        mdui-dialog="{target: '#openAuthor', history: false}">face</i>
+                    <div class="mdui-list-item-content" mdui-dialog="{target: '#openAuthor', history: false}">
+                        <div class="mdui-list-item-title" mdui-dialog="{target: '#openAuthor', history: false}">作者</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line"
+                            mdui-dialog="{target: '#openAuthor', history: false}">酷安@牛奶土豆</div>
+                    </div> <button class="mdui-btn mdui-btn-icon jump-link" data="mailto:feedback@milkpotatoes.cn"><i
+                            class="mdui-list-item-icon mdui-icon material-icons">email</i></button>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link"
+                    data="https://qm.qq.com/cgi-bin/qm/qr?k=9ZPw36rGZEK4-beWpijEhRzeG3BNdcOW&jump_from=webapi"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">group</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">加入群聊</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">加入群聊，一起来聊聊学习？</div>
+                    </div>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">send</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">版本</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line appVersion"></div>
+                    </div>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"
+                    mdui-dialog="{target: '#share', history: false}">
+                    <!-- onclick="byNativeShare()"> --> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">share</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">分享</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">好用的话，就分享给小伙伴吧</div>
+                    </div>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"
+                    mdui-dialog="{target: '#donation', history: false}"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">confirmation_number</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">捐赠</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">卑微土豆，在线乞讨</div>
+                    </div>
+                </li>
+                <li class="mdui-subheader mdui-text-color-theme-accent import-list">引用库</li>
+                <li class="mdui-subheader mdui-text-color-theme-accent friend-link">友情链接</li>
+            </ul>
+        </div>
+        <div class="mdui-dialog" id="share">
+            <div class="mdui-dialog-title">分享</div>
+            <div class="mdui-dialog-content"> <img class="mdui-center mdui-m-b-2" style="width:196px"
+                    src="src/share_qrcode.png">
+                <span class="mdui-typo"> 长按二维码或右键点击将图片保存到本地 </span>
+            </div>
+            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> </div>
+        </div>
+        <div class="mdui-dialog" id="openAuthor">
+            <div class="mdui-dialog-title">在网页打开</div>
+            <div class="mdui-dialog-content"> <span class="mdui-typo"> 手机未安装酷安或没有自动打开？ </span> </div>
+            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> <button
+                    class="mdui-btn mdui-ripple open-link" data="http://www.coolapk.com/u/653223"
+                    mdui-dialog-confirm>打开</button> </div>
+        </div>
+    </div>
+    <div class="main-container user" appbar="simple-appbar" page-title="我" scroll-hide="false" back-up-btn="true"
+        back-btn="true">
+        <div class="mdui-container">
+            <div class="mdui-card-media mdui-m-t-2 mdui-card">
+                <div class="background-card mdui-valign"
+                    style="width: 100%; height: 218px; background-image: url('src/Ultimate%20Material%20Lollipop%20Collection%20-%20456.jpg');  background-repeat: no-repeat;  background-size: 100% auto;">
+                    <div class="user-avatar mdui-center"><img class="userAvatar" /></div>
+                </div>
+                <div class="mdui-card-primary mdui-card-media-covered mdui-p-y-0">
+                    <div class="mdui-list-item-content userBasicInfo nick-name mdui-center"
+                        style="text-align: center; font-size: 18px;"> </div>
+                </div>
+            </div>
+            <ul class="mdui-list">
+                <li class="mdui-subheader">用户信息</li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">account_circle</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">用户名</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line nick-name"></div>
+                    </div>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">phone</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">手机号</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line userCode"> </div>
+                    </div>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">location_on</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">所在区域</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line city-area"></div>
+                    </div>
+                </li>
+                <li class="mdui-subheader">用户信息</li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons"></i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">学生姓名</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line student-name"></div>
+                    </div>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons"></i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">所在学校</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line school-name"> </div>
+                    </div>
+                </li>
+                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons"></i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">所在年级</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line grade"></div>
+                    </div>
+                </li>
+            </ul> <button
+                class="mdui-btn mdui-btn-block mdui-btn-raised mdui-color-theme-accent mdui-m-b-1 mdui-m-t-2 saveUserInfo"
+                disabled>保存</button>
+        </div>
+    </div>
+    <div class="main-container document help agreement privacystatement widgets" appbar="simple-appbar"
+        page-title="请稍后..."
+        data='{"help": {"title": "帮助", "data": "md/help.md"}, "agreement": {"title": "使用条款", "data": "md/agreement.md"}, "privacystatement": {"title": "隐私条款", "data": "md/privacystatement.md"}, "widgets": {"title": "桌面小部件", "data": "md/widgets.md"}}'
+        scroll-hide="true" back-up-btn="true" back-btn="true">
+        <div class="main mdui-p-t-2 mdui-container mdui-typo"> </div>
+    </div>
+    <div class="main-container settings" appbar="simple-appbar" page-title="设置" scroll-hide="false" back-up-btn="true"
+        back-btn="true"></div>
+    <div class="mdui-dialog" id="donation">
+        <div class="mdui-dialog-title">捐赠</div>
+        <div class="mdui-dialog-content"> <span class="mdui-typo">
+                学习空间自初版运行至今已有两年有余，自网页版上线以来，最主要的一个问题就是服务器以及域名的支出。<br>
+                学习空间并不盈利，也没有加入任何广告。如果您想要为学习空间的维护及运行提供一些帮助的话，您可以在下方的捐赠方式中向我转账，可以是1元、3元、5元或者其他任何金额。<br />
+                当然您也可以继续免费使用。在您捐赠时，请在付款时备注学习空间，并加上您的称呼。如果后期上线鸣谢页面，您的称呼将作为捐赠人出现。<br />
+            </span>
+            <div class="mdui-panel" mdui-panel="{accordion: true}">
+                <div class="mdui-panel-item">
+                    <div class="mdui-panel-item-header">
+                        <div class="mdui-panel-item-title">支付宝</div>
+                        <i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+                    </div>
+                    <div class="mdui-panel-item-body"> <img class="mdui-img-rounded mdui-img-fluid"
+                            style="border-radius: 12px;" src="src/alipay_qrcode.png">
+                        <div class="mdui-panel-item-actions"> <button class="mdui-btn mdui-ripple open-link"
+                                data="https://qr.alipay.com/fkx03789wzomihfk9oashc9"
+                                mdui-panel-item-confirm>打开支付宝</button> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>不了</button> </div>
+    </div>
+    <div class="back-up-btn-box">
+        <button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed back-top mdui-hidden">
+            <i class="mdui-icon material-icons">keyboard_arrow_up</i>
+        </button>
+    </div>
+    <script
+        type="text/javascript"> if ('serviceWorker' in navigator) { navigator.serviceWorker.register("/sw.js"); }</script>
+    <script src="/js/mdui.min.js"></script>
+    <script src="/js/switch_device.min.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

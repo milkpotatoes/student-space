@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css" integrity="sha384-2PJ2u4NYg6jCNNpv3i1hK9AoAqODy6CdiC+gYiL2DVx+ku5wzJMFNdE3RoWfBIRP"
+		 crossorigin="anonymous" />
+		<link rel="stylesheet" href="css/style.css?v=1.0.0" />
+		<link rel="manifest" href="json/manifest.json" />
+		<link rel="shortcut icon" href="src/ic_launcher.png" type="image/x-icon">
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"> </script>
+		<script src="https://cdn.jsdelivr.net/npm/js-base64@3.4.5/base64.min.js"></script>
+		<script src="js/function.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/script.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/theme.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/unClaim.js" type="text/javascript" charset="utf-8"></script>
+		<title>未认领考试</title>
+	</head>
+	<body class="mdui-appbar-with-toolbar mdui-theme-layout-auto">
+		<!-- 顶栏 -->
+		<header class="mdui-appbar mdui-appbar-fixed">
+			<div class="mdui-toolbar mdui-color-theme">
+				<a href="javascript:;" onclick="window.history.back()" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a>
+				<span class=" mdui-typo-title">未认领考试</span>
+			</div>
+		</header>
+		<!-- 未认领考试列表 -->
+		<div class="main">
+			<ul class="mdui-list mdui-container mdui-center" id="unClaimExamList">
+
+			</ul>
+			<div class="mdui-typo mdui-hidden noUnclaimExam" style="text-align: center;" mdui-dialog="{target: '#claimExam'}">
+				当前无未认领考试
+			</div>
+			<div class="mdui-progress mdui-m-t-1 exam-item-pgs">
+				<div class="mdui-progress-indeterminate"></div>
+			</div>
+		</div>
+		<!-- 认领考试对话框 -->
+		<div class="mdui-dialog" id="claimExam">
+			<div class="mdui-dialog-title">捐赠</div>
+			<div class="mdui-dialog-content">
+				<span class="mdui-typo">
+					请选择属于本人的考试认领
+				</span>
+				<div class="mdui-panel examInfo" mdui-panel="{accordion: true}">
+					<!-- 待认领考试卡片 -->
+
+				</div>
+			</div>
+			<div class="mdui-dialog-actions">
+				<button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+				<!-- <button class="mdui-btn mdui-ripple copyShareLink" mdui-dialog-confirm>复制分享链接</button> -->
+			</div>
+		</div>
+
+		<button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed back-top"><i class="mdui-icon material-icons">keyboard_arrow_up</i></button>
+
+		<script src="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js" integrity="sha384-aB8rnkAu/GBsQ1q6dwTySnlrrbhqDwrDnpVHR2Wgm8pWLbwUnzDcIROX3VvCbaK+"
+		 crossorigin="anonymous"></script>
+	</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css" integrity="sha384-2PJ2u4NYg6jCNNpv3i1hK9AoAqODy6CdiC+gYiL2DVx+ku5wzJMFNdE3RoWfBIRP"
+		 crossorigin="anonymous" />
+		<link rel="manifest" href="/json/manifest.json" />
+		<link rel="shortcut icon" href="/src/ic_launcher.png" type="image/x-icon">
+		<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"> </script>
+		<script src="https://cdn.jsdelivr.net/npm/js-base64@3.4.5/base64.min.js"></script>
+		<script src="/js/function.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/js/theme.js" type="text/javascript" charset="utf-8"></script>
+		<title>404 NOT FOUND</title>
+	</head>
+	<body class="mdui-appbar-with-toolbar mdui-theme-layout-auto">
+		<!-- 顶栏 -->
+		<header class="mdui-appbar mdui-appbar-fixed">
+			<div class="mdui-toolbar mdui-color-theme">
+				<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a>
+				<span class=" mdui-typo-title">404 NOT FOUND</span>
+			</div>
+		</header>
+
+		<div class="mdui-card-media mdui-center background-1" style="width: 100%;">
+			<div class="background-card mdui-valign" style="width: 100%; height: 100%; background-image: url('/src/Ultimate%20Material%20Lollipop%20Collection%20-%20456.jpg');  background-repeat: no-repeat;  background-size: auto 100%;">
+				<div class="user-avatar mdui-center"><img class="userAvatar" /></div>
+			</div>
+			<div class="mdui-card-media-covered mdui-valign message-1">
+				<div class="mdui-card-primary mdui-p-y-0" style="width: 100%;">
+					<div class="mdui-list-item-content mdui-center" style="text-align: center; font-size: 24px; line-height: 36px;">
+						啊哦，您访问的页面似乎已经沉入海底了
+					</div>
+					<div class="mdui-card-actions">
+						<button class="mdui-btn mdui-ripple mdui-ripple-white mdui-center jump-link" data="index.html">
+							<i class="mdui-icon material-icons">home</i> <span class="home-btn-text">返回首页</span></button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mdui-container background-2">
+			<div class="mdui-card-media mdui-center mdui-card" style="width: 100%; height: auto;">
+				<div class="background-card-2 mdui-valign" style="width: 100%; height: 100%; background-image: url('/src/Ultimate%20Material%20Lollipop%20Collection%20-%20456.jpg');  background-repeat: no-repeat;  background-size: 100% auto;">
+					<div class="user-avatar mdui-center"><img class="userAvatar" /></div>
+				</div>
+				<div class="mdui-card-media-covered mdui-valign message-2">
+					<div class="mdui-card-primary mdui-p-y-0" style="width: 100%;">
+						<div class="mdui-list-item-content mdui-center" style="text-align: center; font-size: 24px;">
+							啊哦，您访问的页面似乎已经沉入海底了
+						</div>
+						<div class="mdui-card-actions">
+							<button class="mdui-btn mdui-ripple mdui-ripple-white mdui-center jump-link" data="index.html">
+								<i class="mdui-icon material-icons">home</i> <span class="home-btn-text">返回首页</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			function setBG() {
+				// let ew = document.getElementsByClassName("background-card")[0].offsetWidth;
+				// let eh = document.getElementsByClassName("background-card")[0].offsetHeight;
+				// let item = document.getElementsByClassName("userBasicInfo")[0].offsetHeight;
+				// let py = 0 - (ew * 1155 / 2048 + item - eh);
+
+				let vh = document.documentElement.clientHeight;
+				let vw = document.documentElement.clientWidth;
+				let appbar = document.getElementsByClassName("mdui-appbar")[0].offsetHeight;
+				if (vh / vw < 1) {
+					$(".background-1").addClass("mdui-hidden");
+					$(".background-2").removeClass("mdui-hidden");
+					let bg2h = vh - appbar;
+					let bg2w = document.getElementsByClassName("background-card-2")[0].offsetWidth;
+					let msgh = bg2h * 1 / 3;
+					bg2h = bg2w * 3 / 5;
+					let b2pos = -bg2w * 1155 / 2048 - msgh + bg2h;
+					$(".background-card-2").css("height", `${bg2h}px`);
+					$(".message-2").css("height", `${msgh}px`);
+					$(".background-card-2").css("background-position", `0px ${b2pos}px`);
+					// console.log(`元素宽度：${ew}，元素高度:${eh}，信息栏高度：${item}，位移${py}`)
+				} else {
+					$(".background-1").removeClass("mdui-hidden");
+					$(".background-2").addClass("mdui-hidden");
+					$(".background-1").css("height", `calc(100vh - ${appbar}px)`)
+					$(".message-1").css(style = "height", `calc((100vh - ${appbar}px) * (2048 - 1155) / 2048)`)
+				}
+			};
+			window.onresize = function() {
+				setBG();
+			}
+			setBG()
+			// 倒计时5秒自动跳转首页
+			countDown(6, function(time) {
+				if (time > 0) {
+					$(".home-btn-text").text(`返回首页 (${time})`);
+				} else {
+					window.location.assign("/index.html");
+				}
+			})
+			
+			$(function() {
+				$(".open-link").click(function(e) {
+					window.open($(e.target).closest(".open-link").attr("data"));
+				});
+			
+				$(".jump-link").click(function(e) {
+					window.location.assign($(e.target).closest(".jump-link").attr("data"));
+					console.log(123)
+				})
+			})
+		</script>
+
+		<script src="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js" integrity="sha384-aB8rnkAu/GBsQ1q6dwTySnlrrbhqDwrDnpVHR2Wgm8pWLbwUnzDcIROX3VvCbaK+"
+		 crossorigin="anonymous"></script>
+	</body>
+</html>

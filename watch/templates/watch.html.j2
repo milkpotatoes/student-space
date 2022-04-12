@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习空间 手表版</title>
+    <link rel="stylesheet" href="wcss/index.min.css">
+    <script src="wjs/socket.io.min.js"></script>
+    <script src="wjs/watch.min.js"></script>
+</head>
+
+<body>
+    <div class="view">
+        <div class="app" showat="1">
+            <div class="user-info page">
+                <div class="user-action page-container"  showat="1">
+                    <div class="user">
+                        <img src="/avatar/default.png" alt="用户头像" class="avatar">
+                        <div class="welcome">{{ time_interval }}好，{{ student_name }}</div>
+                        {% if unclaim_exam_count > 0 %}
+                        <div class="unclaim-info">您有{{ unclaim_exam_count }}场考试待认领</div>
+                        {% else %}
+                        <div class="unclaim-info">当前无未认领考试</div>
+                        {% endif %}
+                    </div>
+                    <div class="action">
+                        <button class="logout common-button" title="退出登录">退出登录</button>
+                    </div>
+                </div>
+            </div>
+            <div class="exam-info page">
+                <div class="exam-list page-container" showat="1">
+                    {% for exam_item in exam_list %}
+                        <div class="exam">
+                            <div class="exam-base">
+                                <span class="type">{{ exam_item.type }}</span><span class="name">{{ exam_item.examName }}</span>
+                            </div>
+                            <div class="exam-score">{{ exam_item.score }}</div>
+                            <a class="exam-detail circle-button" title="查看详情"
+                                href="/exam?ruCode={{ exam_item.ruCode }}&examGuid={{ exam_item.examGuid }}&studentCode={{ exam_item.studentCode }}">查看详情</a>
+                        </div>
+                        {% if loop.last %}
+                            {% if loop.index < 3 %} 
+                            <div class="exam-note exam">
+                                <div class="note-icon"></div>
+                                <div class="note">已显示全部考试</div>
+                            </div>
+                            {% else %}
+                                <div class="exam-note exam">
+                                    <div class="note-icon"></div>
+                                    <div class="note">更多考试信息请前往其他设备查看</div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                    <div class="exam-note exam">
+                        <div class="note-icon"></div>
+                        <div class="note">当前无任何考试</div>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+        <div class="unclaim-exam-list page">
+            <div class="unclaim-exam-list page-container" showat="1">
+                {% for exam_item in unclaim_exam_list %}
+                    <div class="unclaim-exam">
+                        <div class="exam-name">{{ exam_item.examName|cutstring }}</div>
+                        <div class="exam-time">时间&nbsp;&nbsp;{{ exam_item.time }}</div>
+                        <div class="student-code">考号&nbsp;&nbsp;{{ exam_item.studentCodeList[0] }}</div>
+                        <div class="spacing"></div>
+                        <button class="claim-exam circle-button" title="认领考试"
+                            data="{'studentCode': '{{ exam_item.studentCodeList[0] }}', 'examGuid': '{{ exam_item.examGuid }}'}">认领考试</button>
+                    </div>
+                    {% if loop.last %}
+                        {% if loop.index >= unclaim_exam_count %}
+                            <div class="exam-note exam">
+                                <div class="note-icon"></div>
+                                <div class="note">已显示所有未认领考试</div>
+                            </div>
+                        {% else %}
+                            <div class="exam-note exam">
+                                <div class="note-icon"></div>
+                                <div class="note">更多未认领考试请前往其他设备查看</div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <div class="exam-note exam">
+                        <div class="note-icon"></div>
+                        <div class="note">当前无未认领考试</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

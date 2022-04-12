@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习空间 成绩详情</title>
+    <link rel="stylesheet" href="wcss/exam.min.css">
+    <script src="wjs/exam.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="back icon"></div>
+        <div class="title">成绩详情</div>
+        <div class="icon fullscreen"></div>
+    </header>
+    <div class="app">
+        <div class="exam-details">
+            {% for subject_item in subject_details %}
+            {% if loop.first %}
+            <div name="{{ subject_item.km }}：">{{ subject_item.myScore | tostr }}/{{ subject_item.fullScore | tostr }}
+            </div>
+            {% else %}
+            {% if subject_item.code != -1 %}
+            {% if loop.last and loop.index % 2 == 1 %}
+            <div class="x-row" name="{{ subject_item.km }}">{{ subject_item.myScore | tostr }}</div>
+            {% else %}
+            <div name="{{ subject_item.km }}">{{ subject_item.myScore | tostr }}</div>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>
