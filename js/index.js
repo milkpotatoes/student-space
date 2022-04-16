@@ -923,21 +923,6 @@ function showUserInfo(data) {
     $(".userCode").text((getUserCache().data.userCode).replace(/(\d{3})\d*(\d{4})/, '$1****$2'));
 }
 
-function uploadUsers(user_data) {
-    $.post("//api.milkpotatoes.cn/stusp/user.php", {
-        method: "query",
-        nickname: user_data.data.nickName
-    }, (data) => {
-        if (data.code === 10200 && data.data.count === 0) {
-            $.post("//api.milkpotatoes.cn/stusp/user.php", {
-                method: "put",
-                nickname: user_data.data.nickName,
-                schoolname: user_data.data.schoolName,
-                location: user_data.data.cityCode + "," + getProvinceName(user_data.data.cityCode).join(",")
-            });
-        }
-    }, "json");
-}
 /* 首次加载页面执行 */
 function firstLoad(page_name) {
     //console.log("firstLoad_1", page_name);
@@ -972,7 +957,6 @@ function firstLoad(page_name) {
                                 onClick: (inst) => {
                                     if ($("#agree-rules").is(":checked")) {
                                         localStorage.agree = (new Date()).getTime();
-                                        uploadUsers(data);
                                         inst.close();
                                     } else {
                                         mdui.snackbar({
@@ -987,8 +971,6 @@ function firstLoad(page_name) {
                                 onClick: () => logout()
                             }]
                         })
-                    } else {
-                        uploadUsers(data);
                     }
                     if (data.data.schoolGuid !== "") {
                         /* 获取考试/未认领列表 */
@@ -1785,29 +1767,6 @@ $(document).on("click", ".jump-link", (e) => {
     window.location.assign($(e.target).closest(".jump-link").attr("data"));
 });
 
-$(document).on("click", ".connect-watch", (e) => {
-    let dialog = new mdui.dialog({
-        title: "连接手表",
-        content: `<div class="mdui-typo">输入手表上的授权码以进行配对</div>
-        <div class="mdui-typo">手表端地址：<a href="/watch">https://stusp.milkpotatoes.cn/watch</a></div>
-        <div class="authcode"><div></div><span></span><span></span><span></span><span></span><div></div><input><span class="focus mdui-hidden"></span></div>
-        <div class="midi-type"></div>
-      <button class="mdui-btn mdui-btn-raised mdui-color-theme-accent authdevices" onclick="authWatch()">授权</button>`,
-        history: false
-    });
-    window.authdialog = dialog;
-
-    let auth_code = document.querySelector(".authcode > input");
-    auth_code.addEventListener("blur", (e) => {
-        if (e.target == auth_code) {
-            document.querySelector(".authcode>.focus").classList.add("mdui-hidden")
-            // document.querySelector(".authcode>.focus").style.left = `calc(${len * 100}% + ${len * 16}px)`
-        }
-    });
-
-});
-
-
 document.addEventListener("click", (e) => {
     let auth_box = document.querySelectorAll(".authcode > span");
     let auth_code = document.querySelector(".authcode > input");
@@ -1879,57 +1838,9 @@ document.addEventListener("input", (e) => {
     }
 });
 
-
-function authWatch() {
-    let auth_code = document.querySelector(".authcode > input");
-    auth_code = auth_code.value.replace(/ /g, "");
-    // 想提前体验的可在浏览器登入学习空间，然后再控制台输入如下代码即可
-    let json_type = new Headers();
-    json_type.append('Content-Type', 'application/json');
-    fetch("/api/authdevice", {
-            method: "POST",
-            body: JSON.stringify({
-                authcode: auth_code,
-                token: localStorage.Token
-            }),
-            headers: json_type
-        })
-        .then(data => {
-            return data.json()
-        })
-        .then(data => {
-            if (data.status == 200) {
-                window.authdialog.close();
-                mdui.snackbar("登录成功，请查看手表");
-            } else {
-                mdui.snackbar("授权码错误或已失效");
-            }
-        })
-}
-
 $(".back-top").addClass("mdui-hidden");
 $(document).on("click", ".back-top", () => window.scrollTo(0, 0));
-/* 百度统计代码 */
-var _hmt = _hmt || [];
-(function () {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?dd18823003a9883d07ac0b24b75f9d16";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-})();
-/* 360统计代码 */
-(function (b, a, e, h, f, c, g, s) {
-    b[h] = b[h] || function () {
-        (b[h].c = b[h].c || []).push(arguments);
-    };
-    b[h].s = !!c;
-    g = a.getElementsByTagName(e)[0];
-    s = a.createElement(e);
-    s.src = "//s.union.360.cn/" + f + ".js";
-    s.defer = !0;
-    s.async = !0;
-    g.parentNode.insertBefore(s, g);
-})(window, document, "script", "_qha", 361707, false);
+
 /* Android设备专有代码 */
 $(document).on("click", "li.widgets", () => {
     mdui.dialog({

@@ -27,8 +27,8 @@
         <div class="page-loading-appname">学习空间</div>
         <div class="page-loading-version"></div>
     </div> <!-- 登录界面 -->
-    <div class="main-container login" appbar="simple-appbar" page-title="学习空间 - 登录" scroll-hide="false" back-up-btn="false"
-        back-btn="false">
+    <div class="main-container login" appbar="simple-appbar" page-title="学习空间 - 登录" scroll-hide="false"
+        back-up-btn="false" back-btn="false">
         <div class="mdui-card-content mdui-center mdui-container">
             <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12"> <i
                     class="mdui-icon material-icons">phone</i> <label class="mdui-textfield-label">手机号</label> <input
@@ -85,17 +85,10 @@
                         class="mdui-list-item-icon mdui-icon material-icons">settings</i>
                     <div class="mdui-list-item-content">设置</div>
                 </li>
-                <li class="mdui-list-item mdui-ripple connect-watch" data="connect-watch"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">watch</i>
-                    <div class="mdui-list-item-content">连接到手表</div>
-                </li>
                 <li class="mdui-list-item mdui-ripple show-page" data="help"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">book</i>
                     <div class="mdui-list-item-content">帮助</div>
                 </li>
-                <li class="mdui-list-item mdui-ripple" mdui-dialog="{target: '#donation', history: false}"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">confirmation_number</i>
-                    <div class="mdui-list-item-content">捐赠</div>
                 </li>
                 <li class="mdui-list-item mdui-ripple show-page" data="about"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">send</i>
@@ -156,25 +149,6 @@
                         class="mdui-subheader description">七天网络成绩查询</span> </div>
             </div>
             <ul class="mdui-list">
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item jump-link"
-                    data="coolmarket://www.coolapk.com/u/653223"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons"
-                        mdui-dialog="{target: '#openAuthor', history: false}">face</i>
-                    <div class="mdui-list-item-content" mdui-dialog="{target: '#openAuthor', history: false}">
-                        <div class="mdui-list-item-title" mdui-dialog="{target: '#openAuthor', history: false}">作者</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line"
-                            mdui-dialog="{target: '#openAuthor', history: false}">酷安@牛奶土豆</div>
-                    </div> <button class="mdui-btn mdui-btn-icon jump-link" data="mailto:feedback@milkpotatoes.cn"><i
-                            class="mdui-list-item-icon mdui-icon material-icons">email</i></button>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link"
-                    data="https://qm.qq.com/cgi-bin/qm/qr?k=9ZPw36rGZEK4-beWpijEhRzeG3BNdcOW&jump_from=webapi"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">group</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">加入群聊</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">加入群聊，一起来聊聊学习？</div>
-                    </div>
-                </li>
                 <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">send</i>
                     <div class="mdui-list-item-content">
@@ -182,42 +156,11 @@
                         <div class="mdui-list-item-text mdui-list-item-one-line appVersion"></div>
                     </div>
                 </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"
-                    mdui-dialog="{target: '#share', history: false}">
-                    <!-- onclick="byNativeShare()"> --> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">share</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">分享</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">好用的话，就分享给小伙伴吧</div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"
-                    mdui-dialog="{target: '#donation', history: false}"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">confirmation_number</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">捐赠</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">卑微土豆，在线乞讨</div>
-                    </div>
-                </li>
                 <li class="mdui-subheader mdui-text-color-theme-accent import-list">引用库</li>
                 <li class="mdui-subheader mdui-text-color-theme-accent friend-link">友情链接</li>
             </ul>
         </div>
-        <div class="mdui-dialog" id="share">
-            <div class="mdui-dialog-title">分享</div>
-            <div class="mdui-dialog-content"> <img class="mdui-center mdui-m-b-2" style="width:196px"
-                    src="src/share_qrcode.png">
-                <span class="mdui-typo"> 长按二维码或右键点击将图片保存到本地 </span>
-            </div>
-            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> </div>
-        </div>
-        <div class="mdui-dialog" id="openAuthor">
-            <div class="mdui-dialog-title">在网页打开</div>
-            <div class="mdui-dialog-content"> <span class="mdui-typo"> 手机未安装酷安或没有自动打开？ </span> </div>
-            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> <button
-                    class="mdui-btn mdui-ripple open-link" data="http://www.coolapk.com/u/653223"
-                    mdui-dialog-confirm>打开</button> </div>
-        </div>
+
     </div>
     <div class="main-container user" appbar="simple-appbar" page-title="我" scroll-hide="false" back-up-btn="true"
         back-btn="true">
@@ -288,39 +231,17 @@
         scroll-hide="true" back-up-btn="true" back-btn="true">
         <div class="main mdui-p-t-2 mdui-container mdui-typo"> </div>
     </div>
-    <div class="main-container settings" appbar="simple-appbar" page-title="设置" scroll-hide="false" back-up-btn="true"
-        back-btn="true"></div>
-    <div class="mdui-dialog" id="donation">
-        <div class="mdui-dialog-title">捐赠</div>
-        <div class="mdui-dialog-content"> <span class="mdui-typo">
-                学习空间自初版运行至今已有两年有余，自网页版上线以来，最主要的一个问题就是服务器以及域名的支出。<br>
-                学习空间并不盈利，也没有加入任何广告。如果您想要为学习空间的维护及运行提供一些帮助的话，您可以在下方的捐赠方式中向我转账，可以是1元、3元、5元或者其他任何金额。<br />
-                当然您也可以继续免费使用。在您捐赠时，请在付款时备注学习空间，并加上您的称呼。如果后期上线鸣谢页面，您的称呼将作为捐赠人出现。<br />
-            </span>
-            <div class="mdui-panel" mdui-panel="{accordion: true}">
-                <div class="mdui-panel-item">
-                    <div class="mdui-panel-item-header">
-                        <div class="mdui-panel-item-title">支付宝</div>
-                        <i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
-                    </div>
-                    <div class="mdui-panel-item-body"> <img class="mdui-img-rounded mdui-img-fluid"
-                            style="border-radius: 12px;" src="src/alipay_qrcode.png">
-                        <div class="mdui-panel-item-actions"> <button class="mdui-btn mdui-ripple open-link"
-                                data="https://qr.alipay.com/fkx03789wzomihfk9oashc9"
-                                mdui-panel-item-confirm>打开支付宝</button> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>不了</button> </div>
-    </div>
+
     <div class="back-up-btn-box">
         <button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed back-top mdui-hidden">
             <i class="mdui-icon material-icons">keyboard_arrow_up</i>
         </button>
     </div>
-    <script
-        type="text/javascript"> if ('serviceWorker' in navigator) { navigator.serviceWorker.register("/sw.js"); }</script>
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("/sw.js");
+        }
+    </script>
     <script src="/js/mdui.min.js"></script>
     <script src="/js/switch_device.min.js" type="text/javascript" charset="utf-8"></script>
 </body>
