@@ -1023,16 +1023,6 @@ function firstLoad(page_name) {
                     ));
                 }
             }, "json");
-            $.get("json/friend_link.json", null, (data) => {
-                data.reverse();
-                $.each(data, (_k, v) => {
-                    $(".friend-link").after($(
-                        template.about['friend-link-item'].replace("{{frndLnkUrl}}", v.url)
-                        .replace("{{frndLnkTitle}}", v.title)
-                        .replace("{{frndLnkDesc}}", v.description)
-                    ));
-                })
-            }, "json")
             break;
         case "login":
             if (localStorage.agree !== undefined) {
