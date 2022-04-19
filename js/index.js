@@ -63,7 +63,7 @@ $.fn.extend({
     }
 });
 
-$.get("/json/version.json", null, (data) => {
+$.get("json/version.json", null, (data) => {
     app_info = data;
     let update_log = localStorage.update;
     if (update_log === undefined) {
@@ -95,8 +95,8 @@ $.get("/json/version.json", null, (data) => {
     $(".page-loading-version").text("v" + data.version + (location.host.includes("dev") ? " - 仅供调试用" : ""));
 }, "json");
 
-$.get("/json/province.json", null, (data) => province_list = data, "json");
-$.get("/json/grade.json", null, (data) => grade_list = data, "json"); /* 动态设置背景图显示位置 */
+$.get("json/province.json", null, (data) => province_list = data, "json");
+$.get("json/grade.json", null, (data) => grade_list = data, "json"); /* 动态设置背景图显示位置 */
 
 function countDown(lefttime, callback) {
     lefttime--;
@@ -170,9 +170,7 @@ function getQueryString(name) {
     if (r !== null) return decodeURI(r[2]);
     return null;
 }
-/* function byNativeShare(command) {try {nativeShare.call(command)} catch (err) {*/
-/* 如果不支持，你可以在这里做降级处理  alert(err.message) */
-/* 		}} */
+
 function setBG() {
     let i = -1;
     let page_name = location.hash.substring(2);
@@ -201,7 +199,6 @@ function showPage(page_name, add_history, state) {
     } else {
         history.replaceState(state, $("." + page_name).attr("page-title"), "#/" + page_name);
     }
-    //console.log("ShowPage:", page_name);
     let page = $(".main-container." + page_name);
     console.log("showPage:", page_name, location.hash, location.hash.substring(2));
     if (page.length === 0) {
@@ -317,13 +314,12 @@ function getUnClaimExamList() {
                     let unclaim_data = data.data[i];
                     $("#unClaimExamList").append(
                         template.unclaim['sub-header'].replace("{{examMonth}}", unclaim_data.month)
-                        // `<li class="mdui-subheader">${unclaim_data.month}</li>`
+
                     );
                     for (let i = 0; i < unclaim_data.list.length; i++) {
                         let exam_data = unclaim_data.list[i];
                         $("#unClaimExamList").append(
                             template.unclaim['exam-item'].replace("{{examGuid}}", exam_data.examGuid).replace("{{studentCodeList}}", Base64.encode(JSON.stringify(exam_data.studentCodeList))).replace("{{examName}}", exam_data.examName).replace("{{examTime}}", exam_data.time)
-                            // `<li class="mdui-list-item mdui-card mdui-m-t-1 mdui-hoverable exam-item"value="${exam_data.examGuid}"data="${Base64.encode(JSON.stringify(exam_data.studentCodeList))}"><div class="mdui-list-item-content"><div class="mdui-list-item-title">${exam_data.examName}</div><div class="mdui-list-item-text exam-time">${exam_data.time}</div></div></li>`
                         );
                     }
                 }
@@ -412,7 +408,6 @@ function getExamList(start, rows) {
 
                     $("#examList").append(
                         it
-                        //`<li class="mdui-list-item mdui-card mdui-m-t-1 mdui-hoverable exam-item"data='${JSON.stringify(exam_data)}'><div class="mdui-list-item-content"><div class="mdui-list-item-title"><span class="mdui-text-color-theme-accent">${exam_data.type} · </span>${exam_data.examName}</div><div class="mdui-list-item-text exam-time">${exam_data.time.replace(/(\d{4})-(\d{2})-(\d{2})/, "考试时间：$1年$2月$3日")}</div></div><i class="mdui-icon mdui-list-item-icon mdui-text-color-theme-accent mdui-m-r-4">${exam_data.score}</i></li>`
                     );
                 }
                 $(".index .exam-item-pgs").removeClass("exam-loading");
@@ -466,33 +461,15 @@ function getSubjectGrade(args) {
             let grade_tbody = "";
             readMsg = readMsg.replace("<span>", '<span class="mdui-text-color-theme-accent">');
             pkMsg = pkMsg.replace("<span>", '<span class="mdui-text-color-theme-accent">');
-            // $(`#subject-tab-${args.i} .score-card`)
-            // (() => {
-            //     if ($(`#subject-tab-${args.i} .score-summary`).length > 0) {
-            //         return $(`#subject-tab-${args.i} .score-summary`)
-            //     } else {}
-            // })().after(
+
             let sub_page = $("#subject-tab-" + args.i).html();
             sub_page = sub_page.replace(
                 "{{examTotal}}",
                 template.exam['exam-total'].replace("{{examTotal}}", data.data.report.total)
             );
-            // `<div class="mdui-card mdui-shadow-1 mdui-m-t-2 mdui-p-a-2 msg-card count-card" style="text-align: center;">本次参考总人数<span class="mdui-text-color-theme-accent">${data.data.report.total}</span></div>`
-            // );
+
             sub_page = sub_page.replace("{{examCommon}}", template.exam['exam-common'].replace("{{pkMsg}}", pkMsg).replace("{{readMsg}}", readMsg));
-            /* if (pkMsg !== "") {
-                pkgMsg = `<p style="text-indent: 2em;">${pkMsg}</p>`;
-            }
-            if (readMsg !== "") {
-                readMsg = `<p style="text-indent: 2em;">${readMsg}</p>`;
-                let e = template.exam['exam-common'].replace("{{readMsg}}", readMsg).replace("{{pkMsg}}", pkMsg);
-                // `<div class="mdui-card mdui-shadow-1 mdui-typo mdui-m-t-2 mdui-p-a-2 msg-card"><p style="text-indent: 2em;">${readMsg}${pkMsg}</div>`;
-                if ($(`#subject-tab-${args.i} .subject-question-table`).length > 0) {
-                    $(`#subject-tab-${args.i} .subject-question-table`).eq(0).before(e);
-                } else {
-                    $(e).appendTo(`#subject-tab-${args.i}`);
-                }
-            } */
+
             $("#subject-tab-" + args.i).html(sub_page);
             if (pkMsg == "" && readMsg == "") $("#subject-tab-" + args.i + ">.msg-card").addClass("mdui-hidden");
             let grade_data = data.data.report.grades;
@@ -506,19 +483,13 @@ function getSubjectGrade(args) {
                             tr = tr.replace("{{tr" + j + "td" + k + "}}", grade_data[i + j][k]);
                         }
                     }
-                    // `<tr${myLevel}><td style="min-width: 64px;" rowspan="2">${grade_data[i][0]}</td><td style="min-width: 96px;">${grade_data[i][1]}</td><td>${grade_data[i][2]}</td><td>${grade_data[i][3]}</td><td rowspan="2">${grade_data[i][4]}</td><td rowspan="2">${grade_data[i][5]}</td></tr><tr${myLevel}><td style="min-width: 96px;">${grade_data[i + 1][1]}</td><td>${grade_data[i + 1][2]}</td><td>${grade_data[i + 1][3]}</td></tr>`;
+
                     grade_tbody += tr;
                 }
             }
             $("#subject-tab-" + args.i).html($("#subject-tab-" + args.i).html().replace("{{gradeTable}}", template.exam['grade-table'].replace("{{gradeTbody}}", grade_tbody).replace("{{expandButton}}", template.exam['expand-button'])))
             if (grade_tbody !== "") {
-                /* let e =
-                     `<div class="subject-grade-table subject-table-cards mdui-card mdui-typo mdui-m-t-2 level-card"><table class="subject-grade mdui-table"><thead><tr><th colspan="2" rowspan="2">等级</th><th rowspan="2">得分</th><th rowspan="2">标准分</th><th colspan="2" rowspan="1">区间累计人数</th></tr><tr><th>年级</th><th>班级</th></tr></thead><tbody>${grade_tbody}<tr><td colspan="6"><button class="mdui-btn expand-table"><i class="mdui-icon material-icons">expand_more</i><span>展开</span></button></td></tr></tbody></table></div>`;
-                 if ($(`#subject-tab-${args.i} .subject-question-table`).length > 0) {
-                     $(`#subject-tab-${args.i} .subject-question-table`).eq(0).before(e);
-                 } else {
-                     $(e).appendTo(`#subject-tab-${args.i}`);
-                 } */
+
                 $(".exam .subject-grade-table tbody tr").addClass("mdui-hidden");
                 $(".expand-table").parents("tr").removeClass("mdui-hidden");
                 let mylv = $(".exam .subject-grade-table tbody .mdui-color-theme-accent");
@@ -564,19 +535,7 @@ function getSubjectRead(args) {
             if (data.status !== 200) {
                 return false;
             }
-            // let readMsg = data.data.read.replace("<span>", '<span class="mdui-text-color-theme-accent">');
-            // readMsg = readMsg;
-            // template.exam['exam-common'].replace("{{readMsg}}", data.data.read.replace("<span>", '<span class="mdui-text-color-theme-accent">'));
-            // if (readMsg !== "") {
-            //     readMsg = `<p style="text-indent: 2em;">${readMsg}</p>`;
-            //     let e =
-            //         `<div class="mdui-card mdui-shadow-1 mdui-typo mdui-m-t-2 mdui-p-a-2 msg-card">${readMsg}</div>`;
-            //     if ($(`#subject-tab-${i} .subject-question-table`).length > 0) {
-            //         $(`#subject-tab-${i} .subject-question-table`).eq(0).before(e);
-            //     } else {
-            //         $(e).appendTo(`#subject-tab-${i}`);
-            //     }
-            // }
+
             $("#subject-tab-" + i).html($("#subject-tab-" + i).html().replace("{{examCommon}}", data.data.read != "" ? template.exam['exam-common'].replace("{{pkMsg}}", "").replace("{{readMsg}}", data.data.read.replace("<span>", '<span class="mdui-text-color-theme-accent">')) : ""));
 
             mdui.mutation();
@@ -611,16 +570,8 @@ function getAnswerCard(args) {
             let answer_card = ""
             for (let j = 0; j < data.data.length; j++) {
                 answer_card += template.exam['answer-card'].replace(/\{\{subjectOrder\}\}/g, args.i).replace(/\{\{imgOrder\}\}/g, j).replace("{{imgSrc}}", data.data[j]).replace("{{subjectName}}", args.srcSubject);
-                // `<div class="mdui-card-media answer-card mdui-m-t-2 mdui-shadow-${args.i}"><img class="subject-${args.i}-img-${j} lz-load" lz-src="${data.data[j]}" src="src/lz_load.png" alt="“${args.srcSubject}”答题卡"><div class="mdui-card-media-covered mdui-valign subject-${args.i}-img-loading-${j}"><div class="mdui-center mdui-spinner mdui-spinner-colorful"></div></div></div>`;
             }
-            // if (
             $("#subject-tab-" + args.i).html($("#subject-tab-" + args.i).html().replace("{{answerCard}}", answer_card));
-            // find(".count-card").length > 0) {
-            //     $(`#subject-tab-${args.i} .count-card`).eq(0).after(answer_card);
-
-            // } else {
-            //     $(`#subject-tab-${args.i} .score-card`).after(answer_card);
-            // }
             mdui.mutation();
         }
     });
@@ -694,7 +645,6 @@ function selectArea() {
     let areaDialog = new mdui.dialog({
         title: "请选择地区",
         content: template.dialog['city-selector'],
-        // `<div class="mdui-typo province">省/直辖市/特别行政区</div><select class="mdui-select province province-select"></select><div class="mdui-typo city">市/县</div><select class="mdui-select city city-select"></select>`,
         buttons: [{
             text: "取消"
         }, {
@@ -766,7 +716,6 @@ function selectSchool() {
             let schoolDialog = new mdui.dialog({
                 title: "请选择学校",
                 content: template.dialog['school-selector'],
-                // `<div class="mdui-typo school">学校</div><select class="mdui-select school school-select"></select>`,
                 buttons: [{
                     text: "取消"
                 }, {
@@ -816,7 +765,6 @@ function selectGrade() {
     let agradeDialog = new mdui.dialog({
         title: "请选择年级",
         content: template.dialog['grade-selector'],
-        // `<div class="mdui-typo step">阶段</div><select  class="mdui-select step step-select"><option value="-1" selected>请选择</option><option value="x">小学</option><option value="c">初中</option><option value="g">高中</option></select><div class="mdui-typo agrade">年级</div><select  class="mdui-select agrade agrade-select"></select>`,
         buttons: [{
             text: "取消"
         }, {
@@ -925,7 +873,6 @@ function showUserInfo(data) {
 
 /* 首次加载页面执行 */
 function firstLoad(page_name) {
-    //console.log("firstLoad_1", page_name);
 
     $("." + page_name).addClass("loaded");
     switch (page_name) {
@@ -948,7 +895,6 @@ function firstLoad(page_name) {
                         mdui.dialog({
                             title: "用户协议",
                             content: template.dialog['user-agree'],
-                            // '</br><label class="mdui-checkbox"><input type="checkbox" id="agree-rules"/><i class="mdui-checkbox-icon"></i>我已阅读并同意<a class="open-link mdui-text-color-theme-accent" data="agreement.html">《学习空间用户条款》</a>、<a class="open-link mdui-text-color-theme-accent" data="privacystatement.html">《学习空间隐私条款》</a></label>',
                             history: false,
                             modal: true,
                             closeOnEsc: false,
@@ -996,14 +942,12 @@ function firstLoad(page_name) {
                     return false;
                 }
             });
-            //console.log("firstLoad_2_index", page_name);
             setBG();
             break;
         case "exam":
             loadAnyway(page_name);
             break;
         case "user":
-            //console.log("firstLoad_3_user", page_name);
             setBG();
             setTimeout(setBG, 300);
             /* 以本地缓存设置用户信息 */
@@ -1059,7 +1003,6 @@ function firstLoad(page_name) {
         case "unclaim":
             getUnClaimExamList();
         case "about":
-            /* $(".copyShareLink").click(function() {$('#shareUrl').select();$().focus();document.execCommand('copy');mdui.snackbar({message: "复制成功"});}); */
             $(".appVersion").text("v" + app_info.version).parents(".mdui-list-item").click(() => {
                 mdui.dialog({
                     title: "更新日志",
@@ -1073,14 +1016,6 @@ function firstLoad(page_name) {
             $.get("json/import.json", null, (data) => {
                 data.reverse();
                 for (let i = 0; i < data.length; i++) {
-                    /* let model;
-                     if (data[i].iconType === "img") {
-                         model =
-                             `<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link" data="${data[i].url}"><div class="mdui-list-item-avatar"><img src="${data[i].icon}"></div><div class="mdui-list-item-content"><div class="mdui-list-item-title">${data[i].name}&nbsp;&nbsp;<small class="mdui-typo-body-1-opacity">v${data[i].version}</small></div><div class="mdui-list-item-text mdui-list-item-one-line">${data[i].description}</div></div></li>`
-                     } else {
-                         model =
-                             `<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link" data="${data[i].url}"><div class="mdui-list-item-avatar">${data[i].icon} ;</div><div class="mdui-list-item-content"><div class="mdui-list-item-title">${data[i].name}&nbsp;&nbsp;<small class="mdui-typo-body-1-opacity">v${data[i].version}</small></div><div class="mdui-list-item-text mdui-list-item-one-line">${data[i].description}</div></div></li>`
-                     }; */
                     $(".import-list").after($(
                         template.about['import-item'].replace("{{projectUrl}}", data[i].url)
                         .replace("{{projectName}}", data[i].name)
@@ -1097,11 +1032,9 @@ function firstLoad(page_name) {
                         template.about['friend-link-item'].replace("{{frndLnkUrl}}", v.url)
                         .replace("{{frndLnkTitle}}", v.title)
                         .replace("{{frndLnkDesc}}", v.description)
-                        // `<li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item open-link" data="${v.url}"> <i class="mdui-list-item-icon mdui-icon material-icons">link</i><div class="mdui-list-item-content"><div class="mdui-list-item-title">${v.title}</div><div class="mdui-list-item-text mdui-list-item-one-line">${v.description}</div></div></li>`
                     ));
                 })
             }, "json")
-            /* var nativeShare = new NativeShare() var shareData = { title: '学习空间', desc: '学习空间是一个完全免费的第三方七天学堂成绩查询工具。', link: 'https://stusp.milkpotatos.cn/?sourse=share', icon: 'https://stusp.milkpotatoes.cn/ic_launcher.png', // 不要过于依赖以下两个回调，很多浏览器是不支持的 success: function() { }, fail: function() { } } nativeShare.setShareData(shareData) */
             break;
         case "login":
             if (localStorage.agree !== undefined) {
@@ -1134,13 +1067,11 @@ function firstLoad(page_name) {
 
 function switchDisplay(e, hide) {
     e = $(e);
-    // //console.log(123, hide);
     if (hide) {
         if (e.hasClass("score-summary-table")) {
             e.find("thead").addClass("mdui-hidden");
         }
         e.find("tbody tr").addClass("mdui-hidden").each((i, el) => {
-            // //console.log(i <= 3 && e.hasClass("score-summary-table"))
             if (i <= 3 && !e.hasClass("score-summary-table")) {
                 $(el).removeClass("mdui-hidden");
                 return;
@@ -1171,7 +1102,6 @@ function switchDisplay(e, hide) {
 }
 /* 任意时候加载的事项 */
 function loadAnyway(page_name) {
-    //console.log("loadAnyway_1", page_name);
     switch (page_name) {
         case "index":
             let index_drawer = new mdui.Drawer("#drawer");
@@ -1183,7 +1113,6 @@ function loadAnyway(page_name) {
                 $(".app-show").hasClass("index")) {
                 getExamList($(".exam-item").length, 3);
             }
-            //console.log("loadAnyway_1", page_name);
             setBG();
             break;
         case "exam":
@@ -1235,21 +1164,14 @@ function loadAnyway(page_name) {
                     for (let i = 0; i < data.data.subjects.length; i++) {
                         let subject_data = data.data.subjects[i];
                         if (subject_data.code != -1) {
-                            // console.log(subject_data.code, subject_data.code == -1);
                             $(".exam .mdui-tab").append(template.exam["exam-tab"].replace("{{subjectName}}", subject_data.km).replace("{{subjectOrder}}", i));
-                            // `<a class="mdui-ripple" href="#subject-tab-${i}">${subject_data.km}</a>`
-                            // $(".exam .main").append(
-                            // `<div class="mdui-container subject-card mdui-hidden" id="subject-tab-${i}"><div class="mdui-card-content mdui-shadow-1 mdui-color-theme-accent score-card"><div class="mdui-typo name"> 分数卡片 </div><span class="my-score mdui-typo">${subject_data.myScore}</span> <span class="scoreDivider mdui-typo">/</span> <span class="full-score mdui-typo">${subject_data.fullScore}</span></div></div>`
-                            // );
+
                             let sub_page = subject_data.code == -2 ? template.exam["exam-summary-page"] : template.exam["exam-subject-page"];
                             sub_page = sub_page.replace("{{scoreCard}}", template.exam["score-card"].replace("{{myScore}}", subject_data.myScore).replace("{{fullScore}}", subject_data.fullScore)).replace("{{subjectOrder}}", i);
-                            // //console.log($(".score-summary"));
                             sub_page = sub_page.replace(/\{\{expandButton\}\}/g, template.exam["expand-button"])
                             if (i > 0 && $(".score-summary").length > 0) {
-                                // //console.log(1234);
                                 $(".score-summary .expand-table").closest("tr").before($(
                                     template.exam["summary-score-item"].replace("{{subjectName}}", subject_data.km).replace("{{subjectScore}}", subject_data.myScore).replace("{{fullScore}}", subject_data.fullScore)
-                                    // `<tr class="mdui-hidden"> <td>${subject_data.km}</td> <td>${subject_data.myScore}</td> <td>${subject_data.fullScore}</td> </tr>`
                                 ));
                             };
                             let object_tbody = "";
@@ -1262,37 +1184,25 @@ function loadAnyway(page_name) {
                                             .replace("{{td2}}", v.Content)
                                             .replace("{{td3}}", v.trueAnswer)
                                             .replace("{{td4}}", v.Score + "/" + v.totalScore);
-                                        // `<tr><td>${v.TH}</td><td>${v.Content}</td><td>${v.trueAnswer}</td><td>${v.Score}/${v.totalScore}</td></tr>`
+
                                     } else {
                                         unobject_tbody += template.exam["4columnTr"]
                                             .replace("{{td1}}", v.TH)
                                             .replace("{{td2}}", v.Score + "/" + v.totalScore)
                                             .replace("{{td3}}", v.radar)
                                             .replace("{{td4}}", v.avg);
-                                        // `<tr><td>${v.TH}</td> <td>${v.Score}/${v.totalScore}</td> <td>${v.radar}</td> <td>${v.avg}</td></tr>`
+
                                     }
                                 });
                             }
-                            // if (object_tbody !== "") {
-                            // object_tbody = $(
-                            // `<div class="subject-question-table mdui-card mdui-typo mdui-m-t-2 subject-table-cards"><table class="subject-question mdui-table mdui-table-hoverable"><thead><tr><th colspan="5">客观题</th></tr><tr><th>题号</th><th>我的答案</th><th>参考答案</th><th>得分</th></tr></thead><tbody>
                             sub_page = sub_page.replace("{{objectTbody}}", object_tbody)
                                 .replace("{{unobjectTbody}}", unobject_tbody);
-                            // sub_page = sub_page
-                            // <tr class="mdui-hidden"><td colspan="4"><button class="mdui-btn expand-table"><i class="mdui-icon material-icons">expand_more</i><span>展开</span></button></td></tr></tbody></table></div>`
-                            // );
-                            // object_tbody.appendTo(`#subject-tab-${i}`);
-                            // }
-                            // if (unobject_tbody !== "") {
-                            // unobject_tbody = $(`<div class="subject-question-table mdui-card mdui-typo mdui-m-t-2 subject-table-cards"><table class="subject-question mdui-table mdui-table-hoverable"><thead><tr><th colspan="5">主观题</th></tr><tr><th>题号</th><th>得分</th><th>与平均分差值</th><th>平均分</th></tr></thead><tbody>${unobject_tbody}<tr class="mdui-hidden"><td colspan="4"><button class="mdui-btn expand-table"><i class="mdui-icon material-icons">expand_more</i><span>展开</span></button></td></tr></tbody></table></div>`);
-                            // unobject_tbody.appendTo(`#subject-tab-${i}`);
-                            // }
+
                             $(".expand-table").parents("tr").removeClass("mdui-hidden");
                             let mylv = $(".exam .subject-grade-table tbody .mdui-color-theme-accent");
                             mylv.removeClass("mdui-hidden").next().removeClass("mdui-hidden").next().removeClass("mdui-hidden");
                             mylv.prev().removeClass("mdui-hidden").prev().removeClass("mdui-hidden");
                             mdui.mutation();
-                            //console.log(3456890);
 
                             switch (subject_data.code) {
                                 case 0:
@@ -1349,16 +1259,10 @@ function loadAnyway(page_name) {
                                             studentCode: exam_data.studentCode
                                         }, subject_data))
                                     }
-                                    //console.log(3456890);
 
-                                    // if (subject_data.code == -2 && data.data.subjects.length > 1) {
-                                    //     // //console.log(3456890);
-                                    //     $(`#subject-tab-${i} .score-card`).after(`<div class="score-summary"> <table class="mdui-table score-summary-table"><thead><tr><th>科目</th><th>得分</th><th>总分</th></tr></thead><tbody><tr><td colspan="3" class="expand-td"><button class="mdui-btn expand-table"><i class="mdui-icon material-icons">expand_more</i><span>查看各科成绩</span></button></td></tr></tbody> </table> </div>`);
-                                    // }
                                     break;
                                 default:
                             }
-                            // console.log(subject_data);
                             $(".exam .main").append(sub_page);
                             if (subject_data.code != -2) {
                                 let o = $(".exam>.main>#subject-tab-" + i + " .object-table");
@@ -1373,14 +1277,12 @@ function loadAnyway(page_name) {
                         }
                     }
                     setTimeout(() => {
-                        // console.log(123);
                         $(".exam .mdui-tab").removeClass("mdui-hidden");
                         $(".exam").addClass("mdui-appbar-with-tab");
                         let inst = new mdui.Tab(".mdui-tab");
                         inst.show(0);
                     }, 1000);
                     setTimeout(() => {
-                        // console.log(234);
                         $(".exam .subject-card").removeClass("mdui-hidden");
                         $(".exam .exam-detail-pgs").addClass("mdui-hidden");
                     }, 1600);
@@ -1389,7 +1291,6 @@ function loadAnyway(page_name) {
             history.replaceState(null, "成绩详情", "#/exam");
             break;
         case "user":
-            //console.log("loadAnyway_1", page_name);
             setBG();
             setTimeout(setBG, 300);
             break;
@@ -1398,7 +1299,6 @@ function loadAnyway(page_name) {
 }
 /* 窗口变动监听 */
 window.onresize = () => {
-    //console.log("window_resize_1");
     setBG();
 };
 
@@ -1642,9 +1542,6 @@ $(document).on("click", ".exam .expand-table", (e) => {
     e = $(e.target).closest("button");
     if (e.find("i").text() === "expand_more") {
         switchDisplay(e.closest("table"), false);
-        /* .find("tr").removeClass("mdui-hidden");
-            e.find("span").text("收起");
-            e.find("i").text("expand_less"); */
     } else {
         e.closest("tbody").find("tr").addClass("mdui-hidden").last().removeClass("mdui-hidden");
         // //console.log(e);
@@ -1654,14 +1551,10 @@ $(document).on("click", ".exam .expand-table", (e) => {
             mylv.next().removeClass("mdui-hidden").next().removeClass("mdui-hidden");
             mylv.prev().removeClass("mdui-hidden").prev().removeClass("mdui-hidden");
         } else {
-            /* e.closest("tbody").find("tr").each((i, e) => {
-                if (i <= 3) {
-                    $(e).removeClass("mdui-hidden");
-                }
-            }); */
+
             switchDisplay(e.closest("table"), true);
         }
-        // e.find("span").text("展开");
+
         e.find("i").text("expand_more");
     }
     e.closest("tr").removeClass("mdui-hidden");
@@ -1691,21 +1584,16 @@ $(document).on("click", ".unclaim .exam-item", (e) => {
                 if (data.status == 200) {
                     img = data.data.url;
                 }
-                // let openClass;
-                // if (i === 0) {
-                //     openClass = " mdui-panel-item-open";
-                // } else {
-                //     openClass = "";
-                // }
+
                 itemContent += template.dialog['unclaim-panel'].replace(/\{\{studentCode\}\}/g, student_code_list[i])
                     .replace("{{examGuid}}", exam_guid)
                     .replace("{{defaultOpen}}", i == 0 ? " mdui-panel-item-open" : "")
                     .replace("{{answerCard}}", img);
-                // `<!-- 待认领考试卡片 --><div class="mdui-panel-item${openClass}"><div class="mdui-panel-item-header">${student_code_list[i]}<i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i></div><div class="mdui-panel-item-body"><img class="mdui-img-rounded mdui-img-fluid paperImg" src="${img}"><div class="mdui-panel-item-actions"><button class="mdui-btn mdui-ripple claimExamBtn" onclick="claimExam('${student_code_list[i]}','${exam_guid}')"  mdui-panel-item-confirm>认领</button></div></div></div>`;
+
                 claim_dialog = new mdui.dialog({
                     title: "认领考试",
                     content: template.dialog['unclaim-dialog'].replace("{{unclaimPanel}}", itemContent),
-                    // `<span class="mdui-typo">请选择属于本人的考试认领</span><div class="mdui-panel examInfo" mdui-panel="{accordion: true}">${itemContent}</div>`,
+
                     onOpen: (inst) => {
                         $("img").one(
                             "load", (e) => {
@@ -1716,8 +1604,7 @@ $(document).on("click", ".unclaim .exam-item", (e) => {
                                 });
                                 inst.handleUpdate();
                             });
-                        // .load(() => {
-                        // });
+
                     },
                     buttons: [{
                         text: "取消"
@@ -1743,7 +1630,6 @@ $(document).on("click", ".index .exam-item", (e) => {
         jumpData: jump_data
     });
 });
-/* claimExamDialog.open(); */
 /* 成绩详情页图片懒加载 */
 $(document).on("change.mdui.tab", ".exam .mdui-tab", (event) => {
     $("#" + event.detail.id).find(".lz-load").each((_i, e) => {
@@ -1778,7 +1664,6 @@ document.addEventListener("click", (e) => {
     if (inc) {
         auth_code.focus();
         auth_code.value = auth_code.value;
-        // document.querySelector(".authcode>.focus")
         document.querySelector(".authcode>.focus").classList.remove("mdui-hidden")
 
     }
@@ -1830,7 +1715,6 @@ document.addEventListener("input", (e) => {
 
         code = code.match(/.{0,7}/)[0];
         auth_code.value = code;
-        // console.log(code, e.data)
         code = code.replace(/ /g, "");
         let len = code.length;
         len = len < 4 ? len : 3;
@@ -1846,7 +1730,6 @@ $(document).on("click", "li.widgets", () => {
     mdui.dialog({
         title: "桌面小部件",
         content: template.dialog['widget-dialog'].replace("{{userToken}}", localStorage.Token),
-        // `<div class="mdui-typo">复制登录信息并设置到桌面小部件中即可</br></br><span class="mdui-text-color-red-accent">注意：</span>登录信息保护用户隐私，请勿将此信息共享给他人</br></br>登录信息：<div class="user-token"><span>${localStorage.Token}</span></div></div>`,
         buttons: [{
                 text: "查看帮助/下载小部件",
                 onClick: () => {

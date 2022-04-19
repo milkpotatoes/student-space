@@ -4,7 +4,7 @@ var template;
 
 document.title = "请稍后...";
 
-fetch("/json/template.json")
+fetch("json/template.json")
     .then(e => {
         return e.json();
     })
@@ -14,7 +14,7 @@ fetch("/json/template.json")
 
 $("body").addClass("mdui-theme-primary-green mdui-theme-accent-red");
 let s = d.createElement("script");
-s.setAttribute("src", "js/index" + (navigator.vendor === "Apple Computer, Inc." ? "" : "") + (location.host.includes("dev") ? "" : ".min") + ".js");
+s.setAttribute("src", "js/index.js");
 // "js/index" + (navigator.vendor == "Apple Computer, Inc." ? "_ios" : "") + (location.host.includes("dev") ? "" : ".min" + ".js")
 d.body.appendChild(s);
 if (navigator.userAgent.includes("Android")) {

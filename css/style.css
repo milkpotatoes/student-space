@@ -100,7 +100,6 @@ label.bind-select {
     width: 100vw;
     height: 100vh;
     z-index: 1001;
-    /* background: #FFF; */
     position: fixed;
     top: 0;
     left: 0;
@@ -122,104 +121,9 @@ label.bind-select {
     transform: translate(-50%, 0px);
 }
 
-/* 
-.exam-item {
-    filter: blur(4px);
-} */
-
 .user-token {
     border: solid #AAAAAA 1px;
     border-radius: 3px;
     background: #EEEEEE;
-    /* filter: blur(4px); */
     padding: 5px;
-}
-
-/* 
-.score-digtal {
-    padding: 0;
-    width: calc(100% - 72px);
-    margin: -30px 36px 0px;
-    position: relative;
-    z-index: 1;
-    overflow: inherit;
-    background: transparent;
-}
-
-.score-digtal table {
-    width: 100%;
-}
-
-.score-digtal .expand-td {
-    text-align: center;
-    padding: 6 px 0;
-}
-
-.score-digtal::before {
-    content: "";
-    width: calc(100% + 4px);
-    height: 4px;
-    border: outset 4px;
-    display: block;
-    margin: 0 -6px -6px;
-    border-radius: 6px;
-    box-shadow: 3px 3px 15px rgb(0 0 0 / 60%);
-    background: #6f6f6f;
-} */
-
-
-.authcode {
-    display: grid;
-    grid-template-columns: 1fr repeat(4, 48px) 1fr;
-    grid-template-rows: repeat(3, 56px);
-    grid-template-areas: ". a b c d ."". e e e e ."". f . . . .";
-    gap: 16px;
-    margin: 24px 0;
-    height: 56px;
-}
-
-.authcode>span {
-    border: solid 1px #ddd;
-    border-radius: 4px;
-    font-size: 36px;
-    text-align: center;
-    color: #333;
-}
-
-.authcode>input {
-    grid-column-end: e-end;
-    grid-column-start: e-start;
-    position: relative;
-    top: calc(-100% - 16px);
-    z-index: -1;
-    text-align: left;
-    padding-left: 14px;
-    overflow: hidden;
-    word-spacing: 35px;
-    border: none;
-    font-size: 36px;
-    appearance: textfield;
-    outline: none;
-}
-
-.authcode>span.focus {
-    border-color: transparent;
-    outline: solid 1.5px #ff5252;
-    box-shadow: 0 0 12px rgba(255 92 92 / .5);
-    width: 48px;
-    grid-column-start: f-start;
-    position: relative;
-    top: calc(-200% - 32px);
-    box-sizing: border-box;
-    border: solid 1px #ff5252;
-    transition: .5s;
-    left: 0;
-    /* left: calc(100% + 16px); */
-    /* left: calc(200% + 32px); */
-}
-
-.authdevices {
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
 }
