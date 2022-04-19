@@ -7,7 +7,7 @@
     "background_color": "#198b53",
     "description": "七天网络成绩查询",
     "icons": [{
-        "src": "src/ic_launcher.png",
+        "src": "../src/ic_launcher.png",
         "sizes": "256x256",
         "type": "image/png"
     }]
