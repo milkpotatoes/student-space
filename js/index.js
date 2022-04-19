@@ -76,7 +76,6 @@ $.get("json/version.json", null, (data) => {
             history: []
         };
         //console.log("安装成功：" + app_info.version);
-        _hmt.push(['_trackEvent', "appinfo", "install", app_info.version + "(" + app_info.code + ")", update_log.current.time]);
         localStorage.update = JSON.stringify(update_log);
     } else {
         update_log = JSON.parse(update_log);
@@ -88,7 +87,6 @@ $.get("json/version.json", null, (data) => {
                 time: (new Date()).getTime()
             };
             localStorage.update = JSON.stringify(update_log);
-            _hmt.push(['_trackEvent', "appinfo", "update", app_info.version + "(" + app_info.code + ")", update_log.current.time]);
             //console.log("更新成功：" + app_info.version);
         }
     }
