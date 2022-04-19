@@ -1420,6 +1420,7 @@ $(document).on("click", "#login-btn", () => {
                                 timeout: 500,
                                 onClose: () => showPage("index", false, null)
                             });
+                            showPage("index", false, null);
                             $("#login-btn").val("登录成功");
                         }
                     });
