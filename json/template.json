@@ -9,7 +9,7 @@
         "exam-total": "<div class=\"mdui-card mdui-shadow-1 mdui-m-t-2 mdui-p-a-2 msg-card count-card\" style=\"text-align: center;\">本次参考总人数<span class=\"mdui-text-color-theme-accent\">{{examTotal}}</span></div>",
         "exam-common": "<div class=\"mdui-card mdui-shadow-1 mdui-typo mdui-m-t-2 mdui-p-a-2 msg-card\"><pF>{{readMsg}}<p>{{pkMsg}}</p></div>",
         "expand-button": "<button class=\"mdui-btn expand-table\"><i class=\"mdui-icon material-icons\">expand_more</i><span>展开</span></button>",
-        "answer-card": "<div class=\"mdui-card-media answer-card mdui-m-t-2 mdui-shadow-2\"><img class=\"subject-{{subjectOrder}}-img-{{imgOrder}} lz-load\" lz-src=\"{{imgSrc}}\" src=\"src/lz_load.png\" alt=\"“{{subjectName}}”答题卡\"><div class=\"mdui-card-media-covered mdui-valign subject-{{subjectOrder}}-img-loading-{{imgOrder}}\"><div class=\"mdui-center mdui-spinner mdui-spinner-colorful\"></div></div></div>",
+        "answer-card": "<div class=\"mdui-card-media answer-card mdui-m-t-2 mdui-shadow-2\"><img class=\"subject-{{subjectOrder}}-img-{{imgOrder}} lz-load\" lz-src=\"{{imgSrc}}\" src=\"src/lz_load.webp\" alt=\"“{{subjectName}}”答题卡\"><div class=\"mdui-card-media-covered mdui-valign subject-{{subjectOrder}}-img-loading-{{imgOrder}}\"><div class=\"mdui-center mdui-spinner mdui-spinner-colorful\"></div></div></div>",
         "summary-score-item": "<tr class=\"mdui-hidden\"> <td>{{subjectName}}</td> <td>{{subjectScore}}</td> <td>{{fullScore}}</td> </tr>",
         "4columnTr": "<tr><td>{{td1}}</td> <td>{{td2}}</td> <td>{{td3}}</td> <td>{{td4}}</td></tr>",
         "exam-tab": "<a class=\"mdui-ripple\" href=\"#subject-tab-{{subjectOrder}}\">{{subjectName}}</a>",
