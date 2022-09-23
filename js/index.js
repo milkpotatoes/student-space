@@ -96,8 +96,8 @@ $.get("/json/version.json", null, (data) => {
     $(".page-loading-version").text("v" + data.version + (location.host.includes("dev") ? " - 仅供调试用" : ""));
 }, "json");
 
-$.get("/json/province.json", null, (data) => province_list = data, "json");
-$.get("/json/grade.json", null, (data) => grade_list = data, "json"); /* 动态设置背景图显示位置 */
+$.get("json/province.json", null, (data) => province_list = data, "json");
+$.get("json/grade.json", null, (data) => grade_list = data, "json"); /* 动态设置背景图显示位置 */
 
 function createRandomName() {
     let area = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -1914,7 +1914,7 @@ var _hmt = _hmt || [];
 
 if ('serviceWorker' in navigator) {
     document.querySelector(".clear-cache").classList.remove("mdui-hidden");
-    navigator.serviceWorker.register("/sw.js")
+    navigator.serviceWorker.register("sw.js")
 
     navigator.serviceWorker.addEventListener("message", e => {
         if (e.data.callback) execCallback(e.data.callback, false, e);

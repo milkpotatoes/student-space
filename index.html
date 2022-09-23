@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#4caf50">
-    <link rel="stylesheet" href="/css/mdui.min.css" />
-    <link rel="stylesheet" type="text/css" href="/css/viewer.min.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="manifest" href="/json/manifest.json" />
-    <link rel="shortcut icon" href="/src/ic_launcher.png" type="image/x-icon">
-    <script src="/js/viewer.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/js/base64.min.js"></script>
-    <script src="/js/showdown.min.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/mdui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/viewer.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="manifest" href="json/manifest.json" />
+    <link rel="shortcut icon" href="src/ic_launcher.png" type="image/x-icon">
+    <script type="text/javascript">
+        (function (w) {
+            w.frontjsConfig = { token: "5ba108e63b146e3c744535fabc53b581", behaviour: 9, captureConsoleLog: true, trustVendor: true, ignoreVendor: true, optimisedForSPA: true, useHistory: true, FPSThreshold: 10 };
+            w.frontjsTmpData = { r: [], e: [], l: [] };
+            w.frontjsTmpCollector = function (ev) { (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([new Date().getTime(), ev]) };
+            w.FrontJS = {
+                addEventListener: function (t, f) { w.frontjsTmpData.l.push([t, f]); return f; },
+                removeEventListener: function (t, f) {
+                    for (var i = 0; i < w.frontjsTmpData.l.length; i++) {
+                        t === w.frontjsTmpData.l[i][0] && f === w.frontjsTmpData.l[i][1] && w.frontjsTmpData.l.splice(i, 1);
+                    } return f;
+                }
+            };
+            w.document.addEventListener("error", w.frontjsTmpCollector, true);
+            w.addEventListener("error", w.frontjsTmpCollector, true);
+            w.addEventListener("load", function () { var n = w.document.createElement("script"); n.src = "https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js"; w.document.body.appendChild(n); }, true);
+        })(window);
+    </script>
+    <script src="js/viewer.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/base64.min.js"></script>
+    <script src="js/showdown.min.js" type="text/javascript" charset="utf-8"></script>
     <title>学习空间 - 牛奶土豆</title>
-    <link rel="preload" href="/src/bg-for-avatar.webp" as="image">
+    <link rel="preload" href="src/bg-for-avatar.webp" as="image">
 </head>
 
 <body class="mdui-appbar-with-toolbar mdui-theme-layout-auto mdui-drawer-body-left">
@@ -82,17 +100,9 @@
                         class="mdui-list-item-icon mdui-icon material-icons">settings</i>
                     <div class="mdui-list-item-content">设置</div>
                 </li>
-                <li class="mdui-list-item mdui-ripple juml-link" data="/v2/#/index/home"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">directions_car</i>
-                    <div class="mdui-list-item-content">前往新版</div>
-                </li>
                 <li class="mdui-list-item mdui-ripple open-link" data="https://kdocs.cn/l/cs2BO5RdwOPE"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">message</i>
                     <div class="mdui-list-item-content">交流区</div>
-                </li>
-                <li class="mdui-list-item mdui-ripple connect-watch" data="connect-watch"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">watch</i>
-                    <div class="mdui-list-item-content">连接到手表</div>
                 </li>
                 <li class="mdui-list-item mdui-ripple clear-cache mdui-hidden"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">clear_all</i>
@@ -109,12 +119,6 @@
                 <li class="mdui-list-item mdui-ripple show-page" data="about"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">send</i>
                     <div class="mdui-list-item-content">关于</div>
-                </li>
-                <li class="mdui-m-t-1 mdui-list-item band-order"> <em
-                        class="mdui-list-item-icon mdui-icon material-icons">add_circle_outlone</em>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">续期</div>
-                    </div>
                 </li>
                 <li class="mdui-list-item mdui-ripple" onclick="logout()"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">exit_to_app</i>
@@ -172,15 +176,12 @@
             </div>
             <ul class="mdui-list">
                 <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item jump-link"
-                    data="coolmarket://www.coolapk.com/u/653223"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons"
-                        mdui-dialog="{target: '#openAuthor', history: false}">face</i>
-                    <div class="mdui-list-item-content" mdui-dialog="{target: '#openAuthor', history: false}">
-                        <div class="mdui-list-item-title" mdui-dialog="{target: '#openAuthor', history: false}">作者</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line"
-                            mdui-dialog="{target: '#openAuthor', history: false}">酷安@牛奶土豆</div>
-                    </div> <button class="mdui-btn mdui-btn-icon jump-link" data="mailto:feedback@milkpotatoes.cn"><i
-                            class="mdui-list-item-icon mdui-icon material-icons">email</i></button>
+                    data="mailto:feedback@milkpotatoes.cn"> <i
+                        class="mdui-list-item-icon mdui-icon material-icons">face</i>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">作者</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">邮箱@牛奶土豆</div>
+                    </div>
                 </li>
                 <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
                         class="mdui-list-item-icon mdui-icon material-icons">send</i>
@@ -191,8 +192,8 @@
                 </li>
                 <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"
                     mdui-dialog="{target: '#share', history: false}">
-                    <!-- onclick="byNativeShare()"> --> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">share</i>
+                    <!-- onclick="byNativeShare()"> -->
+                    <i class="mdui-list-item-icon mdui-icon material-icons">share</i>
                     <div class="mdui-list-item-content">
                         <div class="mdui-list-item-title">分享</div>
                         <div class="mdui-list-item-text mdui-list-item-one-line">好用的话，就分享给小伙伴吧</div>
@@ -211,13 +212,6 @@
             </div>
             <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> </div>
         </div>
-        <div class="mdui-dialog" id="openAuthor">
-            <div class="mdui-dialog-title">在网页打开</div>
-            <div class="mdui-dialog-content"> <span class="mdui-typo"> 手机未安装酷安或没有自动打开？ </span> </div>
-            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> <button
-                    class="mdui-btn mdui-ripple open-link" data="http://www.coolapk.com/u/653223"
-                    mdui-dialog-confirm>打开</button> </div>
-        </div>
     </div>
     <div class="main-container user" appbar="simple-appbar" page-title="我" scroll-hide="false" back-up-btn="true"
         back-btn="true">
@@ -232,29 +226,6 @@
                         style="text-align: center; font-size: 18px;"> </div>
                 </div>
             </div>
-            <ul class="mdui-list student-space-card mdui-m-t-2">
-                <li class="mdui-subheader">订阅信息</li>
-                <li class="mdui-card mdui-hoverable mdui-m-t-1 mdui-list-item"> <em
-                        class="mdui-list-item-icon mdui-icon material-icons">access_time</em>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">生效时间</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line effective-time"></div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-hoverable mdui-m-t-1 mdui-list-item"> <em
-                        class="mdui-list-item-icon mdui-icon material-icons">timelapse</em>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">有效期至</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line expire-time"> </div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-hoverable mdui-m-t-1 mdui-list-item band-order"> <em
-                        class="mdui-list-item-icon mdui-icon material-icons">add_circle_outlone</em>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">续期</div>
-                    </div>
-                </li>
-            </ul>
             <ul class="mdui-list">
                 <li class="mdui-subheader">用户信息</li>
                 <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
@@ -320,10 +291,9 @@
         </button>
     </div>
 
-    <script src="/js/mdui.min.js"></script>
-    <script src="/js/switch_device.js" type="text/javascript" charset="utf-8"></script>
-    <script
-        type="text/javascript">(function (w) { w.frontjsConfig = { token: "5ba108e63b146e3c744535fabc53b581", behaviour: 9, captureConsoleLog: true, trustVendor: true, ignoreVendor: true, optimisedForSPA: true, useHistory: true, FPSThreshold: 10 }; w.frontjsTmpData = { r: [], e: [], l: [] }; w.frontjsTmpCollector = function (ev) { (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([new Date().getTime(), ev]) }; w.FrontJS = { addEventListener: function (t, f) { w.frontjsTmpData.l.push([t, f]); return f; }, removeEventListener: function (t, f) { for (var i = 0; i < w.frontjsTmpData.l.length; i++) { t === w.frontjsTmpData.l[i][0] && f === w.frontjsTmpData.l[i][1] && w.frontjsTmpData.l.splice(i, 1); } return f; } }; w.document.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("load", function () { var n = w.document.createElement("script"); n.src = "https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js"; w.document.body.appendChild(n); }, true); })(window);</script>
+    <script src="js/mdui.min.js"></script>
+    <script src="js/switch_device.js" type="text/javascript" charset="utf-8"></script>
+
 </body>
 
 </html>
