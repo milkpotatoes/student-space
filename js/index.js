@@ -981,7 +981,7 @@ function firstLoad(page_name) {
                                 onClick: (inst) => {
                                     if ($("#agree-rules").is(":checked")) {
                                         localStorage.agree = (new Date()).getTime();
-                                        uploadUsers(data);
+//                                         uploadUsers(data);
                                         inst.close();
                                     } else {
                                         mdui.snackbar({
@@ -996,9 +996,10 @@ function firstLoad(page_name) {
                                 onClick: () => logout(true)
                             }]
                         })
-                    } else {
-                        uploadUsers(data);
                     }
+//                     else {
+//                         uploadUsers(data);
+//                     }
                     if (data.data.schoolGuid !== "") {
                         /* 获取考试/未认领列表 */
                         getUnClaimExamCount();
