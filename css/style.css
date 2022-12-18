@@ -83,7 +83,7 @@
         left: var(--home-width);
         height: 100%;
         width: calc(100% - var(--home-width));
-        background: url(../src/icon_front.svg) rgba(0 0 0 / .25) no-repeat center;
+        background: url(src/icon_front.svg) rgba(0 0 0 / .25) no-repeat center;
         border-left: solid 1px rgb(0 0 0);
         background-size: 256px;
         opacity: .15;
