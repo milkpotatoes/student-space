@@ -258,7 +258,7 @@ export class PageLoader {
         /* 以本地缓存设置用户信息 */
         this.#mSzone.getUserInfo()
             .then(userInfo => {
-                if (userInfo) {
+                if (!"status" in userInfo) {
                     /* 设置用户头像 */
                     this.showUserInfo(userInfo); /* 设置所在区域 */ /* 设置学生信息 */
                     $(".student-name").text(userInfo.studentName); /* 设置当前年级 */

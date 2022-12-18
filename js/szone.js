@@ -287,7 +287,6 @@ export class Szone {
      */
     async getUserInfo() {
         return new Promise((resolve, _reject) => {
-            console.log(this.#userguid, !this.#token)
             if (this.#userguid && !this.#token) resolve(this.#db.userinfo.get(this.#userguid))
             if (Object.keys(this.#userinfo).length > 0) resolve(this.#userinfo);
             else resolve(this.updateUserInfo());

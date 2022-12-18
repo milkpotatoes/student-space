@@ -278,7 +278,7 @@ export class PageSwitcher {
     /* 首次加载页面执行 */
     firstLoad(page_name) {
         $(`[page~=${page_name}]`).addClass("loaded");
-        this.#mPageLoader.setUserInfo();
+        // this.#mPageLoader.setUserInfo();
         switch (page_name) {
             case "home":
                 document.querySelector(".navigator-container>header").classList.remove("mdui-hidden")
