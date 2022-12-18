@@ -1,17 +1,7 @@
 # Ignore node_modules
 node_modules/
 
-# Ignore all build output
-dist/*.js
-dist/*.map
-dist/*.ts
-dist/*.gz
-dist/*.mjs
-dist/**/*.js
-dist/**/*.map
-dist/**/*.ts
-dist/**/*.gz
-dist/**/*.mjs
+
 
 # Other ignores
 tmp/
