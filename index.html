@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#4caf50">
-    <link rel="stylesheet" href="./node_modules/mdui/dist/css/mdui.min.css" />
+    <link rel="stylesheet" href="./module/mdui/dist/css/mdui.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="stylesheet" href="./module/viewer/viewer.css" />
     <link rel="apple-touch-icon" href="./src/ic_launcher.png" type="image/x-icon" />
     <link rel="shortcut icon" href="./src/ic_launcher.png" type="image/x-icon">
-    <script src="./node_modules/eruda/eruda.js"></script>
+    <script src="./module/eruda/eruda.js"></script>
     <script>
         (function (w, d, s, q, i) {
             w[q] = w[q] || [];
@@ -43,7 +43,7 @@
          /******************************************************************/
     </script>
     <script src="./module/base64/base64.min.js"></script>
-    <script src="./node_modules/showdown/dist/showdown.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./module/showdown/dist/showdown.min.js" type="text/javascript" charset="utf-8"></script>
     <title>学习空间 - 牛奶土豆</title>
     <link rel="preload" href="./src/bg-for-avatar.webp" as="image">
     <script>
@@ -89,8 +89,8 @@
             if (settings_config["eruda-status"]) {
                 let _eruda_dom = document.createElement("script");
                 let _eruda_memory = document.createElement("script");
-                _eruda_dom.src = "./node_modules/eruda-dom/eruda-dom.js"
-                _eruda_memory.src = "./node_modules/eruda-memory/eruda-memory.js"
+                _eruda_dom.src = "./module/eruda-dom/eruda-dom.js"
+                _eruda_memory.src = "./module/eruda-memory/eruda-memory.js"
                 document.head.append(_eruda_dom);
                 document.head.append(_eruda_memory);
                 eruda.init();
