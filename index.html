@@ -3,296 +3,761 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#4caf50">
-    <link rel="stylesheet" href="css/mdui.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/viewer.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="manifest" href="json/manifest.json" />
-    <link rel="shortcut icon" href="src/ic_launcher.png" type="image/x-icon">
-    <script type="text/javascript">
-        (function (w) {
-            w.frontjsConfig = { token: "5ba108e63b146e3c744535fabc53b581", behaviour: 9, captureConsoleLog: true, trustVendor: true, ignoreVendor: true, optimisedForSPA: true, useHistory: true, FPSThreshold: 10 };
-            w.frontjsTmpData = { r: [], e: [], l: [] };
-            w.frontjsTmpCollector = function (ev) { (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([new Date().getTime(), ev]) };
-            w.FrontJS = {
-                addEventListener: function (t, f) { w.frontjsTmpData.l.push([t, f]); return f; },
-                removeEventListener: function (t, f) {
-                    for (var i = 0; i < w.frontjsTmpData.l.length; i++) {
-                        t === w.frontjsTmpData.l[i][0] && f === w.frontjsTmpData.l[i][1] && w.frontjsTmpData.l.splice(i, 1);
-                    } return f;
-                }
-            };
-            w.document.addEventListener("error", w.frontjsTmpCollector, true);
-            w.addEventListener("error", w.frontjsTmpCollector, true);
-            w.addEventListener("load", function () { var n = w.document.createElement("script"); n.src = "https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js"; w.document.body.appendChild(n); }, true);
-        })(window);
+    <link rel="stylesheet" href="./node_modules/mdui/dist/css/mdui.min.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="stylesheet" href="./module/viewer/viewer.css" />
+    <link rel="apple-touch-icon" href="./src/ic_launcher.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="./src/ic_launcher.png" type="image/x-icon">
+    <script src="./node_modules/eruda/eruda.js"></script>
+    <script>
+        (function (w, d, s, q, i) {
+            w[q] = w[q] || [];
+            var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+            j.async = true;
+            j.id = 'beacon-aplus';
+            j.src = 'https://d.alicdn.com/alilog/mlog/aplus/' + i + '.js';
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'aplus_queue', '203467608');
+
+        //集成应用的appKey
+        aplus_queue.push({
+            action: 'aplus.setMetaInfo',
+            arguments: ['appKey', '63503d0505844627b56a8d73']
+        });
+        aplus_queue.push({
+            action: 'aplus.setMetaInfo',
+            arguments: ['aplus-waiting', 'MAN']
+        });
+        //是否开启调试模式 
+        aplus_queue.push({
+            action: 'aplus.setMetaInfo',
+            arguments: ['DEBUG', true]
+        });
+        aplus_queue.push({
+            action: 'aplus.setMetaInfo',
+            arguments: ['aplus-idtype', 'cnaid'] //取值参考见附表1
+        });
+         /******************************************************************/
     </script>
-    <script src="js/viewer.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/base64.min.js"></script>
-    <script src="js/showdown.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./module/base64/base64.min.js"></script>
+    <script src="./node_modules/showdown/dist/showdown.min.js" type="text/javascript" charset="utf-8"></script>
     <title>学习空间 - 牛奶土豆</title>
-    <link rel="preload" href="src/bg-for-avatar.webp" as="image">
+    <link rel="preload" href="./src/bg-for-avatar.webp" as="image">
+    <script>
+        function fitBars(statusBarHeight, navigationBarHeight) {
+            document.body.parentElement.setAttribute("style", `--status-bar: ${statusBarHeight}px;--navigation-bar: ${navigationBarHeight}px;`)
+            if (eruda && eruda._shadowRoot) {
+                let style = document.createElement("style")
+                style.textContent = ".eruda-dev-tools {transform: translate(0, calc(0px - var(--navigation-bar)));} .eruda-dev-tools:after {content: \"\";display: block;height: var(--navigation-bar);background: inherit;}"
+                eruda._shadowRoot.append(style);
+            }
+        }
+
+        function fitDayNightMode(isNightMode) {
+            let bcl = document.body.classList;
+            bcl.remove("mdui-theme-layout-auto", "mdui-theme-layout-dark", "mdui-theme-layout-light")
+            switch (isNightMode) {
+                case true:
+                    bcl.add("mdui-theme-layout-dark")
+                    break;
+                case false:
+                    bcl.add("mdui-theme-layout-light");
+                    break;
+                case undefined:
+                    bcl.add("mdui-theme-layout-auto")
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        function fitSystemConfig() {
+            let settings_config = localStorage.stusp_settings_config;
+            settings_config = settings_config ? JSON.parse(settings_config) : { "dark-mode-follow-system": false, "dark-mode-status": false, "eruda-status": false, "dubug-by-usb": false }
+            if (window.stusp) {
+                fitDayNightMode(stusp.isNightMode())
+                const screenInfo = JSON.parse(stusp.getScreenInfo());
+                fitBars(stusp.getStatusBarHeight(), stusp.getNavigationBarHeight())
+                document.querySelector(".download-app").classList.add("mdui-hidden")
+                document.querySelector(".show-page[data=\"help\"]").classList.add("mdui-hidden")
+            } else if (settings_config["dark-mode-follow-system"]) fitDayNightMode(undefined);
+            else fitDayNightMode(settings_config["dark-mode-status"]);
+            if (settings_config["eruda-status"]) {
+                let _eruda_dom = document.createElement("script");
+                let _eruda_memory = document.createElement("script");
+                _eruda_dom.src = "./node_modules/eruda-dom/eruda-dom.js"
+                _eruda_memory.src = "./node_modules/eruda-memory/eruda-memory.js"
+                document.head.append(_eruda_dom);
+                document.head.append(_eruda_memory);
+                eruda.init();
+                _eruda_dom.onload = () => eruda.add(erudaDom);
+                _eruda_memory.onload = () => eruda.add(erudaMemory)
+
+            }
+
+            if (location.host !== "stusp.milkpotatoes.cn") {
+                document.querySelector(".subscribe-info").classList.add("mdui-hidden")
+                document.querySelector(".banded-devices").classList.add("mdui-hidden")
+                document.querySelector(".connect-watch").classList.add("mdui-hidden")
+            }
+        }
+
+    </script>
 </head>
 
-<body class="mdui-appbar-with-toolbar mdui-theme-layout-auto mdui-drawer-body-left">
-    <header class="mdui-appbar mdui-appbar-fixed simple-appbar mdui-hidden">
-        <div class="mdui-toolbar mdui-color-theme"> <a href="javascript:;" onclick="window.history.back()"
-                class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a> <span
-                class=" mdui-typo-title"></span> </div>
+<body class="mdui-theme-primary-blue mdui-theme-accent-blue">
+    <header
+        class="mdui-appbar mdui-appbar-fixed simple-appbar mdui-hidden mdui-text-color-theme-600 glass mdui-toolbar"> <a
+            href="javascript:;" class="mdui-btn mdui-btn-icon back-forward-btn">
+            <i class="mdui-icon material-icons">arrow_back</i>
+        </a> <span class=" mdui-typo-title"></span>
     </header>
-    <div class="page-loading mdui-theme-layout-auto">
+    <!-- <div class="page-loading mdui-theme-layout-auto">
         <div class="mdui-spinner page-loading-pgs"></div>
         <div class="page-loading-appname">学习空间</div>
         <div class="page-loading-version"></div>
-    </div> <!-- 登录界面 -->
-    <div class="main-container login" appbar="simple-appbar" page-title="学习空间 - 登录" scroll-hide="false"
-        back-up-btn="false" back-btn="false">
-        <div class="mdui-card-content mdui-center mdui-container">
-            <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12"> <i
-                    class="mdui-icon material-icons">phone</i> <label class="mdui-textfield-label">手机号</label> <input
-                    class="mdui-textfield-input" id="userCode" name="userCode" pattern="^1+[0-9]{10,10}$"
-                    autocomplete="off" type="tel" />
-                <div class="mdui-textfield-error">手机号格式错误</div>
-            </div>
-            <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12 password-widget"> <i
-                    class="mdui-icon material-icons">lock</i> <label class="mdui-textfield-label">密码</label> <input
-                    class="mdui-textfield-input" id="password" type="password" name="password" /> </div>
-            <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-8 sms-widget" style="display: none;">
-                <i class="mdui-icon material-icons">message</i> <label class="mdui-textfield-label">短信验证码</label> <input
-                    class="mdui-textfield-input" id="smsCode" pattern="^[0-9]{1,6}$" type="tel" name="smscode" />
-                <div class="mdui-textfield-error">验证码格式错误</div>
-            </div> <button class="mdui-btn mdui-btn-raised mdui-color-theme-accent mdui-m-t-3 mdui-col-xs-4 sms-widget"
-                id="sendsms" type="button" style="display: none;">获取验证码</button>
-            <p class="mdui-typo mdui-col-xs-12" style="font-size: 16px;"><a id="login-type" class="login-sms"
-                    href="javascript:void(0);">验证码登录/注册</a></p> <label class="mdui-checkbox"><input type="checkbox"
-                    id="agree-rules-login" /><i class="mdui-checkbox-icon"></i>我已阅读并同意<a
-                    class="show-page mdui-text-color-theme-accent" data="agreement">《学习空间用户条款》</a>、<a
-                    class="show-page mdui-text-color-theme-accent" data="privacystatement">《学习空间隐私条款》</a></label>
-            <div class="mdui-col-xs-12"> <input type="submit" id="login-btn"
-                    class="mdui-btn mdui-btn-raised mdui-color-theme-accent mdui-float-right" value="登录" /> </div>
-        </div>
-    </div>
-    <div class="main-container index" appbar="nonw" page-title="学习空间" back-up-btn="true">
-        <header class="mdui-appbar mdui-appbar-fixed">
-            <div class="mdui-toolbar mdui-color-theme"> <a href="javascript:;" class="mdui-btn mdui-btn-icon"
-                    mdui-drawer="{target: '#drawer'}"><i class="mdui-icon material-icons">menu</i></a> <span
-                    class="mdui-typo-title mdui-toolbar-spacer">学习空间</span> <a href="javascript:void(0);"
-                    class="mdui-btn mdui-btn-icon show-page" data="unclaim" mdui-tooltip="{content: '未认领'}"> <i
-                        class="mdui-icon material-icons notifications-icon">notifications_none</i> </a> </div>
-        </header>
-        <div class="mdui-drawer" id="drawer">
-            <div class="mdui-card-media">
-                <div class="background-card"
-                    style="width: 100%; height: 196px; background-image: url('src/bg-for-avatar.webp');  background-repeat: no-repeat;  background-size: 100% auto;">
+    </div> -->
+    <div class="page-container subpage-container">
+        <div class="main-container" page="exam" appbar="none" page-title="成绩详情" back-up-btn="true" back-btn="true">
+            <!-- "exam-summary-page": -->
+            <template name="exam-summary-page">
+                <div class="mdui-container subject-card mdui-hidden" id="subject-tab-{{subjectOrder}}">
+                    {{scoreCard}}
+                    <div class="score-summary student-space-card">
+                        <div class="score-summary-table student-space-table" union="{{isUnion}}">
+                            <div class="mdui-hidden">
+                                <div>科目</div>
+                                <div>得分</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <span type="node" name="examTotal">
+                        {{examTotal}}
+                    </span>
+                    <div class="student-space-card mdui-p-a-2 subject-analysis">
+                        <canvas></canvas>
+                        <span class="mdui-btn mdui-btn-icon download-radar">
+                            <i class="mdui-icon material-icons">file_download</i>
+                        </span>
+                    </div>
+                    <span type="node" name="examCommon">
+                        {{examCommon}}
+                    </span>
+                    <span type="node" name="gradeTable">
+                        {{gradeTable}}
+                    </span>
                 </div>
-                <div class="mdui-card-primary mdui-list-item mdui-card-media-covered show-page userBasicInfo"
-                    data="user">
-                    <div class="mdui-list-item-avatar"><img class="userAvatar" /></div>
-                    <div class="mdui-list-item-content ">
-                        <div class="mdui-list-item-title nick-name"> </div>
-                        <div class="mdui-list-item-summary userCode"></div>
+            </template>
+
+            <!-- "exam-subject-page": -->
+            <template name="exam-subject-page">
+                <div class="mdui-container subject-card mdui-hidden" id="subject-tab-{{subjectOrder}}">
+                    {{scoreCard}}
+                    <span type="node" name="examTotal">{{examTotal}}</span>
+                    <span type="node" name="examCommon">{{examCommon}}</span>
+                    <span type="node" name="answerCard">{{answerCard}}</span>
+                    <span type="node" name="gradeTable">{{gradeTable}}</span>
+                    <div
+                        class="subject-question mdui-typo subject-table-cards student-space-card student-space-table objective-table">
+                        <div>
+                            <div>题号</div>
+                            <div>我的答案</div>
+                            <div>参考答案</div>
+                            <div>得分</div>
+                        </div>
+
+                        <div type="node" name="objectiveTbody"></div>
+                        <div>{{expandButton}}</div>
+                    </div>
+                    <div
+                        class="subject-question mdui-typo subject-table-cards student-space-card student-space-table subjective-table">
+                        <div>
+                            <div>题号</div>
+                            <div>得分</div>
+                            <div>与均分差值</div>
+                            <div>平均分</div>
+                        </div>
+                        <div type="node" name="subjectiveTbody"></div>
+                        <div>{{expandButton}}</div>
                     </div>
                 </div>
+            </template>
+
+            <!-- "score-card": -->
+            <template name="score-card">
+                <div class="mdui-card-content mdui-text-color-theme-accent score-card student-space-card">
+                    <div class="mdui-typo name"> 分数卡片 </div>
+                    <div class="score-value">
+                        <span class="my-score mdui-typo">{{myScore}}</span> <span
+                            class="scoreDivider mdui-typo">/</span>
+                        <span class="full-score mdui-typo">{{fullScore}}</span>
+                    </div>
+                    <div class="rank-info mdui-hidden" union="{{isUnion}}">
+                        <div>
+                            <span>{{unionRank}}</span>
+                            <span>联考排名</span>
+                        </div>
+                        <div>
+                            <span>{{schoolRank}}</span>
+                            <span>学校排名</span>
+                        </div>
+                        <div>
+                            <span>{{classRank}}</span>
+                            <span>班级排名</span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <!-- "exam-total":  -->
+            <template name="exam-total">
+                <div class="student-space-card mdui-p-a-2 count-card" style="text-align:
+                    center;">本次参考总人数<span class="mdui-text-color-theme-accent">{{examTotal}}</span>
+                </div>
+            </template>
+            <!-- "exam-common":  -->
+            <template name="exam-common">
+                <div class="student-space-card mdui-typo mdui-p-a-2 msg-card">
+                    <p>{{readMsg}}
+                    <p>{{pkMsg}}</p>
+                </div>
+            </template>
+            <!-- "expand-button":  -->
+            <template name="expand-button">
+                <button class="mdui-btn expand-table"><i
+                        class="mdui-icon material-icons">expand_more</i><span>展开</span></button>
+            </template>
+            <!-- "answer-card":  -->
+            <template name="answer-card">
+                <div class="student-space-card answer-card mdui-card-media"><img
+                        class="subject-{{subjectOrder}}-img-{{imgOrder}} lz-load" lz-src="{{imgSrc}}"
+                        src="src/lz_load.webp" alt="“{{subjectName}}”答题卡">
+                    <a class="mdui-btn mdui-btn-icon download-answer-card mdui-hidden" download="{{fileName}}">
+                        <i class="mdui-icon material-icons">file_download</i>
+                    </a>
+                    <div class="mdui-card-media-covered mdui-valign subject-{{subjectOrder}}-img-loading-{{imgOrder}}">
+                        <div class="mdui-center mdui-spinner mdui-spinner-colorful"></div>
+                    </div>
+                </div>
+            </template>
+            <!-- "summary-score-item": -->
+            <template name="summary-score-item">
+                <div great="{{great}}">
+                    <div>{{subjectName}}</div>
+                    <div>{{subjectScore}} / {{fullScore}}</div>
+                </div>
+            </template>
+            <!-- "4columnTr":  -->
+            <template name="_4columnTr">
+                <div>
+                    <div>{{td1}}</div>
+                    <div>{{td2}}</div>
+                    <div>{{td3}}</div>
+                    <div>{{td4}}</div>
+                </div>
+            </template>
+            <!-- "exam-tab":  -->
+            <template name="exam-tab">
+                <a class="mdui-ripple" href="#subject-tab-{{subjectOrder}}">{{subjectName}}</a>
+            </template>
+            <!-- "grade-table": -->
+            <template name="grade-table">
+                <div
+                    class="subject-grade-table subject-grade subject-table-cards mdui-typo level-card student-space-card student-space-table">
+                    <div>
+                        <div>等级</div>
+                        <div>得分</div>
+                        <div>标准分</div>
+                        <div>年级人数</div>
+                        <div>班级人数</div>
+                    </div>
+                    <div type="node" name="gradeTbody"></div>
+                    <div>{{expandButton}}</div>
+                </div>
+            </template>
+            <!-- "grade-tr": -->
+            <template name="grade-tr">
+                <div class="{{myLevel}}">
+                    <div style="min-width: 64px;">{{tr0td0}}</div>
+                    <div>{{tr1td2}} / {{tr0td2}}</div>
+                    <div title="{{tr1td3}} / {{tr0td3}}">{{rndSSL}} / {{rndSSH}}</div>
+                    <div>{{gradeStart}} - {{gradeEnd}}</div>
+                    <div>{{classStart}} - {{classEnd}}</div>
+                </div>
+            </template>
+            <header
+                class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-toolbar-hide mdui-text-color-theme-600 glass">
+                <div class="mdui-toolbar">
+                    <a href="javascript:;" class="mdui-btn mdui-btn-icon back-forward-btn">
+                        <i class="mdui-icon material-icons">arrow_back</i>
+                    </a> <span class=" mdui-typo-title">成绩详情</span>
+                </div>
+                <div class="mdui-tab mdui-tab-scrollable mdui-tab-full-width mdui-hidden mdui-p-l-1"
+                    mdui-tab="{trigger:'click'}"></div>
+            </header>
+            <div class="main mdui-p-t-2">
+
+                <div class="mdui-progress mdui-m-t-1 exam-detail-pgs">
+                    <div class="mdui-progress-indeterminate"></div>
+                </div>
             </div>
+        </div>
+        <div class="main-container" page="about" appbar="simple-appbar" page-title="关于" scroll-hide="false"
+            back-up-btn="true" back-btn="true">
+            <div class="mdui-container">
+                <div class="mdui-m-t-2"> <img class="mdui-img-circle mdui-center mdui-m-t-3 back" alt="学习空间图标"
+                        src="src/ic_launcher.png" style="width: 154px;">
+                    <div class="mdui-m-y-3 mdui-typo-title" style="width: 100%;text-align: center;"> <span
+                            class="mdui-typo-title app-name">学习空间</span><br /> <span
+                            class="mdui-subheader description">七天网络成绩查询</span> </div>
+                </div>
+                <ul class="mdui-list student-space-card">
+                    <li class="mdui-list-item app-version"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">send</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">版本</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line appVersion"></div>
+                        </div>
+                    </li>
+                    <li class="mdui-list-item" mdui-dialog="{target: '#share', history: false}">
+                        <em class="mdui-list-item-icon mdui-icon material-icons">share</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">分享</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line">好用的话，就分享给小伙伴吧</div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="mdui-list student-space-card mdui-m-t-2 import-list">
+                    <li class="mdui-subheader mdui-text-color-theme-accent">引用库</li>
+                    <template name="import-item">
+                        <li class="mdui-list-item open-link" data="{{projectUrl}}">
+                            <div class="mdui-list-item-avatar">{{projectIcon}}</div>
+                            <div class="mdui-list-item-content">
+                                <div class="mdui-list-item-title">{{projectName}}&nbsp;&nbsp;<small
+                                        class="mdui-typo-body-1-opacity">v{{projectVersion}}</small></div>
+                                <div class="mdui-list-item-text mdui-list-item-one-line">{{projectDescription}}</div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+                <ul class="mdui-list student-space-card mdui-m-t-2 friend-link">
+                    <li class="mdui-subheader mdui-text-color-theme-accent">友情链接</li>
+                    <template name="friend-link-item">
+                        <li class="mdui-list-item open-link" data="{{frndLnkUrl}}"> <em
+                                class="mdui-list-item-icon mdui-icon material-icons">link</em>
+                            <div class="mdui-list-item-content">
+                                <div class="mdui-list-item-title">{{frndLnkTitle}}</div>
+                                <div class="mdui-list-item-text mdui-list-item-one-line">{{frndLnkDesc}}</div>
+                            </div>
+                        </li>
+
+                    </template>
+                </ul>
+            </div>
+        </div>
+        <div class="main-container" page="user" appbar="simple-appbar" page-title="我" scroll-hide="false"
+            back-up-btn="true" back-btn="true">
+            <div class="mdui-container">
+                <div class="mdui-card-media mdui-m-t-2 student-space-card">
+                    <div class="background-card mdui-valign"
+                        style="width: 100%; height: 218px; background-image: url('src/bg-for-avatar.webp');  background-repeat: no-repeat;  background-size: 100% auto;">
+                        <div class="user-avatar mdui-center"><img class="userAvatar" alt="用户头像" /></div>
+                    </div>
+                    <div class="mdui-card-primary mdui-card-media-covered mdui-p-y-0">
+                        <div class="mdui-list-item-content userBasicInfo nick-name mdui-center"
+                            style="text-align: center; font-size: 18px;"> </div>
+                    </div>
+                </div>
+                <ul class="mdui-list student-space-card mdui-m-t-2 subscribe-info">
+                    <li class="mdui-subheader">订阅信息</li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">access_time</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">生效时间</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line effective-time"></div>
+                        </div>
+                    </li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">timelapse</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">有效期至</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line expire-time"> </div>
+                        </div>
+                    </li>
+                    <li class="mdui-m-t-1 mdui-list-item band-order"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">add_circle_outlone</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">续期</div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="mdui-list student-space-card mdui-m-t-2">
+                    <li class="mdui-subheader">用户信息</li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">account_circle</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">用户名</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line nick-name"></div>
+                        </div>
+                    </li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">phone</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">手机号</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line userCode"> </div>
+                        </div>
+                    </li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">location_on</em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">所在区域</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line city-area"></div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="mdui-list student-space-card mdui-m-t-2">
+                    <li class="mdui-subheader">用户信息</li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons"></em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">学生姓名</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line student-name"></div>
+                        </div>
+                    </li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons"></em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">所在学校</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line school-name"> </div>
+                        </div>
+                    </li>
+                    <li class="mdui-m-t-1 mdui-list-item"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons"></em>
+                        <div class="mdui-list-item-content">
+                            <div class="mdui-list-item-title">所在年级</div>
+                            <div class="mdui-list-item-text mdui-list-item-one-line grade"></div>
+                        </div>
+                    </li>
+
+                </ul> <button
+                    class="mdui-btn mdui-btn-block mdui-btn-raised mdui-color-theme-accent mdui-m-b-1 mdui-m-t-2 saveUserInfo"
+                    disabled>保存</button>
+            </div>
+        </div>
+        <div class="main-container document" page="document help agreement privacystatement widgets donation"
+            appbar="simple-appbar" page-title="请稍后..."
+            data='{"help": {"title": "帮助", "data": "md/help.md"}, "agreement": {"title": "使用条款", "data": "md/agreement.md"}, "privacystatement": {"title": "隐私条款", "data": "md/privacystatement.md"}, "widgets": {"title": "桌面小部件", "data": "md/widgets.md"}, "donation": {"title": "鸣谢", "data": "md/donation.md"}}'
+            scroll-hide="true" back-up-btn="true" back-btn="true">
+            <div class="main mdui-p-t-2 mdui-container mdui-typo"> </div>
+        </div>
+        <div class="main-container" page="settings" appbar="simple-appbar" page-title="设置" scroll-hide="false"
+            back-up-btn="false" back-btn="true">
             <ul class="mdui-list">
-                <li class="mdui-list-item mdui-ripple show-page mdui-hidden" data="settings"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">settings</i>
-                    <div class="mdui-list-item-content">设置</div>
+                <li class="mdui-subheader">夜间模式</li>
+                <li class="mdui-list-item mdui-ripple daynight-auto">
+                    <label for="dark-mode-follow-system" class="mdui-list-item-content">跟随系统</label>
+                    <label class="mdui-switch">
+                        <input type="checkbox" id="dark-mode-follow-system" data="dark-mode-follow-system" />
+                        <i class="mdui-switch-icon"></i>
+                    </label>
                 </li>
-                <li class="mdui-list-item mdui-ripple open-link" data="https://kdocs.cn/l/cs2BO5RdwOPE"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">message</i>
-                    <div class="mdui-list-item-content">交流区</div>
+                <li class="mdui-list-item mdui-ripple daynight-mode">
+                    <label for="dark-mode-status" class="mdui-list-item-content">夜间模式</label>
+                    <label class="mdui-switch">
+                        <input type="checkbox" id="dark-mode-status" data="dark-mode-status" />
+                        <i class="mdui-switch-icon"></i>
+                    </label>
                 </li>
-                <li class="mdui-list-item mdui-ripple clear-cache mdui-hidden"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">clear_all</i>
-                    <div class="mdui-list-item-content">清空缓存</div>
+                <li class="mdui-subheader">调试</li>
+                <li class="mdui-list-item mdui-ripple">
+                    <label for="eruda-status" class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">移动端调试工具</div>
+                        <div class="mdui-list-item-text">刷新后生效</div>
+                    </label>
+                    <label class="mdui-switch">
+                        <input type="checkbox" id="eruda-status" data="eruda-status" />
+                        <i class="mdui-switch-icon"></i>
+                    </label>
                 </li>
-                <li class="mdui-list-item mdui-ripple show-page" data="help"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">book</i>
-                    <div class="mdui-list-item-content">帮助</div>
-                </li>
-                <li class="mdui-list-item mdui-ripple show-page" data="donation"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">🎊</i>
-                    <div class="mdui-list-item-content">鸣谢</div>
-                </li>
-                <li class="mdui-list-item mdui-ripple show-page" data="about"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">send</i>
-                    <div class="mdui-list-item-content">关于</div>
-                </li>
-                <li class="mdui-list-item mdui-ripple" onclick="logout()"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">exit_to_app</i>
-                    <div class="mdui-list-item-content">退出登录</div>
+                <li class="mdui-list-item mdui-ripple">
+                    <label for="debug-over-usb" class="mdui-list-item-content">通过USB调试</label>
+                    <label class="mdui-switch">
+                        <input type="checkbox" id="debug-over-usb" data="debug-over-usb" />
+                        <i class="mdui-switch-icon"></i>
+                    </label>
                 </li>
             </ul>
         </div>
-        <div class="main">
-            <ul class="mdui-list mdui-container mdui-center" id="examList"> </ul>
-            <div class="mdui-progress mdui-m-t-1 exam-item-pgs">
-                <div class="mdui-progress-indeterminate"></div>
-            </div>
-        </div>
     </div>
-    <div class="main-container unclaim" appbar="simple-appbar" page-title="未认领考试" scroll-hide="false" back-up-btn="true"
-        back-btn="true">
-        <div class="main">
-            <ul class="mdui-list mdui-container mdui-center" id="unClaimExamList"> </ul>
-            <div class="mdui-typo mdui-hidden noUnclaimExam" style="text-align: center;"
-                mdui-dialog="{target: '#claimExam', history: false}"> 当前无未认领考试 </div>
-            <div class="mdui-progress mdui-m-t-1 exam-item-pgs">
-                <div class="mdui-progress-indeterminate"></div>
+
+    <div class="page-container navigator-container main-container mdui-bottom-nav-fixed app-show" appbar="none"
+        page-title="学习空间" back-up-btn="true">
+        <header class="mdui-appbar mdui-appbar-fixed mdui-text-color-theme-600 glass">
+            <div class="mdui-toolbar">
+                <span class="mdui-typo-title mdui-toolbar-spacer">学习空间</span>
             </div>
-        </div>
-        <div class="mdui-dialog" id="claimExam">
-            <div class="mdui-dialog-title">认领考试</div>
-            <div class="mdui-dialog-content"> <span class="mdui-typo"> 请选择属于本人的考试认领 </span>
-                <div class="mdui-panel examInfo" mdui-panel="{accordion: true}"> </div>
-            </div>
-            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> </div>
-        </div>
-    </div>
-    <div class="main-container exam" appbar="none" page-title="成绩详情" back-up-btn="true" back-btn="true">
-        <header class="mdui-appbar mdui-appbar-fixed mdui-appbar-scroll-toolbar-hide">
-            <div class="mdui-toolbar mdui-color-theme"> <a href="javascript:;" onclick="window.history.back()"
-                    class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">arrow_back</i></a> <span
-                    class=" mdui-typo-title">成绩详情</span> </div>
-            <div class="mdui-tab mdui-tab-scrollable mdui-tab-full-width mdui-color-white mdui-hidden mdui-p-l-1"
-                mdui-tab="{trigger:'click'}"></div>
         </header>
-        <div class="main mdui-p-t-2">
-            <div class="mdui-progress mdui-m-t-1 exam-detail-pgs">
-                <div class="mdui-progress-indeterminate"></div>
-            </div>
-        </div>
-    </div>
-    <div class="main-container about" appbar="simple-appbar" page-title="关于" scroll-hide="false" back-up-btn="true"
-        back-btn="true">
-        <div class="mdui-container">
-            <div class="mdui-card mdui-m-t-2 mdui-hoverable"> <img class="mdui-img-circle mdui-center mdui-m-t-3 back"
-                    src="src/ic_launcher.png" style="width: 154px;">
-                <div class="mdui-m-y-3 mdui-typo-title" style="width: 100%;text-align: center;"> <span
-                        class="mdui-typo-title app-name">学习空间</span><br /> <span
-                        class="mdui-subheader description">七天网络成绩查询</span> </div>
-            </div>
-            <ul class="mdui-list">
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item jump-link"
-                    data="mailto:feedback@milkpotatoes.cn"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">face</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">作者</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">邮箱@牛奶土豆</div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">send</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">版本</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line appVersion"></div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"
-                    mdui-dialog="{target: '#share', history: false}">
-                    <!-- onclick="byNativeShare()"> -->
-                    <i class="mdui-list-item-icon mdui-icon material-icons">share</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">分享</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">好用的话，就分享给小伙伴吧</div>
-                    </div>
-                </li>
 
-                <li class="mdui-subheader mdui-text-color-theme-accent import-list">引用库</li>
-                <li class="mdui-subheader mdui-text-color-theme-accent friend-link">友情链接</li>
-            </ul>
-        </div>
-        <div class="mdui-dialog" id="share">
-            <div class="mdui-dialog-title">分享</div>
-            <div class="mdui-dialog-content"> <img class="mdui-center mdui-m-b-2" style="width:196px"
-                    src="src/share_qrcode.webp">
-                <span class="mdui-typo"> 长按二维码或右键点击将图片保存到本地 </span>
-            </div>
-            <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button> </div>
-        </div>
-    </div>
-    <div class="main-container user" appbar="simple-appbar" page-title="我" scroll-hide="false" back-up-btn="true"
-        back-btn="true">
-        <div class="mdui-container">
-            <div class="mdui-card-media mdui-m-t-2 mdui-card">
-                <div class="background-card mdui-valign"
-                    style="width: 100%; height: 218px; background-image: url('src/bg-for-avatar.webp');  background-repeat: no-repeat;  background-size: 100% auto;">
-                    <div class="user-avatar mdui-center"><img class="userAvatar" /></div>
+        <div class="sub-container">
+            <div page="home" page-title="首页">
+                <ul class="mdui-list mdui-container mdui-center" id="examList">
+                    <!-- 首页考试列表项目模板 -->
+                    <template name="exam-item">
+                        <li class="mdui-list-item exam-item" data="{{examData}}" exam-guid="{{examGuid}}">
+                            <div class="mdui-list-item-content">
+                                <div class="mdui-list-item-title">
+                                    {{examName}}</div>
+                                <div class="mdui-list-item-text exam-info">{{examType}} | {{examTime}}</div>
+                            </div><i
+                                class="mdui-icon mdui-list-item-icon mdui-text-color-theme-accent mdui-m-r-4">{{examScore}}</i>
+                        </li>
+                    </template>
+                </ul>
+                <div class="mdui-progress mdui-m-t-1 exam-item-pgs">
+                    <div class="mdui-progress-indeterminate"></div>
                 </div>
-                <div class="mdui-card-primary mdui-card-media-covered mdui-p-y-0">
-                    <div class="mdui-list-item-content userBasicInfo nick-name mdui-center"
-                        style="text-align: center; font-size: 18px;"> </div>
+                <div class="mdui-typo no-claim-exam mdui-center"> 已加载全部考试 </div>
+            </div>
+            <div page="unclaim" page-title="未认领考试">
+                <ul class="mdui-list mdui-container mdui-center" id="unClaimExamList">
+                    <template name="sub-header">
+                        <li class="mdui-subheader">{{examMonth}}</li>
+                    </template>
+                    <template name="exam-item">
+                        <li class="mdui-list-item student-space-card mdui-m-t-1 exam-item" value="{{examGuid}}"
+                            data="{{studentCodeList}}">
+                            <div class="mdui-list-item-content">
+                                <div class="mdui-list-item-title">{{examName}}</div>
+                                <div class="mdui-list-item-text exam-time">{{examTime}}</div>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+                <div class="mdui-typo mdui-hidden no-unclaim-exam mdui-center"> 当前无未认领考试 </div>
+                <div class="mdui-progress mdui-m-t-1 exam-item-pgs">
+                    <div class="mdui-progress-indeterminate"></div>
                 </div>
             </div>
-            <ul class="mdui-list">
-                <li class="mdui-subheader">用户信息</li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">account_circle</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">用户名</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line nick-name"></div>
+            <div page="profile" page-title="我的">
+                <div class="show-page userBasicInfo" data="user">
+                    <div class="mdui-list-item-avatar">
+                        <img class="userAvatar" alt="用户头像" src="src/ic_launcher.png">
                     </div>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">phone</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">手机号</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line userCode"> </div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons">location_on</i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">所在区域</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line city-area"></div>
-                    </div>
-                </li>
-                <li class="mdui-subheader">用户信息</li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons"></i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">学生姓名</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line student-name"></div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons"></i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">所在学校</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line school-name"> </div>
-                    </div>
-                </li>
-                <li class="mdui-card mdui-m-t-1 mdui-hoverable mdui-list-item"> <i
-                        class="mdui-list-item-icon mdui-icon material-icons"></i>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">所在年级</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line grade"></div>
-                    </div>
-                </li>
-            </ul> <button
-                class="mdui-btn mdui-btn-block mdui-btn-raised mdui-color-theme-accent mdui-m-b-1 mdui-m-t-2 saveUserInfo"
-                disabled>保存</button>
+
+                    <div class="nick-name">学习空间用户</div>
+                    <div class="userCode">000****0000</div>
+
+                </div>
+                <ul class="mdui-list mdui-m-t-2">
+                    <li class="mdui-list-item mdui-ripple connect-watch" data="connect-watch"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">phonelink</em>
+                        <div class="mdui-list-item-content">连接到手表</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple banded-devices" data="banded-devices"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">watch</em>
+                        <div class="mdui-list-item-content">已连接设备</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple show-page" data="settings"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">settings</em>
+                        <div class="mdui-list-item-content">设置</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple open-link download-app" data="https://www.wkzx.store/bTnO">
+                        <em class="mdui-list-item-icon mdui-icon material-icons">file_download</em>
+                        <div class="mdui-list-item-content">下载客户端(Android)</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple mdui-hidden">
+                        <em class="mdui-list-item-icon mdui-icon material-icons">swap_horiz</em>
+                        <div class="mdui-list-item-content">切换用户</div>
+                    </li>
+
+                    <li class="mdui-list-item mdui-ripple show-page" data="donation"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">🎊</em>
+                        <div class="mdui-list-item-content">鸣谢</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple open-link" data="https://jq.qq.com/?_wv=1027&k=CVnD6jNK"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">group</em>
+                        <div class="mdui-list-item-content">QQ群</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple show-page" data="help"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">book</em>
+                        <div class="mdui-list-item-content">帮助</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple show-page" data="about"> <em
+                            class="mdui-list-item-icon mdui-icon material-icons">send</em>
+                        <div class="mdui-list-item-content">关于</div>
+                    </li>
+                    <li class="mdui-list-item mdui-ripple logout-stusp">
+                        <em class="mdui-list-item-icon mdui-icon material-icons">exit_to_app</em>
+                        <div class="mdui-list-item-content">退出登录</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <footer
+            class="mdui-bottom-nav mdui-bottom-nav-text-auto mdui-bottom-nav-scroll-hide mdui-text-color-theme mdui-headroom">
+            <a href="javascript:void(0);" class="mdui-ripple mdui-bottom-nav-active show-page" data="home">
+                <i class="mdui-icon material-icons">home</i>
+                <label>首页</label>
+            </a>
+            <a href="javascript:void(0);" class="mdui-ripple show-page" data="unclaim">
+                <i class="mdui-icon material-icons">notifications</i>
+                <label>消息</label>
+            </a>
+            <a href="javascript:void(0);" class="mdui-ripple show-page" data="profile">
+                <i class="mdui-icon material-icons">account_circle</i>
+                <label>我的</label>
+            </a>
+        </footer>
+    </div>
+    <div class="page-container full-container">
+        <!-- 登录界面 -->
+        <div class="main-container" page="login" appbar="none" page-title="登录" scroll-hide="false" back-up-btn="false"
+            back-btn="false">
+            <h1 class="mdui-m-l-4 mdui-text-color-theme-accent">登录</h1>
+            <div class="mdui-card-content mdui-center mdui-container">
+                <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12"> <i
+                        class="mdui-icon material-icons">phone</i> <label class="mdui-textfield-label">手机号</label>
+                    <input class="mdui-textfield-input" id="userCode" name="userCode" pattern="^1+[0-9]{10,10}$"
+                        autocomplete="off" type="tel" />
+                    <div class="mdui-textfield-error">手机号格式错误</div>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12 password-widget"> <i
+                        class="mdui-icon material-icons">lock</i> <label class="mdui-textfield-label">密码</label>
+                    <input class="mdui-textfield-input" id="password" type="password" name="password" />
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-8 sms-widget mdui-hidden">
+                    <i class="mdui-icon material-icons">message</i> <label class="mdui-textfield-label">短信验证码</label>
+                    <input class="mdui-textfield-input" id="smsCode" pattern="^[0-9]{1,6}$" type="tel" name="smscode" />
+                    <div class="mdui-textfield-error">验证码格式错误</div>
+                </div> <button
+                    class="mdui-btn mdui-btn-raised mdui-color-theme-accent mdui-m-t-3 mdui-col-xs-4 sms-widget mdui-hidden"
+                    id="sendsms" type="button">获取验证码</button>
+                <p class="mdui-typo mdui-col-xs-12">
+                    <a id="login-type" class="login-sms" href="javascript:void(0);">验证码登录/注册</a>
+                </p>
+                <label class="mdui-checkbox"><input type="checkbox" id="agree-rules-login" />
+                    <i class="mdui-checkbox-icon"></i>我已阅读并同意
+                    <a class="show-page mdui-text-color-theme-accent" data="agreement">《学习空间用户条款》</a>、
+                    <a class="show-page mdui-text-color-theme-accent" data="privacystatement">《学习空间隐私条款》</a>
+                </label>
+                <div class="mdui-col-xs-12">
+                    <input type="submit" id="login-btn"
+                        class="mdui-btn mdui-btn-raised mdui-color-theme-accent mdui-float-right" value="登录" />
+                </div>
+            </div>
         </div>
     </div>
-    <div class="main-container document help agreement privacystatement widgets donation" appbar="simple-appbar"
-        page-title="请稍后..."
-        data='{"help": {"title": "帮助", "data": "md/help.md"}, "agreement": {"title": "使用条款", "data": "md/agreement.md"}, "privacystatement": {"title": "隐私条款", "data": "md/privacystatement.md"}, "widgets": {"title": "桌面小部件", "data": "md/widgets.md"}, "donation": {"title": "鸣谢", "data": "md/donation.md"}}'
-        scroll-hide="true" back-up-btn="true" back-btn="true">
-        <div class="main mdui-p-t-2 mdui-container mdui-typo"> </div>
+    <div class="mdui-hidden" page="dialog">
+        <!-- 连接到手表授权对话框 -->
+        <template name="auth-devices">
+            <div class="mdui-typo">输入手表上的授权码以进行配对</div>
+            <div class="mdui-typo">手表端地址：<a href="/watch">https://stusp.milkpotatoes.cn/watch</a></div>
+            <div class="authcode">
+                <div></div><span></span><span></span><span></span><span></span>
+                <div></div><input><span class="focus mdui-hidden"></span>
+            </div>
+        </template>
+        <!-- 地区选择对话框 -->
+        <template name="city-selector">
+            <div class="mdui-typo province">省/直辖市/特别行政区</div><select
+                class="mdui-select province province-select"></select>
+            <div class="mdui-typo city">市/县</div><select class="mdui-select city city-select"></select>
+        </template>
+        <!-- 学校选择对话框 -->
+        <template name="school-selector">
+            <div class="mdui-typo school">学校</div><select class="mdui-select school school-select"></select>
+        </template>
+        <!-- 年级选择对话框 -->
+        <template name="grade-selector">
+            <div class="mdui-typo step">阶段</div><select class="mdui-select step step-select">
+                <option value="-1" selected>请选择</option>
+                <option value="x">小学</option>
+                <option value="c">初中</option>
+                <option value="g">高中</option>
+            </select>
+            <div class="mdui-typo agrade">年级</div><select class="mdui-select agrade agrade-select"></select>
+        </template>
+        <!-- 请求隐私条款授权对话框 -->
+        <template name="user-agree">
+            <br />
+            <label class="mdui-checkbox">
+                <input type="checkbox" class="agree-rules" /><em class="mdui-checkbox-icon"></em>我已阅读并同意
+                <a class="open-link mdui-text-color-theme-accent" data="agreement"
+                    href="javascript:void(0);">《学习空间用户条款》</a>、
+                <a class="open-link mdui-text-color-theme-accent" data="privacystatement"
+                    href="javascript:void(0);">《学习空间隐私条款》</a>
+            </label>
+        </template>
+        <!-- 展示待认领考试 -->
+        <template name="unclaim-panel">
+            <div class="mdui-panel-item {{defaultOpen}}">
+                <div class="mdui-panel-item-header">{{studentCode}}
+                    <i class="mdui-panel-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+                </div>
+                <div class="mdui-panel-item-body">
+                    <img class="mdui-img-rounded mdui-img-fluid paperImg" lz-src="{{answerCard}}">
+                    <div class="mdui-panel-item-actions"><button class="mdui-btn mdui-ripple claimExamBtn"
+                            onclick="claimExam('{{studentCode}}','{{examGuid}}')" mdui-panel-item-confirm>认领</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <!-- 认领考试对话框 -->
+        <template name="unclaim-dialog"><span class="mdui-typo">请选择属于本人的考试认领</span>
+            <div class="mdui-panel examInfo" mdui-panel="{accordion> true}">{{unclaimPanel}}</div>
+        </template>
+        <!-- 订阅过期对话框 -->
+        <template name="subscribe-expired">
+            <p class="mdui-typo">您的学习空间使用权限已到期或未开通<br />您可以前往
+                <a class="open-link" data='https://afdian.net/a/milkpotatoes' href="javascript:void(0);">爱发电 - 牛奶土豆</a>
+                购买使用权限或使用永久免费的<a class="open-link" data='https://milkpotatoes.github.io/student-space/#/'
+                    href="javascript:void(0);">Github Pages版</a>或更换具有订阅权限的用户后重试
+            </p>
+        </template>
+        <!-- 绑定订单对话框 -->
+        <template name="band-order">
+            <p class="mdui-typo mdui-m-y-0">不知道订单号？
+                <a class="open-link" data="https://afdian.net/dashboard/order" href="javascript:void(0);">查看订单</a>或
+                <a class="open-link" data="https://afdian.net/a/milkpotatoes"
+                    href="javascript:void(0);">前往下单</a>（已不可查看排名，请理性消费）
+            </p>
+            <div class="mdui-textfield mdui-textfield-floating-label mdui-p-t-0">
+                <label class="mdui-textfield-label">爱发电订单号</label>
+                <input class="mdui-textfield-input order-id" maxlength="27" />
+                <div class="mdui-textfield-error"></div>
+            </div>
+            <label class="mdui-checkbox">
+                <input type="checkbox" class="auto-band" /><i class="mdui-checkbox-icon"></i>自动绑定</label>
+            <i style="font-size: 16px;margin-left: 4px;color: #888;cursor: help;" class="mdui-icon material-icons"
+                title="勾选此选项，当您在爱发电下单时，我们将自动为您续期">info_outline</i>
+        </template>
     </div>
-    <div class="main-container settings" appbar="simple-appbar" page-title="设置" scroll-hide="false" back-up-btn="true"
-        back-btn="true"></div>
-
+    <div page="other" class="mdui-hidden">
+        <template name="option">
+            <option value="{{optionId}}" {{selected}}>{{optionText}}</option>
+        </template>
+    </div>
+    <div class="mdui-dialog" id="share">
+        <div class="mdui-dialog-title">分享</div>
+        <div class="mdui-dialog-content"> <img class="mdui-center mdui-m-b-2" style="width:196px" alt="分享二维码"
+                src="src/share_qrcode.webp">
+            <span class="mdui-typo"> 长按二维码或右键点击将图片保存到本地 </span>
+        </div>
+        <div class="mdui-dialog-actions"> <button class="mdui-btn mdui-ripple" mdui-dialog-close>关闭</button>
+        </div>
+    </div>
     <div class="back-up-btn-box">
         <button class="mdui-fab mdui-color-theme-accent mdui-ripple mdui-fab-fixed back-top mdui-hidden">
             <i class="mdui-icon material-icons">keyboard_arrow_up</i>
         </button>
     </div>
-
-    <script src="js/mdui.min.js"></script>
-    <script src="js/switch_device.js" type="text/javascript" charset="utf-8"></script>
+    <script
+        type="text/javascript">(function (w) { w.frontjsConfig = { token: "5ba108e63b146e3c744535fabc53b581", behaviour: 9, captureConsoleLog: true, trustVendor: true, ignoreVendor: true, optimisedForSPA: true, useHistory: true, FPSThreshold: 10 }; w.frontjsTmpData = { r: [], e: [], l: [] }; w.frontjsTmpCollector = function (ev) { (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([new Date().getTime(), ev]) }; w.FrontJS = { addEventListener: function (t, f) { w.frontjsTmpData.l.push([t, f]); return f; }, removeEventListener: function (t, f) { for (var i = 0; i < w.frontjsTmpData.l.length; i++) { t === w.frontjsTmpData.l[i][0] && f === w.frontjsTmpData.l[i][1] && w.frontjsTmpData.l.splice(i, 1); } return f; } }; w.document.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("load", function () { var n = w.document.createElement("script"); n.src = "https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js"; w.document.body.appendChild(n); }, true); })(window);</script>
+    <script src="./js/index.js" type="module"></script>
 
 </body>
 

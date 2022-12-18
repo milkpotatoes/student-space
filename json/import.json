@@ -1,1 +1,50 @@
-[{"name": "MDUI","version": "1.0.0","description": "MDUI 漂亮、轻量且好用，它能让你更轻松地开发 Material Design 网页应用","url": "https:\/\/www.mdui.org/","icon": "MDUI","iconType": "text"}, {"name": "Base64.js","version": "3.6.0","description": "Yet another Base64 transcoder in pure-JS.","url": "https:\/\/github.com/dankogai/js-base64","icon": "Base64","iconType": "text"}, {"name": "Viewer","version": "1.1.0","description": "A simple jQuery image viewing plugin.","url": "https:\/\/github.com/fengyuanchen/viewer","icon": "src/viewer.ico","iconType": "img"}, {"name": "ShowDown","version": "2.0.0-alpha1","description": "A Markdown to HTML converter written in Javascript","url": "http:\/\/showdownjs.com/","icon": "src/showdown.png","iconType": "img"}]
+[
+    {
+        "name": "MDUI",
+        "version": "1.0.0",
+        "description": "MDUI 漂亮、轻量且好用，它能让你更轻松地开发 Material Design 网页应用",
+        "url": "https://www.mdui.org/",
+        "icon": "MDUI",
+        "iconType": "text"
+    },
+    {
+        "name": "Viewer",
+        "version": "1.1.0",
+        "description": "A simple jQuery image viewing plugin.",
+        "url": "https://github.com/fengyuanchen/viewer",
+        "icon": "src/viewer.ico",
+        "iconType": "img"
+    },
+    {
+        "name": "ShowDown",
+        "version": "2.0.0-alpha1",
+        "description": "A Markdown to HTML converter written in Javascript",
+        "url": "http://showdownjs.com/",
+        "icon": "src/showdown.webp",
+        "iconType": "img"
+    },
+    {
+        "name": "Dexie",
+        "version": "3.2.2",
+        "description": "A Minimalistic Wrapper for IndexedDB",
+        "url": "https://dexie.org/",
+        "icon": "src/dexie-logo-icon.webp",
+        "iconType": "img"
+    },
+    {
+        "name": "Base64",
+        "version": "3.2.2",
+        "description": "Base64 implementation for JavaScript",
+        "url": "https://github.com/dankogai/js-base64",
+        "icon": "src/base64-author.webp",
+        "iconType": "img"
+    },
+    {
+        "name": "Eruda",
+        "version": "2.5.0",
+        "description": "Console for Mobile Browsers.",
+        "url": "https://eruda.liriliri.io/",
+        "icon": "src/eruda-author.webp",
+        "iconType": "img"
+    }
+]

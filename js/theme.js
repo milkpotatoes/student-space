@@ -1,1 +1,1 @@
-$(() => $("body").addClass("mdui-theme-primary-green mdui-theme-accent-red"));
+$(() => $("body").addClass("mdui-theme-primary-green mdui-theme-accent-blue"));
