@@ -288,6 +288,7 @@ body {
     top: 0;
     transform: translate(-50%, 0);
     left: 50%;
+    pointer-events: all;
 }
 
 .mdui-dialog {

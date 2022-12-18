@@ -368,8 +368,7 @@ export class PageSwitcher {
                 break;
         }
 
-        let page_name = page_path;
-
+        let page_name = page_path == "" ? "home" : page_path;
         let page = document.querySelector(`[page~=${page_name}]`);
 
         // if (page.closest(".subpage-container")) page.closest(".subpage-container").style.zIndex = 2

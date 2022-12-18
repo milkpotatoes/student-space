@@ -468,8 +468,8 @@ export class PageLoader {
                     mdui.snackbar({
                         message: data.message,
                         buttonText: "确定",
-                        onButtonClick: () => mPageSwitcher.showPage("login", false, null),
-                        onClose: () => mPageSwitcher.showPage("login", false, null)
+                        onButtonClick: function () { mPageSwitcher.showPage("login", false, null) },
+                        onClose: function () { mPageSwitcher.showPage("login", false, null) }
                     });
                     return false;
                 }
