@@ -90,7 +90,7 @@ export class PageSwitcher {
                     let order_id = dialog.$element.find("input.order-id").val();
                     let auto_band = dialog.$element.find("input.auto-band").is(":checked");
                     let err_msg = dialog.$element.find(".mdui-textfield-error");
-                    if (!order_id.match(/^[0-9]{8,27}$/g)) {
+                    if (!order_id.match(/^\d{8,27}$/g)) {
                         err_msg.text("订单号应为小于27位数字");
                         dialog.$element.find(".mdui-textfield").addClass("mdui-textfield-invalid");
                         return false;
@@ -193,7 +193,6 @@ export class PageSwitcher {
         }
         else if (sub_info.data.expire_time && sub_info.data.effective_time) {
             document.querySelector(".expire-time").textContent = (new Date(sub_info.data.expire_time * 1000)).toLocaleString() + (sub_info.status == 200 ? "" : " (已失效)");
-            // (new Date(sub_info.data.expire_time * 1000)).toLocaleString();
             document.querySelector(".effective-time").textContent = (new Date(sub_info.data.effective_time * 1000)).toLocaleString();
         } else {
             document.querySelector(".expire-time").textContent = "无订阅记录";
@@ -278,7 +277,7 @@ export class PageSwitcher {
     /* 首次加载页面执行 */
     firstLoad(page_name) {
         $(`[page~=${page_name}]`).addClass("loaded");
-        this.#mPageLoader.setUserInfo();
+        // this.#mPageLoader.setUserInfo();
         switch (page_name) {
             case "home":
                 document.querySelector(".navigator-container>header").classList.remove("mdui-hidden")
@@ -368,8 +367,7 @@ export class PageSwitcher {
                 break;
         }
 
-        let page_name = page_path;
-
+        let page_name = page_path == "" ? "home" : page_path;
         let page = document.querySelector(`[page~=${page_name}]`);
 
         // if (page.closest(".subpage-container")) page.closest(".subpage-container").style.zIndex = 2
@@ -405,12 +403,10 @@ export class PageSwitcher {
                 curr_header = simple_header.cloneNode(true);
                 curr_header.classList.remove("mdui-hidden")
                 curr_header.querySelector(".mdui-typo-title").textContent = page.getAttribute("page-title");
-                // console.log(copy_header)
                 if (page.getAttribute("back-btn") === "true") {
                     curr_header.querySelector("a").classList.remove("mdui-hidden");
                 } else {
                     curr_header.querySelector("a").classList.add("mdui-hidden");
-                    // $(".simple-appbar a").addClass("mdui-hidden");
                 }
                 page.append(curr_header)
             }
@@ -420,8 +416,6 @@ export class PageSwitcher {
 
         document.title = page.getAttribute("page-title");
 
-        // document.querySelector(".page-loading").classList.add("mdui-hidden");
-        // console.log(page_path)
         if (!page.classList.contains("loaded")) {
             this.firstLoad(page_name);
         } else {
@@ -442,7 +436,5 @@ export class PageSwitcher {
             }
         });
     }
-
-
 }
 export default PageSwitcher;

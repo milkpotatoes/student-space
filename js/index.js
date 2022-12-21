@@ -4,7 +4,7 @@ import Szone from "./szone.js";
 import Render from "./render.js";
 import PageLoader from "./pageloader.js";
 import PageSwitcher from "./pageswitcher.js";
-import mdui from "../node_modules/mdui/dist/js/mdui.esm.js";
+import mdui from "../module/mdui/dist/js/mdui.esm.js";
 
 const mSzone = new Szone(localStorage.CurrentUser)
 if (!localStorage.CurrentUser && localStorage.Token) mSzone.setToken(localStorage.Token)
@@ -540,7 +540,7 @@ $(document).on("click", "#login-btn", () => {
     }
 });
 
-$(document).on("click", "#sendsms", () => {
+$(document).on("click", ".login #sendsms", () => {
     mSzone.getSmsCode({
         userCode: Base64.encode($("#userCode").val())
     })

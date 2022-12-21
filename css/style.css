@@ -83,7 +83,7 @@
         left: var(--home-width);
         height: 100%;
         width: calc(100% - var(--home-width));
-        background: url(/src/icon_front.svg) rgba(0 0 0 / .25) no-repeat center;
+        background: url(../src/icon_front.svg) rgba(0 0 0 / .25) no-repeat center;
         border-left: solid 1px rgb(0 0 0);
         background-size: 256px;
         opacity: .15;
@@ -288,6 +288,7 @@ body {
     top: 0;
     transform: translate(-50%, 0);
     left: 50%;
+    pointer-events: all;
 }
 
 .mdui-dialog {
@@ -348,7 +349,6 @@ body {
 .score-card {
     text-align: center;
     padding: 36px;
-    background: t;
     background-color: transparent !important;
 }
 
@@ -433,7 +433,6 @@ label.bind-select {
     width: 100vw;
     height: 100vh;
     z-index: 1001;
-    /* background: #FFF; */
     position: fixed;
     top: 0;
     left: 0;
@@ -455,16 +454,10 @@ label.bind-select {
     transform: translate(-50%, 0px);
 }
 
-/* 
-.exam-item {
-    filter: blur(4px);
-} */
-
 .user-token {
     border: solid #AAAAAA 1px;
     border-radius: 3px;
     background: #EEEEEE;
-    /* filter: blur(4px); */
     padding: 5px;
 }
 
