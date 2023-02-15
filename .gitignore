@@ -1,0 +1,14 @@
+# Archive file
+/*.zip
+/*.7z
+/*.rar
+/*.bz
+/*.gz
+/*.tar.*
+
+# backup files
+*.bak
+
+# moudles_file
+/node_moudles/
+/modules/

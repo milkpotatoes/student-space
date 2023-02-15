@@ -1,4 +1,4 @@
-import Dexie from "../module/dexie/dist/dexie.mjs.js"
+import Dexie from "../modules/dexie/dexie.min.mjs"
 
 export class Szone {
     #headers = {
@@ -33,8 +33,9 @@ export class Szone {
         if (uuid) this.#db.userinfo
             .get(uuid)
             .then(data => {
-                this.#db.accounts.get({ userCode: data.userCode })
+                if (data && data.userCode) this.#db.accounts.get({ userCode: data.userCode })
                     .then(res => this.setToken(res.token));
+                else this.#userguid = undefined
             });
 
         console.log(this.#db)
@@ -286,8 +287,9 @@ export class Szone {
      * @returns {promise}
      */
     async getUserInfo() {
-        return new Promise((resolve, _reject) => {
-            if (this.#userguid && !this.#token) resolve(this.#db.userinfo.get(this.#userguid))
+        return new Promise((resolve, reject) => {
+            if (this.#userguid && this.#token) resolve(this.#db.userinfo.get(this.#userguid))
+
             if (Object.keys(this.#userinfo).length > 0) resolve(this.#userinfo);
             else resolve(this.updateUserInfo());
         });
@@ -350,7 +352,7 @@ export class Szone {
                     this.setToken(json.data.token);
                     this.#db.accounts.where("userCode").equals(data.userCode).delete();
                     this.#db.accounts.put({ userCode: data.userCode, token: json.data.token });
-                } 
+                }
                 return json;
             });
     }
@@ -526,11 +528,11 @@ export class Szone {
                     let expired = false;
                     if (res) {
                         for (let url of res.url) {
-                        expired = expired || new Date(new URL(url).search.match(/Expires=(.+?)(\&|$)/)[1] * 1000) <= new Date()
-                    } 
-                    if(res.data || !expired)  resolve(res?.url);
-                    else reject();
-                }else reject()
+                            expired = expired || new Date(new URL(url).search.match(/Expires=(.+?)(\&|$)/)[1] * 1000) <= new Date()
+                        }
+                        if (res.data || !expired) resolve(res?.url);
+                        else reject();
+                    } else reject()
                 })
         })
             .catch(() => {

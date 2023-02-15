@@ -371,13 +371,7 @@ export class PageSwitcher {
         let page_name = page_path == "" ? "home" : page_path;
         let page = document.querySelector(`[page~=${page_name}]`);
 
-        // if (page.closest(".subpage-container")) page.closest(".subpage-container").style.zIndex = 2
         if (page.closest(".full-container")) page.closest(".full-container").style.zIndex = 2
-        if (add_history === undefined) setTimeout(page => {
-            document.querySelectorAll(".page-container").forEach(page_container => {
-                // page_container.style.zIndex = page_container.isEqualNode(page.closest(".page-container")) ? 1 : 0
-            })
-        }, 500, page);
 
         let siblings = page.parentElement.querySelectorAll("[page]")
         page.style.zIndex = 1
@@ -386,13 +380,12 @@ export class PageSwitcher {
                 sibling.style.zIndex = 0
                 if (page.parentElement.classList.contains("subpage-container")) setTimeout((sibling) => {
                     sibling.classList.remove("app-show")
-                }, 1000, sibling);
+                }, 200, sibling);
                 else sibling.classList.remove("app-show")
             }
 
         })
 
-        // $(".app-show").removeClass("app-show");
 
         this.showBackTopBtn(page.getAttribute("back-up-btn") === "true")
         let simple_header = document.querySelector(".simple-appbar");
@@ -404,12 +397,10 @@ export class PageSwitcher {
                 curr_header = simple_header.cloneNode(true);
                 curr_header.classList.remove("mdui-hidden")
                 curr_header.querySelector(".mdui-typo-title").textContent = page.getAttribute("page-title");
-                // console.log(copy_header)
                 if (page.getAttribute("back-btn") === "true") {
                     curr_header.querySelector("a").classList.remove("mdui-hidden");
                 } else {
                     curr_header.querySelector("a").classList.add("mdui-hidden");
-                    // $(".simple-appbar a").addClass("mdui-hidden");
                 }
                 page.append(curr_header)
             }
@@ -419,14 +410,8 @@ export class PageSwitcher {
 
         document.title = page.getAttribute("page-title");
 
-        // document.querySelector(".page-loading").classList.add("mdui-hidden");
-        // console.log(page_path)
-        if (!page.classList.contains("loaded")) {
-            this.firstLoad(page_name);
-        } else {
-            this.loadAnyway(page_name);
-        }
-        // }
+        if (!page.classList.contains("loaded")) this.firstLoad(page_name);
+        else this.loadAnyway(page_name);
 
     }
 

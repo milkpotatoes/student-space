@@ -1,8 +1,9 @@
 import Render from "./render.js";
 import mPageSwitcher from "./pageswitcher.js";
 import GradeRadar from "./graderadar.js";
-import Viewer from "../module/viewer/viewer.esm.js"
+import Viewer from "../modules/viewerjs/viewer.esm.js"
 import Szone from "./szone.js";
+import { Base64 } from "../modules/js-base64/base64.mjs";
 
 export class PageLoader {
     #mSzone;
@@ -359,6 +360,7 @@ export class PageLoader {
                 exam_item_render
                     .setDirection("append")
                     .setTarget("#examList")
+                console.log(data)
                 data.forEach((exam_data, i) => {
                     let item_target = exam_item_render.renderToPage(
                         {
@@ -378,10 +380,9 @@ export class PageLoader {
                 this.#load_cache_list = true
                 $("[page~=home] .exam-item-pgs").removeClass("exam-loading");
                 $("[page~=home] .exam-item-pgs").addClass("mdui-hidden");
-                setTimeout((user_cache, start, rows) => {
-
-                    this._getExamList(user_cache, start, rows)
-                }, 2000, user_cache, start, rows);
+                setTimeout((start, rows) => {
+                    this.getExamList(start, rows)
+                }, 2000, start, rows);
             })
         else this.#mSzone.getExamData({
             studentName: user_cache.studentName,
@@ -614,8 +615,6 @@ export class PageLoader {
     }
 
     setBG() {
-        let page_name = location.hash.substring(2);
-
         let bg = document.querySelector(".background-card").getBoundingClientRect();
         let it = document.querySelector(".userBasicInfo.mdui-center").getBoundingClientRect();
         $(".background-card").css("background-position",
@@ -648,7 +647,6 @@ export class PageLoader {
                 if (data.schoolGuid !== "") {
                     /* 获取考试/未认领列表 */
                     this.getUnClaimExamCount();
-                    this.getExamList($(".exam-item").length, 5);
                 } else {
                     mdui.snackbar({
                         message: "请先绑定学生信息",

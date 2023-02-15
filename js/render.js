@@ -142,7 +142,7 @@ export class Render {
             return this.template;
         } else {
             let vbox = document.createElement(this.virtualContainer);
-            let node = document.querySelector(`[page=${path}] template[name=${name}]`)
+            let node = document.querySelector(`[page~=${path}] template[name~=${name}]`)
             if (node) {
                 vbox.append(node.content.cloneNode(true));
                 return vbox.innerHTML;

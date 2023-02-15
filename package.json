@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "dexie": "^3.2.3",
+    "eruda": "^2.11.2",
+    "eruda-dom": "^2.0.0",
+    "eruda-memory": "^2.0.0",
+    "js-base64": "^3.7.5",
+    "mdui": "^1.0.2",
+    "showdown": "^2.1.0",
+    "viewerjs": "^1.11.2"
+  }
+}

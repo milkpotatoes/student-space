@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#4caf50">
-    <link rel="stylesheet" href="./module/mdui/dist/css/mdui.min.css" />
+    <link rel="stylesheet" href="./modules/mdui/css/mdui.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="manifest" href="./manifest.webmanifest" />
-    <link rel="stylesheet" href="./module/viewer/viewer.css" />
+    <link rel="stylesheet" href="./modules/viewerjs/viewer.min.css" />
     <link rel="apple-touch-icon" href="./src/ic_launcher.png" type="image/x-icon" />
     <link rel="shortcut icon" href="./src/ic_launcher.png" type="image/x-icon">
-    <script src="./module/eruda/eruda.js"></script>
+    <script src="./modules/eruda/eruda.js"></script>
     <script>
         (function (w, d, s, q, i) {
             w[q] = w[q] || [];
@@ -42,8 +42,8 @@
         });
          /******************************************************************/
     </script>
-    <script src="./module/base64/base64.min.js"></script>
-    <script src="./module/showdown/dist/showdown.min.js" type="text/javascript" charset="utf-8"></script>
+    <!-- <script src="./module/base64/base64.min.js"></script> -->
+    <script src="./modules/showdown/showdown.min.js" type="text/javascript" charset="utf-8"></script>
     <title>学习空间 - 牛奶土豆</title>
     <link rel="preload" href="./src/bg-for-avatar.webp" as="image">
     <script>
@@ -72,7 +72,6 @@
                 default:
                     break;
             }
-
         }
 
         function fitSystemConfig() {
@@ -494,8 +493,7 @@
         </div>
     </div>
 
-    <div class="page-container navigator-container main-container mdui-bottom-nav-fixed app-show" appbar="none"
-        page-title="学习空间" back-up-btn="true">
+    <div class="page-container navigator-container main-container mdui-bottom-nav-fixed app-show" appbar="none" page-title="学习空间">
         <header class="mdui-appbar mdui-appbar-fixed mdui-text-color-theme-600 glass">
             <div class="mdui-toolbar">
                 <span class="mdui-typo-title mdui-toolbar-spacer">学习空间</span>
@@ -503,7 +501,7 @@
         </header>
 
         <div class="sub-container">
-            <div page="home" page-title="首页">
+            <div page="home" page-title="首页" style="z-index: 1;" class="app-show">
                 <ul class="mdui-list mdui-container mdui-center" id="examList">
                     <!-- 首页考试列表项目模板 -->
                     <template name="exam-item">
@@ -613,7 +611,7 @@
             </a>
         </footer>
     </div>
-    <div class="page-container full-container">
+    <div class="page-container full-container" style="z-index: -1;">
         <!-- 登录界面 -->
         <div class="main-container" page="login" appbar="none" page-title="登录" scroll-hide="false" back-up-btn="false"
             back-btn="false">
@@ -755,6 +753,9 @@
             <i class="mdui-icon material-icons">keyboard_arrow_up</i>
         </button>
     </div>
+    <script>
+        fitDayNightMode()
+    </script>
     <script
         type="text/javascript">(function (w) { w.frontjsConfig = { token: "5ba108e63b146e3c744535fabc53b581", behaviour: 9, captureConsoleLog: true, trustVendor: true, ignoreVendor: true, optimisedForSPA: true, useHistory: true, FPSThreshold: 10 }; w.frontjsTmpData = { r: [], e: [], l: [] }; w.frontjsTmpCollector = function (ev) { (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([new Date().getTime(), ev]) }; w.FrontJS = { addEventListener: function (t, f) { w.frontjsTmpData.l.push([t, f]); return f; }, removeEventListener: function (t, f) { for (var i = 0; i < w.frontjsTmpData.l.length; i++) { t === w.frontjsTmpData.l[i][0] && f === w.frontjsTmpData.l[i][1] && w.frontjsTmpData.l.splice(i, 1); } return f; } }; w.document.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("load", function () { var n = w.document.createElement("script"); n.src = "https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js"; w.document.body.appendChild(n); }, true); })(window);</script>
     <script src="./js/index.js" type="module"></script>

@@ -1,10 +1,9 @@
-// var $ = mdui.$;
-
 import Szone from "./szone.js";
 import Render from "./render.js";
 import PageLoader from "./pageloader.js";
 import PageSwitcher from "./pageswitcher.js";
-import mdui from "../module/mdui/dist/js/mdui.esm.js";
+import mdui from "../modules/mdui/js/mdui.esm.js";
+import { Base64 } from "../modules/js-base64/base64.mjs";
 
 const mSzone = new Szone(localStorage.CurrentUser)
 if (!localStorage.CurrentUser && localStorage.Token) mSzone.setToken(localStorage.Token)
@@ -14,11 +13,9 @@ const mPageSwitcher = new PageSwitcher(mPageLoader, mSzone)
 window.mdui = mdui;
 window.$ = mdui.$;
 
-// fitDayNightMode(false)
 fitSystemConfig()
 
 let [navigator_scroll_top, subpage_scroll_top] = [0, 0];
-let current_href;
 
 mSzone.getUserInfo()
     .then(user_info => {
@@ -89,9 +86,6 @@ fetch("json/version.json")
         $(".page-loading-version").text("v" + app_info.version + (location.host.includes("dev") ? " - 仅供调试用" : ""));
     });
 
-// fetch("json/province.json").then(res => res.json()).then(data => province_list = data);
-// fetch("json/grade.json").then(res => res.json()).then(data => grade_list = data);
-
 /* 动态设置背景图显示位置 */
 
 function countDown(lefttime, callback) {
@@ -103,12 +97,6 @@ function countDown(lefttime, callback) {
     }
     callback(lefttime);
 }
-
-// function SzoneBandOrder(order_id, auto_band) {
-//     return mSzone.bandOrder(order_id, auto_band)
-// }
-
-// window.SzoneBandOrder = SzoneBandOrder
 
 /* 认领考试 */
 function claimExam(student_code, exam_guid) {
@@ -393,7 +381,7 @@ window.onpopstate = () => {
             setTimeout(ec => {
                 ec.remove("app-show")
                 ec.remove("app-hide")
-            }, 500, e.classList);
+            }, 300, e.classList);
         })
     }
     // if(page_name  "")
@@ -411,7 +399,6 @@ window.onpopstate = () => {
 
 window.addEventListener("load", () => {
     let page_name = location.hash.substring(2);
-    // console.log("load:", page_name, location.hash, location.hash.substring(2));
 
     if (localStorage.CurrentUser === undefined) {
         mPageSwitcher.showPage("login", undefined, null)
@@ -540,7 +527,8 @@ $(document).on("click", "#login-btn", () => {
     }
 });
 
-$(document).on("click", ".login #sendsms", () => {
+$(document).on("click", "#sendsms", () => {
+    console.log("clicked")
     mSzone.getSmsCode({
         userCode: Base64.encode($("#userCode").val())
     })
@@ -571,8 +559,8 @@ $(document).on("click", ".login #sendsms", () => {
 });
 
 $(document).on("click", "#login-type", () => {
-    $(".sms-widget").toggle();
-    $(".password-widget").toggle();
+    $(".sms-widget").toggleClass("mdui-hidden");
+    $(".password-widget").toggleClass("mdui-hidden");
     $("#login-type").toggleClass("login-sms").toggleClass("login-pwd");
     $("#userCode").parent().removeClass("mdui-textfield-disabled");
     if ($("#login-type").hasClass("login-sms")) {
@@ -664,8 +652,7 @@ $(document).on("click", "[page~=unclaim] .exam-item", (e) => {
                             });
                             inst.handleUpdate();
                         });
-                    // .load(() => {
-                    // });
+
                 },
                 buttons: [{
                     text: "取消"
@@ -692,7 +679,6 @@ $(document).on("click", "[page~=home] .exam-item", (e) => {
     });
 });
 
-/* claimExamDialog.open(); */
 /* 成绩详情页图片懒加载 */
 $(document).on("change.mdui.tab", "[page~=exam] .mdui-tab", (event) => {
     $("#" + event.detail.id).find(".lz-load").each((_i, e) => {
@@ -720,14 +706,10 @@ $(document).on("click", ".connect-watch", _e => {
         }],
         history: false
     });
-    // window.authdialog = dialog;
 
     let auth_code = document.querySelector(".authcode > input");
-    auth_code.addEventListener("blur", (e) => {
-        if (e.target == auth_code) {
-            document.querySelector(".authcode > .focus").classList.add("mdui-hidden")
-            // document.querySelector(".authcode>.focus").style.left = `calc(${len * 100}% + ${len * 16}px)`
-        }
+    auth_code.addEventListener("blur", e => {
+        if (e.target == auth_code) document.querySelector(".authcode > .focus").classList.add("mdui-hidden")
     });
 
 });
@@ -767,8 +749,6 @@ document.addEventListener("click", e => {
 
     if (e.target.closest("a") && e.target.closest("a").classList.contains("download-answer-card") && !e.target.closest("a").download) mdui.snackbar({ message: "该图像为跨域资源，请长按或鼠标右键点击图片以保存到设备。" })
 
-    // if (e.target.classList.contains("authdevices")) authWatch()
-
     if (e.target.closest(".app-version")) fetch("json/version.json")
         .then(res => res.json())
         .then(app_info => {
@@ -796,7 +776,6 @@ document.addEventListener("input", (e) => {
 
         code = code.match(/\d{0,4}/)[0];
         auth_code.value = code;
-        // console.log(code, e.data)
         let len = code.length;
         len = len < 4 ? len : 3;
         document.querySelector(".authcode>.focus").style.left = `calc(${len * 100}% + ${len * 16}px)`
@@ -852,7 +831,6 @@ function authWatch() {
         .then(data => data.json())
         .then(data => {
             if (data.status == 200) {
-                // window.authdialog.close();
                 this.close()
                 mdui.snackbar("登录成功，请查看手表");
             } else {
@@ -864,10 +842,7 @@ function authWatch() {
 function logout() {
     mdui.dialog({
         title: "退出登录",
-        content: '确定退出登录？<br /><label class="mdui-checkbox">\
-        <input type="checkbox"/>\
-        <i class="mdui-checkbox-icon" disable></i>\
-        清除本地缓存 (此功能暂时无效)</label>',
+        content: `确定退出登录？<br /><label class="mdui-checkbox"><input type="checkbox"/><i class="mdui-checkbox-icon" disable></i>清除本地缓存 (此功能暂时无效)</label>`,
         history: false,
         buttons: [
             {
