@@ -33,6 +33,7 @@ export class PageSwitcher {
         $("_unClaimExamList").empty();
         $(".no-uncaim-cxam").text("").addClass("mdui-hidden");
         $("_login-btn").val("登录");
+        mPageLoader.resetExamPage()
     }
 
     load_import_list() {

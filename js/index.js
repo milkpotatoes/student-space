@@ -793,13 +793,13 @@ document.addEventListener("change", e => {
             case "dark-mode-follow-system":
                 fitDayNightMode(e.target.checked ? undefined : settings_config['dark-mode-status'])
                 if (window.stusp) {
-                    stusp.setDayNightMode(e.target.checked ? true : settings_config['dark-mode-status']);
+                    stusp.setDayNightMode(e.target.checked ? -1 : settings_config['dark-mode-status'] + 0);
                     fitDayNightMode(stusp.isNightMode())
                 }
                 break;
             case "dark-mode-status":
                 fitDayNightMode(e.target.checked)
-                if (window.stusp) stusp.setDayNightMode(e.target.checked);
+                if (window.stusp) stusp.setDayNightMode(e.target.checked + 0);
                 break;
             case "eruda-status":
                 break;

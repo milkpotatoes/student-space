@@ -851,11 +851,12 @@ export class PageLoader {
     }
 
     resetExamPage() {
-        $("[page~=exam] .mdui-tab").addClass("mdui-hidden");
-        $("[page~=exam]").removeClass("mdui-appbar-with-tab");
-        $("[page~=exam] .exam-detail-pgs").removeClass("mdui-hidden");
-        $("[page~=exam] .main .subject-card").remove();
-        $("[page~=exam] .mdui-tab").empty();
+        document.querySelectorAll("[page=exam] img").forEach(e => URL.revokeObjectURL(e.src));
+        document.querySelectorAll("[page~=exam] .mdui-tab").forEach(e => e.classList.add("mdui-hidden"));
+        document.querySelectorAll("[page~=exam]").forEach(e => e.classList.remove("mdui-appbar-with-tab"));
+        document.querySelectorAll("[page~=exam] .exam-detail-pgs").forEach(e => e.classList.remove("mdui-hidden"));
+        document.querySelectorAll("[page~=exam] .main .subject-card").forEach(e => e.remove("mdui-hidden"));
+        document.querySelector("[page~=exam] .mdui-tab").innerHTML = "";
     }
 
     loadExamPage() {

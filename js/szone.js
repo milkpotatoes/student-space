@@ -220,19 +220,23 @@ export class Szone {
                     let index = res.url.indexOf(url)
                     let bs64 = res.data[index]
 
-                    if (bs64) resolve(URL.createObjectURL(this._dataURLtoBlob(bs64)));
+                    if (bs64 && bs64 !== "cached") resolve(URL.createObjectURL(this._dataURLtoBlob(bs64)));
                     else fetch(this._replaceOSSUrl(url))
                         .then(imgres => {
-                            console.log(imgres)
+                            // console.log(imgres)
                             if (imgres.status !== 200) throw (imgres.statusText)
                             return imgres.blob()
                         })
                         .then(blob => {
-                            this._blobToBase64(blob)
+                            if (location == "stusp.milkpotatoes.cn") this._blobToBase64(blob)
                                 .then(base64 => {
                                     res.data[index] = base64
                                     this.#db.answercard.put(res)
-                                });
+                                })
+                            else {
+                                res.data[index] = "cached"
+                                this.#db.answercard.put(res)
+                            }
                             resolve(URL.createObjectURL(blob))
                         })
                         .catch(_err => {
@@ -241,18 +245,6 @@ export class Szone {
                 })
         })
     }
-
-    // /**
-    //  * 从indexedDB中查询对应答题卡图像，为废弃方法
-    //  * @param {string} asiresponse 
-    //  */
-    // async getImageUrl(asiresponse) {
-    //     await this.#db.answercard.get({ asiresponse: asiresponse })
-    //         .then(res => {
-    //             if (!res) return true;
-    //             else resolve(this._dataURLtoBlob(res));
-    //         })
-    // }
 
     /**
      * 更新Szone对象中的用户信息
@@ -532,7 +524,8 @@ export class Szone {
                         }
                         if (res.data || !expired) resolve(res?.url);
                         else reject();
-                    } else reject()
+                    }
+                    else reject()
                 })
         })
             .catch(() => {

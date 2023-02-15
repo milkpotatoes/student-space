@@ -109,7 +109,7 @@
     </script>
 </head>
 
-<body class="mdui-theme-primary-blue mdui-theme-accent-blue">
+<body class="mdui-theme-primary-blue mdui-theme-accent-blue mdui-theme-layout-auto">
     <header
         class="mdui-appbar mdui-appbar-fixed simple-appbar mdui-hidden mdui-text-color-theme-600 glass mdui-toolbar"> <a
             href="javascript:;" class="mdui-btn mdui-btn-icon back-forward-btn">
@@ -490,7 +490,8 @@
         </div>
     </div>
 
-    <div class="page-container navigator-container main-container mdui-bottom-nav-fixed app-show" appbar="none" page-title="学习空间">
+    <div class="page-container navigator-container main-container mdui-bottom-nav-fixed app-show" appbar="none"
+        page-title="学习空间">
         <header class="mdui-appbar mdui-appbar-fixed mdui-text-color-theme-600 glass">
             <div class="mdui-toolbar">
                 <span class="mdui-typo-title mdui-toolbar-spacer">学习空间</span>
@@ -752,6 +753,9 @@
     </div>
     <script>
         fitDayNightMode()
+        setTimeout(() => {
+            if (stusp) stusp.dismissBootOverlay()
+        }, 1000)
     </script>
     <script
         type="text/javascript">(function (w) { w.frontjsConfig = { token: "5ba108e63b146e3c744535fabc53b581", behaviour: 9, captureConsoleLog: true, trustVendor: true, ignoreVendor: true, optimisedForSPA: true, useHistory: true, FPSThreshold: 10 }; w.frontjsTmpData = { r: [], e: [], l: [] }; w.frontjsTmpCollector = function (ev) { (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([new Date().getTime(), ev]) }; w.FrontJS = { addEventListener: function (t, f) { w.frontjsTmpData.l.push([t, f]); return f; }, removeEventListener: function (t, f) { for (var i = 0; i < w.frontjsTmpData.l.length; i++) { t === w.frontjsTmpData.l[i][0] && f === w.frontjsTmpData.l[i][1] && w.frontjsTmpData.l.splice(i, 1); } return f; } }; w.document.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("load", function () { var n = w.document.createElement("script"); n.src = "https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js"; w.document.body.appendChild(n); }, true); })(window);</script>
