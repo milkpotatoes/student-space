@@ -1,5 +1,5 @@
 {
-    "code": 16,
-    "version": "2.1.8",
-    "details": "优化首页加载速度；<br />去除部分无效资源；<br />更改考试列表缓存机制；<br /对大屏设备添加双屏支持"
+    "code": 17,
+    "version": "2.1.9",
+    "details": "Android客户端取消使用webserver提供网页访问;<br />修复无法使用验证码登录的bug;"
 }

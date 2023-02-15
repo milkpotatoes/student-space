@@ -90,7 +90,7 @@ export class PageSwitcher {
                     let order_id = dialog.$element.find("input.order-id").val();
                     let auto_band = dialog.$element.find("input.auto-band").is(":checked");
                     let err_msg = dialog.$element.find(".mdui-textfield-error");
-                    if (!order_id.match(/^[0-9]{8,27}$/g)) {
+                    if (!order_id.match(/^\d{8,27}$/g)) {
                         err_msg.text("订单号应为小于27位数字");
                         dialog.$element.find(".mdui-textfield").addClass("mdui-textfield-invalid");
                         return false;
@@ -193,7 +193,6 @@ export class PageSwitcher {
         }
         else if (sub_info.data.expire_time && sub_info.data.effective_time) {
             document.querySelector(".expire-time").textContent = (new Date(sub_info.data.expire_time * 1000)).toLocaleString() + (sub_info.status == 200 ? "" : " (已失效)");
-            // (new Date(sub_info.data.expire_time * 1000)).toLocaleString();
             document.querySelector(".effective-time").textContent = (new Date(sub_info.data.effective_time * 1000)).toLocaleString();
         } else {
             document.querySelector(".expire-time").textContent = "无订阅记录";
@@ -410,8 +409,12 @@ export class PageSwitcher {
 
         document.title = page.getAttribute("page-title");
 
-        if (!page.classList.contains("loaded")) this.firstLoad(page_name);
-        else this.loadAnyway(page_name);
+        if (!page.classList.contains("loaded")) {
+            this.firstLoad(page_name);
+        } else {
+            this.loadAnyway(page_name);
+        }
+        // }
 
     }
 
@@ -426,7 +429,5 @@ export class PageSwitcher {
             }
         });
     }
-
-
 }
 export default PageSwitcher;
