@@ -1,5 +1,5 @@
 {
-    "code": 17,
-    "version": "2.1.9",
-    "details": "Android客户端取消使用webserver提供网页访问;<br />修复无法使用验证码登录的bug;"
+    "code": 18,
+    "version": "2.2.0",
+    "details": "大屏设备更改为3栏UI<br />修复无法使用验证码登录的问题<br />修复考试列表重复的bug"
 }
