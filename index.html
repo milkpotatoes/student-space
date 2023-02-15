@@ -93,6 +93,7 @@
                 document.head.append(_eruda_dom);
                 document.head.append(_eruda_memory);
                 eruda.init();
+                eruda._$el[0].querySelector(".eruda-dev-tools").style.bottom = "var(--navigation-bar)";
                 _eruda_dom.onload = () => eruda.add(erudaDom);
                 _eruda_memory.onload = () => eruda.add(erudaMemory)
 
@@ -115,11 +116,7 @@
             <i class="mdui-icon material-icons">arrow_back</i>
         </a> <span class=" mdui-typo-title"></span>
     </header>
-    <!-- <div class="page-loading mdui-theme-layout-auto">
-        <div class="mdui-spinner page-loading-pgs"></div>
-        <div class="page-loading-appname">学习空间</div>
-        <div class="page-loading-version"></div>
-    </div> -->
+
     <div class="page-container subpage-container">
         <div class="main-container" page="exam" appbar="none" page-title="成绩详情" back-up-btn="true" back-btn="true">
             <!-- "exam-summary-page": -->
