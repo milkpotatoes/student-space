@@ -6,13 +6,6 @@ export class PageSwitcher {
 
     #mPageLoader;
     #mSzone;
-    #route = [
-        {
-            path: "/home",
-            page: '[page="home"]'
-
-        }
-    ]
 
     /**
      * 
@@ -33,24 +26,23 @@ export class PageSwitcher {
         $("_unClaimExamList").empty();
         $(".no-uncaim-cxam").text("").addClass("mdui-hidden");
         $("_login-btn").val("登录");
-        mPageLoader.resetExamPage()
+        this.#mPageLoader.resetExamPage()
     }
 
     load_import_list() {
         fetch("json/import.json")
             .then(res => res.json())
             .then(data => {
-                let imRender = new Render("about", "import-item", "append", ".import-list")
-                let imData = []
-                for (const element of data) {
-                    imData.push({
-                        projectUrl: element.url,
-                        projectName: element.name,
-                        projectIcon: element.iconType == "img" ? '<img src="' + element.icon + '">' : element.icon,
-                        projectDescription: element.description,
-                        projectVersion: element.version
-                    });
-                }
+                let imRender = new Render("about", "import-item", "append", ".import-list");
+                let imData = [];
+                for (const element of data) imData.push({
+                    projectUrl: element.url,
+                    projectName: element.name,
+                    projectIcon: element.iconType == "img" ? '<img src="' + element.icon + '">' : element.icon,
+                    projectDescription: element.description,
+                    projectVersion: element.version
+                });
+
                 imRender.renderList(imData);
             });
     }
@@ -59,22 +51,20 @@ export class PageSwitcher {
         fetch("json/friend_link.json")
             .then(res => res.json())
             .then(data => {
-                let flRender = new Render("about", "friend-link-item", "append", ".friend-link")
-                let flData = []
-                for (const element of data) {
-                    flData.push({
-                        frndLnkUrl: element.url,
-                        frndLnkTitle: element.title,
-                        frndLnkDesc: element.description
-                    });
-                }
-                flRender.renderList(flData)
+                let flRender = new Render("about", "friend-link-item", "append", ".friend-link");
+                let flData = [];
+                for (const element of data) flData.push({
+                    frndLnkUrl: element.url,
+                    frndLnkTitle: element.title,
+                    frndLnkDesc: element.description
+                });
+                flRender.renderList(flData);
             });
     }
 
 
     bandOrder() {
-        // let SzoneBandOrder = this.#mSzone.bandOrder
+        /* let SzoneBandOrder = this.#mSzone.bandOrder */
         let band_promt = mdui.dialog({
             title: "绑定订单",
             content: (new Render("dialog", "band-order")).getTemplate(),
@@ -86,7 +76,7 @@ export class PageSwitcher {
                 text: "绑定",
                 bold: true,
                 close: false,
-                onClick: dialog => {
+                onClick: function (dialog) {
                     dialog.$element.find(".mdui-textfield").removeClass("mdui-textfield-invalid");
                     let order_id = dialog.$element.find("input.order-id").val();
                     let auto_band = dialog.$element.find("input.auto-band").is(":checked");
@@ -95,7 +85,7 @@ export class PageSwitcher {
                         err_msg.text("订单号应为小于27位数字");
                         dialog.$element.find(".mdui-textfield").addClass("mdui-textfield-invalid");
                         return false;
-                    }
+                    };
 
                     this.#mSzone.bandOrder(order_id, auto_band)
                         .then(data => {
@@ -105,7 +95,7 @@ export class PageSwitcher {
                             } else {
                                 err_msg.text(data.message);
                                 dialog.$element.find(".mdui-textfield").addClass("mdui-textfield-invalid");
-                            }
+                            };
                         });
                 }
             },
@@ -114,9 +104,9 @@ export class PageSwitcher {
             type: "text",
             onClose: () => this.checkSubscribeInfo(true)
 
-        })
-        mdui.mutation()
-        band_promt.$element.find(".mdui-dialog-content").addClass("mdui-p-b-0")
+        });
+        mdui.mutation();
+        band_promt.$element.find(".mdui-dialog-content").addClass("mdui-p-b-0");
         band_promt.$element.find("input.order-id").on("input", event => {
             let box_class = event.target.closest(".mdui-textfield").classList;
             box_class.remove("mdui-textfield-invalid");
@@ -125,8 +115,8 @@ export class PageSwitcher {
                 event.target.nextElementSibling.textContent = "订单号只由数字组成";
                 box_class.add("mdui-textfield-invalid");
             }
-        })
-        band_promt.handleUpdate()
+        });
+        band_promt.handleUpdate();
     }
 
 
@@ -166,19 +156,19 @@ export class PageSwitcher {
                         text: "关闭",
                         close: true
                     }
-                ]
+                ];
                 if (data.status == 200) {
                     btns.splice(0, 1);
                     btns[0].bold = true;
-                }
+                };
                 mdui.dialog({
                     title: "订阅已过期",
                     content: (new Render("dialog", "subscribe-expired")).getTemplate(),
                     buttons: btns,
                     stackedButtons: true,
                     history: false
-                })
-            })
+                });
+            });
     }
 
     /**
@@ -203,14 +193,14 @@ export class PageSwitcher {
 
     switchDisplay(e, hide) {
         e = $(e);
-        // //console.log(123, hide);
+        /* //console.log(123, hide); */
         if (hide) {
             if (e.hasClass("score-summary-table")) e.children().first().addClass("mdui-hidden");
-            // console.log(e.find())
+            /* console.log(e.find()) */
             e.children("div").addClass("mdui-hidden").each((i, el) => {
                 if (i <= 4 && !e.hasClass("score-summary-table")) $(el).removeClass("mdui-hidden");
             });
-            console.log(e.find("span"))
+
             e.find("span").text(e.hasClass("score-summary-table") ? "查看各科成绩" : "展开");
             e.find("i").text("expand_more");
         } else {
@@ -229,20 +219,19 @@ export class PageSwitcher {
             case "home":
                 let homeSize = page.getClientRects()[0];
                 let navBar = document.querySelector("footer").getClientRects()[0];
-                document.querySelector(".navigator-container header").classList.remove("mdui-hidden")
+                document.querySelector(".navigator-container header").classList.remove("mdui-hidden");
 
                 if (homeSize.bottom <= navBar.bottom && !$("[page~=home] .exam-item-pgs").hasClass(
                     "exam-end") && $(".app-show").is(("[page~=home]"))) {
                     this.#mPageLoader.getExamList($(".exam-item").length, 5);
-                }
-                try {
-                    document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
-                } catch (e) { }
+                };
+
+                document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
                 document.querySelector(".navigator-container footer>a:nth-child(1)").classList.add("mdui-bottom-nav-active");
 
                 break;
             case "exam":
-                this.#mPageLoader.resetExamPage()
+                this.#mPageLoader.resetExamPage();
                 this.checkSubscribeInfo()
                     .then(sub_info => {
                         if (sub_info.status == 200) this.#mPageLoader.loadExamPage();
@@ -254,34 +243,29 @@ export class PageSwitcher {
                 setTimeout(this.#mPageLoader.setBG, 300);
                 break;
             case "unclaim":
-                document.querySelector(".navigator-container header").classList.remove("mdui-hidden")
-
-                try {
-                    document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
-                } catch (e) { }
+                document.querySelector(".navigator-container header").classList.remove("mdui-hidden");
+                document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
                 document.querySelector(".navigator-container footer>a:nth-child(2)").classList.add("mdui-bottom-nav-active");
                 break;
             case "profile":
-                document.querySelector(".navigator-container header").classList.add("mdui-hidden")
-                try {
-                    document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
-                } catch (e) { }
+                document.querySelector(".navigator-container header").classList.add("mdui-hidden");
+                document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
                 document.querySelector(".navigator-container footer>a:nth-child(3)").classList.add("mdui-bottom-nav-active");
                 break;
             case "settings":
-                this.#mPageLoader.loadSettings()
+                this.#mPageLoader.loadSettings();
                 break;
             default:
                 break;
-        }
+        };
     }
     /* 首次加载页面执行 */
     firstLoad(page_name) {
         $(`[page~=${page_name}]`).addClass("loaded");
-        // this.#mPageLoader.setUserInfo();
+        /* this.#mPageLoader.setUserInfo(); */
         switch (page_name) {
             case "home":
-                document.querySelector(".navigator-container>header").classList.remove("mdui-hidden")
+                document.querySelector(".navigator-container>header").classList.remove("mdui-hidden");
                 this.#mPageLoader.firstLoadHome();
                 break;
             case "exam":
@@ -297,22 +281,19 @@ export class PageSwitcher {
                 this.#mPageLoader.setUserInfo();
                 break;
             case "unclaim":
-                document.querySelector(".navigator-container>header").classList.remove("mdui-hidden")
+                document.querySelector(".navigator-container>header").classList.remove("mdui-hidden");
                 this.#mPageLoader.getUnclaimExamList();
-                this.loadAnyway(page_name)
+                this.loadAnyway(page_name);
                 break;
             case "about":
                 fetch("json/version.json")
                     .then(res => res.json())
-                    .then(app_info => {
-                        let app_version = document.querySelectorAll(".appVersion")
-                        app_version.forEach(e => e.innerText = "v" + app_info.version)
-                    });
-                this.load_import_list()
-                this.load_friend_link()
+                    .then(app_info => document.querySelector(".appVersion").innerText = "v" + app_info.version);
+                this.load_import_list();
+                this.load_friend_link();
                 break;
             case "settings":
-                this.loadAnyway(page_name)
+                this.loadAnyway(page_name);
                 break;
             case "login":
                 this.resetPage();
@@ -342,22 +323,14 @@ export class PageSwitcher {
      */
 
     showPage(page_path, add_history, state) {
-        const { aplus_queue } = window;
-        aplus_queue.push({
-            action: 'aplus.sendPV',
-            arguments: [{ is_auto: false }, {
-                path: page_path,
-                add_history: add_history,
-                state: JSON.stringify(state)
-            }]
-        });
-
-        if (page_path == "index") page_path = "home"
+        if (page_path == "index") page_path = "home";
 
         if (page_path !== "login") {
-            document.querySelector("[page=login]").classList.remove("app-show")
-            document.querySelector(".full-container").style.zIndex = -1
-        } switch (add_history) {
+            document.querySelector("[page=login]").classList.remove("app-show");
+            document.querySelector(".full-container").style.zIndex = -1;
+        };
+        
+        switch (add_history) {
             case true:
                 history.pushState(state, document.title, "#/" + page_path);
                 break;
@@ -371,51 +344,41 @@ export class PageSwitcher {
         let page_name = page_path == "" ? "home" : page_path;
         let page = document.querySelector(`[page~=${page_name}]`);
 
-        if (page.closest(".full-container")) page.closest(".full-container").style.zIndex = 2
+        if (page.closest(".full-container")) page.closest(".full-container").style.zIndex = 2;
 
-        let siblings = page.parentElement.querySelectorAll("[page]")
-        page.style.zIndex = 1
+        let siblings = page.parentElement.querySelectorAll("[page]");
+        page.style.zIndex = 1;
         siblings.forEach(sibling => {
             if (!sibling.isEqualNode(page)) {
-                sibling.style.zIndex = 0
-                if (page.parentElement.classList.contains("subpage-container")) setTimeout((sibling) => {
-                    sibling.classList.remove("app-show")
-                }, 200, sibling);
-                else sibling.classList.remove("app-show")
-            }
+                sibling.style.zIndex = 0;
+                if (page.parentElement.classList.contains("subpage-container")) setTimeout((sibling) => sibling.classList.remove("app-show"), 200, sibling);
+                else sibling.classList.remove("app-show");
+            };
 
-        })
+        });
 
 
-        this.showBackTopBtn(page.getAttribute("back-up-btn") === "true")
+        this.showBackTopBtn(page.getAttribute("back-up-btn") === "true");
         let simple_header = document.querySelector(".simple-appbar");
         if (page.getAttribute("appbar") == "simple-appbar") {
-            let curr_header = page.querySelector(".simple-appbar")
-            if (curr_header) {
-                page.querySelector(".simple-appbar .mdui-typo-title").textContent = page.getAttribute("page-title");
-            } else {
+            let curr_header = page.querySelector(".simple-appbar");
+            if (curr_header) page.querySelector(".simple-appbar .mdui-typo-title").textContent = page.getAttribute("page-title");
+            else {
                 curr_header = simple_header.cloneNode(true);
-                curr_header.classList.remove("mdui-hidden")
+                curr_header.classList.remove("mdui-hidden");
                 curr_header.querySelector(".mdui-typo-title").textContent = page.getAttribute("page-title");
-                if (page.getAttribute("back-btn") === "true") {
-                    curr_header.querySelector("a").classList.remove("mdui-hidden");
-                } else {
-                    curr_header.querySelector("a").classList.add("mdui-hidden");
-                }
-                page.append(curr_header)
-            }
-        }
+                if (page.getAttribute("back-btn") === "true") curr_header.querySelector("a").classList.remove("mdui-hidden");
+                else curr_header.querySelector("a").classList.add("mdui-hidden");
+                page.append(curr_header);
+            };
+        };
 
         page.classList.add("app-show");
 
         document.title = page.getAttribute("page-title");
 
-        if (!page.classList.contains("loaded")) {
-            this.firstLoad(page_name);
-        } else {
-            this.loadAnyway(page_name);
-        }
-        // }
+        if (!page.classList.contains("loaded")) this.firstLoad(page_name);
+        else this.loadAnyway(page_name);
 
     }
 

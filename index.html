@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 
 <head>
@@ -12,100 +12,68 @@
     <link rel="apple-touch-icon" href="./src/ic_launcher.png" type="image/x-icon" />
     <link rel="shortcut icon" href="./src/ic_launcher.png" type="image/x-icon">
     <script src="./modules/eruda/eruda.js"></script>
-    <script>
-        (function (w, d, s, q, i) {
-            w[q] = w[q] || [];
-            var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
-            j.async = true;
-            j.id = 'beacon-aplus';
-            j.src = 'https://d.alicdn.com/alilog/mlog/aplus/' + i + '.js';
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'aplus_queue', '203467608');
-
-        //集成应用的appKey
-        aplus_queue.push({
-            action: 'aplus.setMetaInfo',
-            arguments: ['appKey', '63503d0505844627b56a8d73']
-        });
-        aplus_queue.push({
-            action: 'aplus.setMetaInfo',
-            arguments: ['aplus-waiting', 'MAN']
-        });
-        //是否开启调试模式 
-        aplus_queue.push({
-            action: 'aplus.setMetaInfo',
-            arguments: ['DEBUG', true]
-        });
-        aplus_queue.push({
-            action: 'aplus.setMetaInfo',
-            arguments: ['aplus-idtype', 'cnaid'] //取值参考见附表1
-        });
-         /******************************************************************/
-    </script>
-    <!-- <script src="./module/base64/base64.min.js"></script> -->
     <script src="./modules/showdown/showdown.min.js" type="text/javascript" charset="utf-8"></script>
     <title>学习空间 - 牛奶土豆</title>
     <link rel="preload" href="./src/bg-for-avatar.webp" as="image">
     <script>
         function fitBars(statusBarHeight, navigationBarHeight) {
-            document.body.parentElement.setAttribute("style", `--status-bar: ${statusBarHeight}px;--navigation-bar: ${navigationBarHeight}px;`)
+            document.body.parentElement.setAttribute("style", `--status-bar: ${statusBarHeight}px;--navigation-bar: ${navigationBarHeight}px;`);
             if (eruda && eruda._shadowRoot) {
-                let style = document.createElement("style")
-                style.textContent = ".eruda-dev-tools {transform: translate(0, calc(0px - var(--navigation-bar)));} .eruda-dev-tools:after {content: \"\";display: block;height: var(--navigation-bar);background: inherit;}"
+                let style = document.createElement("style");
+                style.textContent = ".eruda-dev-tools {transform: translate(0, calc(0px - var(--navigation-bar)));} .eruda-dev-tools:after {content: \"\";display: block;height: var(--navigation-bar);background: inherit;}";
                 eruda._shadowRoot.append(style);
-            }
+            };
         }
 
         function fitDayNightMode(isNightMode) {
             let bcl = document.body.classList;
-            bcl.remove("mdui-theme-layout-auto", "mdui-theme-layout-dark", "mdui-theme-layout-light")
+            bcl.remove("mdui-theme-layout-auto", "mdui-theme-layout-dark", "mdui-theme-layout-light");
             switch (isNightMode) {
                 case true:
-                    bcl.add("mdui-theme-layout-dark")
+                    bcl.add("mdui-theme-layout-dark");
                     break;
                 case false:
                     bcl.add("mdui-theme-layout-light");
                     break;
                 case undefined:
-                    bcl.add("mdui-theme-layout-auto")
+                    bcl.add("mdui-theme-layout-auto");
                     break;
                 default:
                     break;
-            }
+            };
         }
 
         function fitSystemConfig() {
             let settings_config = localStorage.stusp_settings_config;
-            settings_config = settings_config ? JSON.parse(settings_config) : { "dark-mode-follow-system": false, "dark-mode-status": false, "eruda-status": false, "dubug-by-usb": false }
+            settings_config = settings_config ? JSON.parse(settings_config) : { "dark-mode-follow-system": false, "dark-mode-status": false, "eruda-status": false, "dubug-by-usb": false };
             if (window.stusp) {
-                fitDayNightMode(stusp.isNightMode())
+                fitDayNightMode(stusp.isNightMode());
                 const screenInfo = JSON.parse(stusp.getScreenInfo());
-                fitBars(stusp.getStatusBarHeight(), stusp.getNavigationBarHeight())
-                document.querySelector(".download-app").classList.add("mdui-hidden")
-                document.querySelector(".show-page[data=\"help\"]").classList.add("mdui-hidden")
+                fitBars(stusp.getStatusBarHeight(), stusp.getNavigationBarHeight());
+                document.querySelector(".download-app").classList.add("mdui-hidden");
+                document.querySelector(".show-page[data=\"help\"]").classList.add("mdui-hidden");
             } else if (settings_config["dark-mode-follow-system"]) fitDayNightMode(undefined);
             else fitDayNightMode(settings_config["dark-mode-status"]);
             if (settings_config["eruda-status"]) {
                 let _eruda_dom = document.createElement("script");
                 let _eruda_memory = document.createElement("script");
-                _eruda_dom.src = "./module/eruda/eruda-dom.js"
-                _eruda_memory.src = "./module/eruda/eruda-memory.js"
+                _eruda_dom.src = "./module/eruda/eruda-dom.js";
+                _eruda_memory.src = "./module/eruda/eruda-memory.js";
                 document.head.append(_eruda_dom);
                 document.head.append(_eruda_memory);
                 eruda.init();
                 eruda._$el[0].querySelector(".eruda-dev-tools").style.bottom = "var(--navigation-bar)";
                 _eruda_dom.onload = () => eruda.add(erudaDom);
-                _eruda_memory.onload = () => eruda.add(erudaMemory)
+                _eruda_memory.onload = () => eruda.add(erudaMemory);
 
-            }
+            };
 
             if (location.host !== "stusp.milkpotatoes.cn") {
-                document.querySelector(".subscribe-info").classList.add("mdui-hidden")
-                document.querySelector(".banded-devices").classList.add("mdui-hidden")
-                document.querySelector(".connect-watch").classList.add("mdui-hidden")
-            }
+                document.querySelector(".subscribe-info").classList.add("mdui-hidden");
+                document.querySelector(".banded-devices").classList.add("mdui-hidden");
+                document.querySelector(".connect-watch").classList.add("mdui-hidden");
+            };
         }
-
     </script>
 </head>
 
@@ -617,7 +585,7 @@
             <div class="mdui-card-content mdui-center mdui-container">
                 <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12"> <i
                         class="mdui-icon material-icons">phone</i> <label class="mdui-textfield-label">手机号</label>
-                    <input class="mdui-textfield-input" id="userCode" name="userCode" pattern="^1+[0-9]{10,10}$"
+                    <input class="mdui-textfield-input" id="userCode" name="userCode" pattern="^1+\d{10}$"
                         autocomplete="off" type="tel" />
                     <div class="mdui-textfield-error">手机号格式错误</div>
                 </div>
@@ -627,7 +595,7 @@
                 </div>
                 <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-8 sms-widget mdui-hidden">
                     <i class="mdui-icon material-icons">message</i> <label class="mdui-textfield-label">短信验证码</label>
-                    <input class="mdui-textfield-input" id="smsCode" pattern="^[0-9]{1,6}$" type="tel" name="smscode" />
+                    <input class="mdui-textfield-input" id="smsCode" pattern="^\d{1,6}$" type="tel" name="smscode" />
                     <div class="mdui-textfield-error">验证码格式错误</div>
                 </div> <button
                     class="mdui-btn mdui-btn-raised mdui-color-theme-accent mdui-m-t-3 mdui-col-xs-4 sms-widget mdui-hidden"
@@ -752,13 +720,14 @@
         </button>
     </div>
     <script>
-        fitDayNightMode()
+        fitDayNightMode();
         setTimeout(() => {
-            if (stusp) stusp.dismissBootOverlay()
-        }, 1000)
+            if (window.stusp) stusp.dismissBootOverlay()
+        }, 1000);
     </script>
-    <script
-        type="text/javascript">(function (w) { w.frontjsConfig = { token: "5ba108e63b146e3c744535fabc53b581", behaviour: 9, captureConsoleLog: true, trustVendor: true, ignoreVendor: true, optimisedForSPA: true, useHistory: true, FPSThreshold: 10 }; w.frontjsTmpData = { r: [], e: [], l: [] }; w.frontjsTmpCollector = function (ev) { (ev.message ? window.frontjsTmpData.e : window.frontjsTmpData.r).push([new Date().getTime(), ev]) }; w.FrontJS = { addEventListener: function (t, f) { w.frontjsTmpData.l.push([t, f]); return f; }, removeEventListener: function (t, f) { for (var i = 0; i < w.frontjsTmpData.l.length; i++) { t === w.frontjsTmpData.l[i][0] && f === w.frontjsTmpData.l[i][1] && w.frontjsTmpData.l.splice(i, 1); } return f; } }; w.document.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("error", w.frontjsTmpCollector, true); w.addEventListener("load", function () { var n = w.document.createElement("script"); n.src = "https://frontjs-static.pgyer.com/dist/current/frontjs.web.min.js"; w.document.body.appendChild(n); }, true); })(window);</script>
+    <!-- frontjs-script -->
+    <!-- 360fenxi-script -->
+    <!-- bdtongji-script -->
     <script src="./js/index.js" type="module"></script>
 
 </body>

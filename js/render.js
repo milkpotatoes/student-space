@@ -29,7 +29,7 @@ export class Render {
      * @returns
      */
     setTarget(node) {
-        if (typeof (node) == "object") if (node instanceof HTMLCollection || node instanceof HTMLElement) this.node = node
+        if (typeof (node) == "object") if (node instanceof HTMLCollection || node instanceof HTMLElement) this.node = node;
         if (typeof (node) == "string") this.node = document.querySelector(node);
         return this;
     }
@@ -50,7 +50,6 @@ export class Render {
      */
     renderList(list) {
         let vdom = this.renderListText(list);
-        // console.log(vdom)
         this.renderToDOM(vdom);
     }
 
@@ -63,11 +62,11 @@ export class Render {
     }
 
     renderToText(data, template) {
-        let text = template ? template : this.template
+        let text = template ? template : this.template;
         for (const k in data) {
-            let re = new RegExp(`{{${k}}}`, "g")
+            let re = new RegExp(`{{${k}}}`, "g");
             text = text.replace(re, data[k]);
-        }
+        };
         return text;
     }
 
@@ -89,26 +88,20 @@ export class Render {
     }
 
     renderToPage(data) {
-        // console.log(this.#renderCache ? this.#renderCache : this.renderToText(data))
         let element = this.renderToElement(this.#renderCache ? this.#renderCache : this.renderToText(data));
-        // console.log(element.childNodes)
-        let element_copy = []
-        for(let el of element.children){
-            element_copy.push(el)
-        }
-        // element.children
-        this.renderToDOM(element)
-        return element_copy
+        let element_copy = [];
+        for (let el of element.children) element_copy.push(el);
+        this.renderToDOM(element);
+        return element_copy;
     }
 
     renderToDOM(html) {
         let target = this.node;
-        let vbox = typeof (html) == "string" ? this.renderToElement(html) : html
-        
+        let vbox = typeof (html) == "string" ? this.renderToElement(html) : html;
+
         let len = vbox.children.length;
 
         for (let i = 0; i < len; i++) {
-            // console.log(i)
             let e = vbox.children[0];
             switch (this.direction) {
                 case "before":
@@ -138,18 +131,15 @@ export class Render {
     }
 
     getTemplate(path, name) {
-        if (!path && this.template) {
-            return this.template;
-        } else {
+        if (!path && this.template) return this.template;
+        else {
             let vbox = document.createElement(this.virtualContainer);
-            let node = document.querySelector(`[page~=${path}] template[name~=${name}]`)
+            let node = document.querySelector(`[page~=${path}] template[name~=${name}]`);
             if (node) {
                 vbox.append(node.content.cloneNode(true));
                 return vbox.innerHTML;
-            } else {
-                return undefined;
-            }
-        }
+            } else return undefined;
+        };
     }
 
     clearCache() {

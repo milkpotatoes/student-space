@@ -5,6 +5,12 @@
 /*.bz
 /*.gz
 /*.tar.*
+/*.jar
+*.min.*
+*.temp.*
+/frontjs
+/360fenxi
+/bdtongji
 
 # backup files
 *.bak

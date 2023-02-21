@@ -1,30 +1,28 @@
-import Dexie from "../modules/dexie/dexie.min.mjs"
+import Dexie from "../modules/dexie/dexie.min.mjs";
 
 export class Szone {
     #headers = {
-        Version: "4.1.8",
-    }
+        Version: "4.1.8"
+    };
 
     #urlencodeform = {
         "Content-Type": "application/x-www-form-urlencoded"
-    }
+    };
 
     #jsonform = {
         "Content-Type": "application/json"
-    }
+    };
 
-    #userinfo = {}
-    #userguid
-    #token
-    #db
-    #repeatloc = 0
-    #latestexamguid
+    #userinfo = {};
+    #userguid;
+    #token;
+    #db;
 
     SUBJECT_TYPE = {
         OVERVIEW_SUBJECT: -2,
         INDEPENDENT_SUBJECT: 0,
         UNENROLLED_SUBJECT: -1
-    }
+    };
 
     constructor(uuid) {
         this.#db = new Dexie("student-space");
@@ -35,10 +33,10 @@ export class Szone {
             .then(data => {
                 if (data && data.userCode) this.#db.accounts.get({ userCode: data.userCode })
                     .then(res => this.setToken(res.token));
-                else this.#userguid = undefined
+                else this.#userguid = undefined;
             });
 
-        console.log(this.#db)
+        /* console.log(this.#db) */
     }
 
     initDatabase(db) {
@@ -52,14 +50,14 @@ export class Szone {
             subjectgrade: "[userGuid+examGuid+subject]",
         });
 
-        // db.accounts.primaryKeys().then()
+        /* db.accounts.primaryKeys().then() */
     }
 
     setToken(token) {
-        this.#userinfo = {}
+        this.#userinfo = {};
         this.#token = token;
         this.#headers.Token = token;
-        this._updateUserInfo()
+        this._updateUserInfo();
     }
 
     getToken() {
@@ -67,11 +65,9 @@ export class Szone {
     }
 
     _transToForm(data) {
-        let f = []
-        for (const k in data) {
-            f.push(k + "=" + data[k])
-        }
-        return f.join("&")
+        let f = [];
+        for (const k in data) f.push(k + "=" + data[k]);
+        return f.join("&");
     }
 
     getUrl(host, path) {
@@ -84,7 +80,7 @@ export class Szone {
                 return "https://szone-score.7net.cc" + path;
             default:
                 return undefined;
-        }
+        };
     }
 
     /**
@@ -100,7 +96,7 @@ export class Szone {
         method = method ? method : "GET";
         let headers = {};
         Object.assign(headers, this.#headers);
-        if (notoken) delete headers.Token
+        if (notoken) delete headers.Token;
 
         if (method == "GET") {
             return fetch(this.getUrl(host, path) + (data ? "?" + this._transToForm(data) : ""), {
@@ -111,7 +107,7 @@ export class Szone {
                     if (!res.ok) {
                         throw Error(res.statusText);
                     }
-                    return res.json()
+                    return res.json();
                 })
                 .catch(_err => {
                     alert("网络连接出错或七天网络服务器异常，请检查网络连接或刷新重试")
@@ -120,12 +116,12 @@ export class Szone {
             return fetch(this.getUrl(host, path), {
                 method: method,
                 headers: Object.assign(this.#urlencodeform, headers),
-                // body: JSON.stringify(data)
+                /* body: JSON.stringify(data) */
                 body: this._transToForm(data)
             })
                 .then(res => res.json())
                 .catch(_err => {
-                    alert("网络连接出错或七天网络服务器异常，请检查网络连接或刷新重试")
+                    alert("网络连接出错或七天网络服务器异常，请检查网络连接或刷新重试");
                 })
         }
 
@@ -140,9 +136,9 @@ export class Szone {
      */
     async _stuspFetch(path, method, data) {
         method = method ? method : "GET";
-        if (data) Object.assign(data, { "user_guid": this.#userguid })
-        else data = { "user_guid": this.#userguid }
-        console.log(data, this.#userguid)
+        if (data) Object.assign(data, { "user_guid": this.#userguid });
+        else data = { "user_guid": this.#userguid };
+        /* console.log(data, this.#userguid) */
         if (method == "GET") {
             return fetch(path + (data ? "?" + this._transToForm(data) : ""), {
                 method: method
@@ -151,22 +147,22 @@ export class Szone {
                     if (!res.ok) {
                         throw Error(res.statusText);
                     }
-                    return res.json()
+                    return res.json();
                 })
                 .catch(_err => {
                     alert("网络连接出错或学习空间服务器异常，请检查网络连接或稍后重试")
-                })
+                });
         } else {
             return fetch(path, {
                 method: method,
                 headers: this.#jsonform,
-                // body: JSON.stringify(data)
+                /* body: JSON.stringify(data) */
                 body: JSON.stringify(data)
             })
                 .then(res => res.json())
                 .catch(_err => {
-                    alert("网络连接出错或学习空间服务器异常，请检查网络连接或稍后重试")
-                })
+                    alert("网络连接出错或学习空间服务器异常，请检查网络连接或稍后重试");
+                });
         }
     }
 
@@ -193,9 +189,7 @@ export class Szone {
     async _blobToBase64(blob) {
         const fileReader = new FileReader();
         fileReader.readAsDataURL(blob);
-        return new Promise((resolve, _reject) => fileReader.onload = e => {
-            resolve(e.target.result);
-        });
+        return new Promise((resolve, _reject) => fileReader.onload = e => resolve(e.target.result));
     }
 
     /**
@@ -217,33 +211,33 @@ export class Szone {
             this.#db.answercard.get({ url: url })
                 .then(res => {
                     res.data = res.data ? res.data : [];
-                    let index = res.url.indexOf(url)
-                    let bs64 = res.data[index]
+                    let index = res.url.indexOf(url);
+                    let bs64 = res.data[index];
 
                     if (bs64 && bs64 !== "cached") resolve(URL.createObjectURL(this._dataURLtoBlob(bs64)));
                     else fetch(this._replaceOSSUrl(url))
                         .then(imgres => {
-                            // console.log(imgres)
-                            if (imgres.status !== 200) throw (imgres.statusText)
-                            return imgres.blob()
+                            /* console.log(imgres) */
+                            if (imgres.status !== 200) throw (imgres.statusText);
+                            return imgres.blob();
                         })
                         .then(blob => {
                             if (location == "stusp.milkpotatoes.cn") this._blobToBase64(blob)
                                 .then(base64 => {
-                                    res.data[index] = base64
-                                    this.#db.answercard.put(res)
-                                })
+                                    res.data[index] = base64;
+                                    this.#db.answercard.put(res);
+                                });
                             else {
-                                res.data[index] = "cached"
-                                this.#db.answercard.put(res)
+                                res.data[index] = "cached";
+                                this.#db.answercard.put(res);
                             }
-                            resolve(URL.createObjectURL(blob))
+                            resolve(URL.createObjectURL(blob));
                         })
                         .catch(_err => {
                             resolve(url);
                         });
-                })
-        })
+                });
+        });
     }
 
     /**
@@ -258,7 +252,7 @@ export class Szone {
                     this.#userguid = data.data.userGuid;
                     this.#db.userinfo.put(data.data);
                     this.#db.accounts.put({ token: this.#token, userCode: data.data.userCode });
-                    localStorage.CurrentUser = data.data.userGuid
+                    localStorage.CurrentUser = data.data.userGuid;
                     return data.data;
                 } else {
                     return data;
@@ -280,7 +274,7 @@ export class Szone {
      */
     async getUserInfo() {
         return new Promise((resolve, reject) => {
-            if (this.#userguid && this.#token) resolve(this.#db.userinfo.get(this.#userguid))
+            if (this.#userguid && this.#token) resolve(this.#db.userinfo.get(this.#userguid));
 
             if (Object.keys(this.#userinfo).length > 0) resolve(this.#userinfo);
             else resolve(this.updateUserInfo());
@@ -320,7 +314,7 @@ export class Szone {
         return new Promise((resolve, _reject) => {
             this.#db.examinfo.get({ userGuid: this.#userguid, examGuid: data.examGuid })
                 .then(res => {
-                    if (res) resolve(res)
+                    if (res) resolve(res);
                     else resolve(this._privateFetch("score", "/Question/Subjects", "POST", data)
                         .then(json => {
                             this.#db.examinfo.put(Object.assign({ userGuid: this.#userguid, examGuid: data.examGuid, examType: data.examType }, json.data));
@@ -404,7 +398,7 @@ export class Szone {
             .then(json => {
                 for (let element of json.data.list) {
                     this.#db.examlist.put(Object.assign({ userGuid: this.#userguid }, element));
-                    this.#latestexamguid = element.examGuid;
+                    /* this.#latestexamguid = element.examGuid; */
                 }
                 return json.status == 200 ? json.data.list : json;
             })
@@ -443,12 +437,10 @@ export class Szone {
         return new Promise((resolve, _reject) => {
             this.#db.examlist.where("userGuid").equals(this.#userguid).toArray()
                 .then(res => {
-                    res.filter((e, i, arr) => {
-                        return arr.findIndex((a) => a.examGuid == e.examGuid) == i
-                    })
+                    res.filter((e, i, arr) => arr.findIndex(a => a.examGuid == e.examGuid) == i);
                     res = this.sortExamList(res);
 
-                    resolve(res)
+                    resolve(res);
                 })
         });
     }
@@ -459,7 +451,7 @@ export class Szone {
      * @returns {promise}
      */
     async getExamData(data) {
-        return this.fetchExamData(data)
+        return this.fetchExamData(data);
     }
 
 
@@ -469,26 +461,28 @@ export class Szone {
      * @returns {promise}
      */
     async getSubjectGrade(data) {
-        return new Promise((resolve, _reject) => {
+        return new Promise((resolve, reject) => {
             let keypath = {
                 examGuid: data.examGuid,
                 userGuid: this.#userguid,
                 subject: data.subject
-            }
+            };
+
             this.#db.subjectgrade.get(keypath)
                 .then(res => {
-                    if (res) resolve(res); else reject()
+                    if (res) resolve(res);
+                    else reject();
                 })
                 .catch(_err => {
                     resolve(this._privateFetch("score", "/Question/SubjectGrade", "POST", data)
                         .then(json => {
                             if (json.status == 200) {
-                                this.#db.subjectgrade.put(Object.assign(json.data, keypath))
-                                return json.data
-                            }
-                            return json
-                        }))
-                })
+                                this.#db.subjectgrade.put(Object.assign(json.data, keypath));
+                                return json.data;
+                            };
+                            return json;
+                        }));
+                });
         });
     }
 
@@ -499,7 +493,7 @@ export class Szone {
      * @returns {promise}
      */
     async getSubjectRead(data) {
-        return this._privateFetch("score", "/Question/SubjectRead", "POST", data)
+        return this._privateFetch("score", "/Question/SubjectRead", "POST", data);
     }
 
 
@@ -513,32 +507,32 @@ export class Szone {
             asiresponse: data.asiresponse,
             examGuid: data.examGuid,
             userGuid: this.#userguid
-        }
+        };
         return new Promise((resolve, reject) => {
             this.#db.answercard.get(keypath)
                 .then(res => {
                     let expired = false;
                     if (res) {
                         for (let url of res.url) {
-                            expired = expired || new Date(new URL(url).search.match(/Expires=(.+?)(\&|$)/)[1] * 1000) <= new Date()
+                            expired = expired || new Date(new URL(url).search.match(/Expires=(.+?)(\&|$)/)[1] * 1000) <= new Date();
                         }
                         if (res.data || !expired) resolve(res?.url);
                         else reject();
                     }
-                    else reject()
+                    else reject();
                 })
         })
             .catch(() => {
-                // console.log(err)
+                /* console.log(err) */
                 return this._privateFetch("score", "/Question/AnswerCardUrl", "POST", data)
                     .then(json => {
                         if (json.status == 200) {
-                            json = json.data
-                            this.#db.answercard.put(Object.assign({ url: json }, keypath))
+                            json = json.data;
+                            this.#db.answercard.put(Object.assign({ url: json }, keypath));
                             return json;
                         } else return json;
                     });
-            })
+            });
     }
 
 
@@ -548,7 +542,7 @@ export class Szone {
      * @returns {promise}
      */
     async getSchoolList(data) {
-        return this._privateFetch("my", "/userInfo/getSchoolList", "GET", data)
+        return this._privateFetch("my", "/userInfo/getSchoolList", "GET", data);
     }
 
 
@@ -558,7 +552,7 @@ export class Szone {
      */
     async getSubscribeInfo() {
         return new Promise(resolve => {
-            if (location.href == "stusp.milkpotatoes.cn") resolve(this._stuspFetch("/api/get_sub_info", "POST"))
+            if (location.href == "stusp.milkpotatoes.cn") resolve(this._stuspFetch("/api/get_sub_info", "POST"));
             else resolve({
                 "data": {
                     "effective_time": (new Date()).getTime() / 1000,
@@ -566,8 +560,8 @@ export class Szone {
                 },
                 "message": "success",
                 "status": 200
-            })
-        })
+            });
+        });
     }
 
     /**
@@ -575,7 +569,7 @@ export class Szone {
      * @returns {promise}
      */
     async startTrial() {
-        return this._stuspFetch("/api/start_trial", "POST")
+        return this._stuspFetch("/api/start_trial", "POST");
     }
 
     /**
@@ -583,7 +577,7 @@ export class Szone {
      * @returns {promise}
      */
     async getTrialInfo() {
-        return this._stuspFetch("/api/get_trial", "POST")
+        return this._stuspFetch("/api/get_trial", "POST");
     }
 
     async isChecked(exam_guid) {
@@ -591,7 +585,7 @@ export class Szone {
             examGuid: exam_guid,
             userGuid: this.#userguid
         }).toArray();
-        return res.length > 0
+        return res.length > 0;
     }
 
     /**
@@ -601,7 +595,7 @@ export class Szone {
      * @returns {promise}
      */
     bandOrder(order_id, auto_band) {
-        if (order_id) return this._stuspFetch("/api/band_order", "POST", { order_id: order_id, auto_band: auto_band })
+        if (order_id) return this._stuspFetch("/api/band_order", "POST", { order_id: order_id, auto_band: auto_band });
     }
 
     logout() {
