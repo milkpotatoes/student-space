@@ -35,7 +35,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Uglify
-        run: sudo npm install uglify -g
+        run: sudo npm install uglify-js -g
       - name: Install Dependencies
         run: npm install
       - name: Set permission
