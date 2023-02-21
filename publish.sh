@@ -1,7 +1,7 @@
 #! /bin/bash
 
 build="$1"
-unset 1
+index=1
 
 if ! command -v node >/dev/null 2>&1; then
     echo "No Node.js found, go to https://nodejs.org/ download Node.js and install "
@@ -16,10 +16,10 @@ if ! command -v npm >/dev/null 2>&1; then
 fi
 
 if ! command -v uglifyjs >/dev/null 2>&1; then
-    echo "Command not found: uglify"
+    echo "Command not found: uglifyjs"
     echo "Trying to install..."
     echo "Please enter your password"
-    sudo npm install uglify -g
+    sudo npm install uglify-js -g
     exit 1
 fi
 
