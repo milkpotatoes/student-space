@@ -16,5 +16,5 @@
 *.bak
 
 # moudles_file
-/node_moudles/
+/node_modules/
 /modules/
