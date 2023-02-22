@@ -91,10 +91,9 @@ cp ./node_modules/viewerjs/dist/viewer.min.css ./modules/viewerjs/viewer.min.css
 function createTempFile() {
     Path=$1
     temp_file=$(echo "$Path" | sed "s/\([^\\/]\+\)\.\(\w\+\)$/\1.temp.\2/g")
-    echo "$Path"
 
     if [ -f $temp_file ]; then
-        echo "temp file deleted"
+        echo "old temp file deleted"
         rm $temp_file
     fi
     cp "$Path" "$temp_file"
@@ -114,46 +113,43 @@ function editTempFile() {
     done
 
     if echo "$file" | grep -q "\.js$"; then
-        uglifyjs "$temp_file" -o "$mini_file"
+        uglifyjs "$temp_file" -o "$mini_file" --module --source-map
         rm $temp_file
     fi
 }
 
 function escapeString() {
     str=$1
-    cat <<< $str | sed "s/\([\"!\<\>\(\)]\)/\\\\\\1/g"
+    cat <<<$str | sed "s/\([\"!\<\>\(\)]\)/\\\\\\1/g"
 }
 
 function insertAfterBury() {
     keyword=$1
     file=$2
     content=$3
-    
-    sed -i "`grep -n "<\!-- $keyword -->" $file | cut -d ":" -f 1`a $content" $file
+    row=`grep -n "<\!-- $keyword -->" $file | cut -d ":" -f 1`
+    sed -i ":a;N;s/<\!-- $keyword -->[\\r\\n]\+//g;ta" $file 
+    sed -i "${row}a $content" $file
 }
 
 function editHtmlFile() {
     path=$1
 
-    echo "ddddddddddddddddddddddddddd"
-    echo $path
-
-    temp_file=`sed "s/\.\(\w\+\?\)$/.temp.\1/g" <<< "$path"`
-    echo $temp_file
+    temp_file=$(sed "s/\.\(\w\+\?\)$/.temp.\1/g" <<<"$path")
     if [ -f "./frontjs" ]; then
-        content=`cat "./frontjs"`
-        content=`escapeString "$content"`
+        content=$(cat "./frontjs")
+        content=$(escapeString "$content")
         insertAfterBury "frontjs-script" "$temp_file" "$content"
     fi
 
     if [ -f "./360fenxi" ]; then
-        content=`cat "./360fenxi"`
-        content=`escapeString "$content"`
+        content=$(cat "./360fenxi")
+        content=$(escapeString "$content")
         insertAfterBury "360fenxi-script" "$temp_file" "$content"
     fi
 
     if [ -f "./bdtongji" ]; then
-        content=`cat "./bdtongji"`
+        content=$(cat "./bdtongji")
         insertAfterBury "bdtongji-script" "$temp_file" "$content"
     fi
     editTempFile $path
@@ -192,7 +188,7 @@ fi
 
 editHtmlFile ./index.html
 
-if [ $build="build" ]; then
-    mv "./index.html" "./index-`date +%s`.html.bak"
+if [ "$build" == "build" ]; then
+    mv "./index.html" "./index-$(date +%s).html.bak"
     mv "./index.temp.html" "./index.html"
 fi

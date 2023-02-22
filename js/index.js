@@ -5,11 +5,23 @@ import PageSwitcher from "./pageswitcher.js";
 import mdui from "../modules/mdui/js/mdui.esm.js";
 import { Base64 } from "../modules/js-base64/base64.mjs";
 
-const mSzone = new Szone(localStorage.CurrentUser)
+
+window.addEventListener("load", () => {
+    let page_name = location.hash.substring(2);
+    switchPage(page_name);
+});
+
+
+const mSzone = new Szone(localStorage.CurrentUser);
 if (!localStorage.CurrentUser && localStorage.Token) mSzone.setToken(localStorage.Token);
 let click_item, claim_dialog;
 const mPageLoader = new PageLoader(mSzone);
 const mPageSwitcher = new PageSwitcher(mPageLoader, mSzone);
+let aaaa = await new Promise(resolve=>{setTimeout(() => {
+    resolve("over")
+}, 1000);})
+console.log(aaaa)
+await mSzone.tokenSet();
 window.mdui = mdui;
 window.$ = mdui.$;
 
@@ -373,17 +385,29 @@ window.onpopstate = () => {
 
 };
 
-window.addEventListener("load", () => {
-    let page_name = location.hash.substring(2);
+async function pageModuleLoaded() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            if (mPageLoader && mPageSwitcher) {
+                console.log("inited")
+                resolve(true);
+            }
+            else return pageModuleLoaded()
 
+        }, 100);
+    });
+}
+
+async function switchPage(page_name) {
+    await mSzone.tokenSet();
+    await pageModuleLoaded()
     if (localStorage.CurrentUser === undefined) {
         mPageSwitcher.showPage("login", undefined, null)
     } else {
         mPageSwitcher.showPage("home", true, null);
         mPageSwitcher.showPage(page_name, true, history.state);
     }
-});
-
+}
 
 document.querySelectorAll(".navigator-container [page]").forEach(page => page.addEventListener("scroll", function (e) {
     let footer = document.querySelector(".navigator-container footer").classList;
@@ -466,15 +490,14 @@ $(document).on("click", "#login-btn", () => {
     if (auth_method && fetch_data) mSzone.loginToSzone(auth_method, fetch_data)
         /* console.log() */
         .then(data => {
-            if (data.status == 200) mSzone.getUserInfo()
-                .then(() => {
-                    mdui.snackbar({
-                        message: "登录成功",
-                        timeout: 500,
-                        onClose: function () { mPageSwitcher.showPage("home", false, null); login_btn.value = "登录" }
-                    });
-                    login_btn.value = "登录成功";
+            if (data.status == 200) {
+                mdui.snackbar({
+                    message: "登录成功",
+                    timeout: 500,
+                    onClose: function () { mPageSwitcher.showPage("home", false, null); login_btn.value = "登录" }
                 });
+                login_btn.value = "登录成功";
+            }
             else {
                 mdui.snackbar(data.message);
                 login_btn.value = "登录";

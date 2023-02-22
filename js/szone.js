@@ -17,7 +17,7 @@ export class Szone {
     #userguid;
     #token;
     #db;
-
+    #userInfoUpdateStatus;
     SUBJECT_TYPE = {
         OVERVIEW_SUBJECT: -2,
         INDEPENDENT_SUBJECT: 0,
@@ -57,7 +57,8 @@ export class Szone {
         this.#userinfo = {};
         this.#token = token;
         this.#headers.Token = token;
-        this._updateUserInfo();
+        this.updateUserInfo();
+        this.#userInfoUpdateStatus = new Date().getTime()
     }
 
     getToken() {
@@ -81,6 +82,14 @@ export class Szone {
             default:
                 return undefined;
         };
+    }
+
+    async tokenSet() {
+        return new Promise((resolve, _reject) => {
+            if (!this.#userguid) resolve(false);
+            else if (this.#token) resolve(true);
+            else setTimeout(() => resolve(this.tokenSet()), 200);
+        });
     }
 
     /**
@@ -273,11 +282,24 @@ export class Szone {
      * @returns {promise}
      */
     async getUserInfo() {
+        window.db = this.#db
         return new Promise((resolve, reject) => {
-            if (this.#userguid && this.#token) resolve(this.#db.userinfo.get(this.#userguid));
+            if (this.#userguid && this.#token) {
+                if (Object.keys(this.#userinfo).length > 0) resolve(this.#userinfo);
+                else {
+                    this.#db.userinfo.get(this.#userguid).then(r => {
+                        if (r) {
+                            resolve(r);
+                            if (this.#userInfoUpdateStatus === undefined) {
+                                this.updateUserInfo();
+                                this.#userInfoUpdateStatus = new Date().getTime()
+                            }
+                        } else this.updateUserInfo()
+                            .then(hr => resolve(hr));
+                    });
+                }
+            }
 
-            if (Object.keys(this.#userinfo).length > 0) resolve(this.#userinfo);
-            else resolve(this.updateUserInfo());
         });
     }
 

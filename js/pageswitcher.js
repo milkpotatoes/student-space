@@ -193,10 +193,8 @@ export class PageSwitcher {
 
     switchDisplay(e, hide) {
         e = $(e);
-        /* //console.log(123, hide); */
         if (hide) {
             if (e.hasClass("score-summary-table")) e.children().first().addClass("mdui-hidden");
-            /* console.log(e.find()) */
             e.children("div").addClass("mdui-hidden").each((i, el) => {
                 if (i <= 4 && !e.hasClass("score-summary-table")) $(el).removeClass("mdui-hidden");
             });
@@ -217,14 +215,12 @@ export class PageSwitcher {
         let page = document.querySelector("[page~=" + page_name);
         switch (page_name) {
             case "home":
-                let homeSize = page.getClientRects()[0];
-                let navBar = document.querySelector("footer").getClientRects()[0];
+                // let homeSize = page.getClientRects()[0];
+                // let navBar = document.querySelector("footer").getClientRects()[0];
                 document.querySelector(".navigator-container header").classList.remove("mdui-hidden");
 
-                if (homeSize.bottom <= navBar.bottom && !$("[page~=home] .exam-item-pgs").hasClass(
-                    "exam-end") && $(".app-show").is(("[page~=home]"))) {
-                    this.#mPageLoader.getExamList($(".exam-item").length, 5);
-                };
+                // console.log("before load exams")
+
 
                 document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
                 document.querySelector(".navigator-container footer>a:nth-child(1)").classList.add("mdui-bottom-nav-active");
@@ -247,7 +243,11 @@ export class PageSwitcher {
                 document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
                 document.querySelector(".navigator-container footer>a:nth-child(2)").classList.add("mdui-bottom-nav-active");
                 break;
+            case "user":
+                this.#mPageLoader.setUserInfo();
+
             case "profile":
+                this.#mPageLoader.setUserInfo();
                 document.querySelector(".navigator-container header").classList.add("mdui-hidden");
                 document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
                 document.querySelector(".navigator-container footer>a:nth-child(3)").classList.add("mdui-bottom-nav-active");
@@ -262,11 +262,16 @@ export class PageSwitcher {
     /* 首次加载页面执行 */
     firstLoad(page_name) {
         $(`[page~=${page_name}]`).addClass("loaded");
+        console.log("first load page " + page_name)
         /* this.#mPageLoader.setUserInfo(); */
         switch (page_name) {
             case "home":
                 document.querySelector(".navigator-container>header").classList.remove("mdui-hidden");
                 this.#mPageLoader.firstLoadHome();
+                if (!$("[page~=home] .exam-item-pgs").hasClass("exam-end")) {
+                    console.log("loading exams")
+                    this.#mPageLoader.getExamList($(".exam-item").length, 5);
+                };
                 break;
             case "exam":
                 this.loadAnyway(page_name);
@@ -323,13 +328,14 @@ export class PageSwitcher {
      */
 
     showPage(page_path, add_history, state) {
+        console.log("show page " + page_path)
         if (page_path == "index") page_path = "home";
 
         if (page_path !== "login") {
             document.querySelector("[page=login]").classList.remove("app-show");
             document.querySelector(".full-container").style.zIndex = -1;
         };
-        
+
         switch (add_history) {
             case true:
                 history.pushState(state, document.title, "#/" + page_path);
@@ -377,6 +383,7 @@ export class PageSwitcher {
 
         document.title = page.getAttribute("page-title");
 
+        console.log("show page2 " + page_name)
         if (!page.classList.contains("loaded")) this.firstLoad(page_name);
         else this.loadAnyway(page_name);
 

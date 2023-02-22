@@ -253,17 +253,14 @@ export class PageLoader {
         /* 以本地缓存设置用户信息 */
         this.#mSzone.getUserInfo()
             .then(userInfo => {
-                if (!"status" in userInfo) {
+                if (!userInfo["status"]) {
                     /* 设置用户头像 */
                     this.showUserInfo(userInfo); /* 设置所在区域 */ /* 设置学生信息 */
-                    $(".student-name").text(userInfo.studentName); /* 设置当前年级 */
-                    if (userInfo.cityCode) {
-                        this.setStudentAreaInfo(userInfo);
-                    } else {
-                        this.band_user_events()
-                    }
-                }
-            })
+                    document.querySelector(".student-name").textContent = userInfo.studentName; /* 设置当前年级 */
+                    if (userInfo.cityCode) this.setStudentAreaInfo(userInfo);
+
+                };
+            });
     }
 
     /**
@@ -588,13 +585,12 @@ export class PageLoader {
             `0px ${0 - (bg.width * 1155 / 2048 + it.height - bg.height)}px`);
     }
 
-    firstLoadHome() {
+    async firstLoadHome() {
 
-        try {
-            document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
-        } catch (e) { }
+        document.querySelector(".navigator-container footer>.mdui-bottom-nav-active").classList.remove("mdui-bottom-nav-active");
+
         document.querySelector(".navigator-container footer>a:nth-child(1)").classList.add("mdui-bottom-nav-active");
-
+        await this.#mSzone.tokenSet()
         this.#mSzone.getUserInfo()
             .then((data) => {
                 if ("message" in data) {
@@ -611,17 +607,15 @@ export class PageLoader {
                 /* 设置用户头像 */
                 this.showUserInfo(data);
                 if (localStorage.agree === undefined) this.require_agreement(data);
-                if (data.schoolGuid !== "") {
-                    /* 获取考试/未认领列表 */
-                    this.getUnClaimExamCount();
-                } else {
-                    mdui.snackbar({
-                        message: "请先绑定学生信息",
-                        buttonText: "前往绑定",
-                        onClose: () => this.#mPageSwitcher.showPage("user", true, null),
-                        onButtonClick: () => this.#mPageSwitcher.showPage("user", true, null),
-                    });
-                }
+                /* 获取考试/未认领列表 */
+                if (data.schoolGuid !== "") this.getUnClaimExamCount();
+                else mdui.snackbar({
+                    message: "请先绑定学生信息",
+                    buttonText: "前往绑定",
+                    onClose: () => this.#mPageSwitcher.showPage("user", true, null),
+                    onButtonClick: () => this.#mPageSwitcher.showPage("user", true, null),
+                });
+
 
             });
         this.setBG();
