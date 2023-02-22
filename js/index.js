@@ -5,6 +5,9 @@ import PageSwitcher from "./pageswitcher.js";
 import mdui from "../modules/mdui/js/mdui.esm.js";
 import { Base64 } from "../modules/js-base64/base64.mjs";
 
+window.mdui = mdui;
+window.$ = mdui.$;
+fitSystemConfig();
 
 window.addEventListener("load", () => {
     let page_name = location.hash.substring(2);
@@ -17,15 +20,9 @@ if (!localStorage.CurrentUser && localStorage.Token) mSzone.setToken(localStorag
 let click_item, claim_dialog;
 const mPageLoader = new PageLoader(mSzone);
 const mPageSwitcher = new PageSwitcher(mPageLoader, mSzone);
-let aaaa = await new Promise(resolve=>{setTimeout(() => {
-    resolve("over")
-}, 1000);})
-console.log(aaaa)
-await mSzone.tokenSet();
-window.mdui = mdui;
-window.$ = mdui.$;
 
-fitSystemConfig();
+await mSzone.tokenSet();
+
 
 let [navigator_scroll_top, subpage_scroll_top] = [0, 0];
 
