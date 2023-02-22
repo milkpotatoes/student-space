@@ -24,7 +24,7 @@ if ! command -v uglifyjs >/dev/null 2>&1; then
 fi
 
 echo "Updating node modules..."
-# npm install
+npm install
 
 function ConfirmPath() {
     Path=$1
