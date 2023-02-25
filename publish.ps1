@@ -29,6 +29,7 @@ if (-not (Get-Command uglifyjs -errorAction SilentlyContinue)) {
 
 Write-Output "Making pure modules..."
 # modules Directory
+Confirm-Path -Path "./modules"
 Remove-Item -Path "./modules" -Force -Recurse
 Confirm-Path -Path "./modules"
 
@@ -107,7 +108,7 @@ function editTempFile {
     }
     Set-Content -Path $temp_file -Value $content -Encoding utf8
     if ( $file -match "\.js$") {
-        $null = uglifyjs $temp_file -o $mini_file 
+        $null = uglifyjs $temp_file -o $mini_file --module --source-map
         Remove-Item -Path $temp_file
     }
 }
