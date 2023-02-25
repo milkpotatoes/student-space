@@ -398,7 +398,8 @@ async function pageModuleLoaded() {
 async function switchPage(page_name) {
     await mSzone.tokenSet();
     await pageModuleLoaded()
-    if (localStorage.CurrentUser === undefined) {
+    let exp = ["agreement", "donation", "help", "settings", "privacystatement"]
+    if (localStorage.CurrentUser === undefined && ! page_name in exp) {
         mPageSwitcher.showPage("login", undefined, null)
     } else {
         mPageSwitcher.showPage("home", true, null);

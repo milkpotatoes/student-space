@@ -18,3 +18,7 @@
 # moudles_file
 /node_modules/
 /modules/
+
+# download 
+/download.html
+/release/

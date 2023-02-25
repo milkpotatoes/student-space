@@ -1,5 +1,5 @@
 {
-    "code": 21,
-    "version": "2.2.3",
-    "details": "修复了部分bug"
+    "code": 22,
+    "version": "2.2.4",
+    "details": "仍然修复了部分bug<br />自有服务器更改下载客户端链接更改为同源提供"
 }

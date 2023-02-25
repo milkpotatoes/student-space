@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -17,63 +18,64 @@
     <link rel="preload" href="./src/bg-for-avatar.webp" as="image">
     <script>
         function fitBars(statusBarHeight, navigationBarHeight) {
-            document.body.parentElement.setAttribute("style", `--status-bar: ${statusBarHeight}px;--navigation-bar: ${navigationBarHeight}px;`);
+            document.body.parentElement.setAttribute("style", `--status-bar: ${statusBarHeight}px;--navigation-bar: ${navigationBarHeight}px;`)
             if (eruda && eruda._shadowRoot) {
-                let style = document.createElement("style");
-                style.textContent = ".eruda-dev-tools {transform: translate(0, calc(0px - var(--navigation-bar)));} .eruda-dev-tools:after {content: \"\";display: block;height: var(--navigation-bar);background: inherit;}";
+                let style = document.createElement("style")
+                style.textContent = ".eruda-dev-tools {transform: translate(0, calc(0px - var(--navigation-bar)));} .eruda-dev-tools:after {content: \"\";display: block;height: var(--navigation-bar);background: inherit;}"
                 eruda._shadowRoot.append(style);
-            };
+            }
         }
 
         function fitDayNightMode(isNightMode) {
             let bcl = document.body.classList;
-            bcl.remove("mdui-theme-layout-auto", "mdui-theme-layout-dark", "mdui-theme-layout-light");
+            bcl.remove("mdui-theme-layout-auto", "mdui-theme-layout-dark", "mdui-theme-layout-light")
             switch (isNightMode) {
                 case true:
-                    bcl.add("mdui-theme-layout-dark");
+                    bcl.add("mdui-theme-layout-dark")
                     break;
                 case false:
                     bcl.add("mdui-theme-layout-light");
                     break;
                 case undefined:
-                    bcl.add("mdui-theme-layout-auto");
+                    bcl.add("mdui-theme-layout-auto")
                     break;
                 default:
                     break;
-            };
+            }
         }
 
         function fitSystemConfig() {
             let settings_config = localStorage.stusp_settings_config;
-            settings_config = settings_config ? JSON.parse(settings_config) : { "dark-mode-follow-system": false, "dark-mode-status": false, "eruda-status": false, "dubug-by-usb": false };
+            settings_config = settings_config ? JSON.parse(settings_config) : { "dark-mode-follow-system": false, "dark-mode-status": false, "eruda-status": false, "dubug-by-usb": false }
             if (window.stusp) {
-                fitDayNightMode(stusp.isNightMode());
+                fitDayNightMode(stusp.isNightMode())
                 const screenInfo = JSON.parse(stusp.getScreenInfo());
-                fitBars(stusp.getStatusBarHeight(), stusp.getNavigationBarHeight());
-                document.querySelector(".download-app").classList.add("mdui-hidden");
-                document.querySelector(".show-page[data=\"help\"]").classList.add("mdui-hidden");
+                fitBars(stusp.getStatusBarHeight(), stusp.getNavigationBarHeight())
+                document.querySelector(".download-app").classList.add("mdui-hidden")
+                document.querySelector(".show-page[data=\"help\"]").classList.add("mdui-hidden")
             } else if (settings_config["dark-mode-follow-system"]) fitDayNightMode(undefined);
             else fitDayNightMode(settings_config["dark-mode-status"]);
             if (settings_config["eruda-status"]) {
                 let _eruda_dom = document.createElement("script");
                 let _eruda_memory = document.createElement("script");
-                _eruda_dom.src = "./module/eruda/eruda-dom.js";
-                _eruda_memory.src = "./module/eruda/eruda-memory.js";
+                _eruda_dom.src = "./module/eruda/eruda-dom.js"
+                _eruda_memory.src = "./module/eruda/eruda-memory.js"
                 document.head.append(_eruda_dom);
                 document.head.append(_eruda_memory);
                 eruda.init();
                 eruda._$el[0].querySelector(".eruda-dev-tools").style.bottom = "var(--navigation-bar)";
                 _eruda_dom.onload = () => eruda.add(erudaDom);
-                _eruda_memory.onload = () => eruda.add(erudaMemory);
+                _eruda_memory.onload = () => eruda.add(erudaMemory)
 
-            };
+            }
 
             if (location.host !== "stusp.milkpotatoes.cn") {
-                document.querySelector(".subscribe-info").classList.add("mdui-hidden");
-                document.querySelector(".banded-devices").classList.add("mdui-hidden");
-                document.querySelector(".connect-watch").classList.add("mdui-hidden");
-            };
+                document.querySelector(".subscribe-info").classList.add("mdui-hidden")
+                document.querySelector(".banded-devices").classList.add("mdui-hidden")
+                document.querySelector(".connect-watch").classList.add("mdui-hidden")
+            }
         }
+
     </script>
 </head>
 
@@ -529,7 +531,7 @@
                             class="mdui-list-item-icon mdui-icon material-icons">settings</em>
                         <div class="mdui-list-item-content">设置</div>
                     </li>
-                    <li class="mdui-list-item mdui-ripple open-link download-app" data="https://www.wkzx.store/bTnO">
+                    <li class="mdui-list-item mdui-ripple open-link download-app" data="/download.html">
                         <em class="mdui-list-item-icon mdui-icon material-icons">file_download</em>
                         <div class="mdui-list-item-content">下载客户端(Android)</div>
                     </li>
@@ -728,7 +730,7 @@
     <!-- frontjs-script -->
     <!-- 360fenxi-script -->
     <!-- bdtongji-script -->
-    <script src="./js/index.min.js" type="module"></script>
+    <script src="./js/index.js" type="module"></script>
 
 </body>
 
